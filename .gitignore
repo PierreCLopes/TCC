@@ -1,0 +1,60 @@
+# Arquivos de compilação e saída
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.suo
+*.user
+*.vs/
+*.vscode/
+
+# Arquivos temporários
+*.tmp
+*.cache
+
+# Arquivos de log
+*.log
+
+# Arquivos gerados automaticamente
+*.generated.cs
+
+# Pacotes NuGet
+packages/
+
+# Arquivos de configuração de ambiente e secrets
+*.env
+*.env.*
+*.pfx
+*.cer
+
+# Arquivos de chave de autenticação e tokens
+*.key
+*.pem
+*.p12
+*.jks
+
+# Arquivos de usuário
+*.sln.docstates
+
+# Arquivos de histórico de sessão do Visual Studio
+*.vsp
+
+# Arquivos de publicação da Azure
+*.publishsettings
+
+# Outros arquivos gerados automaticamente
+[Dd]ebug/
+[Rr]elease/
+_ReSharper/
+*.ReSharper.user
+
+# Arquivos do Node.js e npm
+node_modules/
+npm-debug.log*
+
+# Arquivos de dependências do Yarn
+yarn-error.log
+
+# Arquivos de logs do npm
+logs/
