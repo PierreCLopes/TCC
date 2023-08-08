@@ -1,6 +1,10 @@
 ﻿using Backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Backend.Controllers
 {
@@ -10,12 +14,15 @@ namespace Backend.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly AppSettings _appSettings;
 
         public AuthController(SignInManager<IdentityUser> signInManager,
-                              UserManager<IdentityUser> userManager)
+                              UserManager<IdentityUser> userManager,
+                              IOptions<AppSettings> appSettings)
         {
             _signInManager = signInManager;
-            _userManager = userManager; 
+            _userManager = userManager;
+            _appSettings = appSettings.Value;
         }
 
         [HttpPost("registrar")]
@@ -36,7 +43,7 @@ namespace Backend.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            return Ok();
+            return Ok(await GerarJWT(registerUser.Email));
         }
 
         [HttpPost("login")]
@@ -48,10 +55,28 @@ namespace Backend.Controllers
 
             if (result.Succeeded)
             {
-                return Ok();
+                return Ok(await GerarJWT(loginUser.Email));
             }
 
             return BadRequest("Usuário ou senha inválidos");
+        }
+
+        private async Task<string> GerarJWT(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = _appSettings.Emissor,
+                Audience = _appSettings.ValidoEm,
+                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }
     }
 }
