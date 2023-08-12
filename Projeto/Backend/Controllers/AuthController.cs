@@ -1,9 +1,11 @@
 ﻿using Backend.Models;
+using DemoToken;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 
 namespace Backend.Controllers
@@ -65,11 +67,15 @@ namespace Backend.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
 
+            var identityClaims = new ClaimsIdentity();
+            identityClaims.AddClaims(await _userManager.GetClaimsAsync(user));
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Subject = identityClaims,
                 Issuer = _appSettings.Emissor,
                 Audience = _appSettings.ValidoEm,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpiracaoHoras),
@@ -78,5 +84,23 @@ namespace Backend.Controllers
 
             return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }
+
+        [ClaimsAuthorize("Usuario","Visualizar")]
+        [HttpGet("todos-usuarios")]
+        public IActionResult GetTodosUsuarios()
+        {
+            var usuarios = _userManager.Users.ToList();
+
+            // Aqui você pode mapear as propriedades que deseja retornar em uma lista de objetos ViewModel
+            var usuariosViewModel = usuarios.Select(user => new IdentityUser
+            {
+                Id = user.Id,
+                Email = user.Email,
+                // Outras propriedades do usuário
+            }).ToList();
+
+            return Ok(usuarios);
+        }
+
     }
 }
