@@ -1,35 +1,35 @@
-.estado-container {
+.usuario-container {
   width: 100%;
   max-width: 1200px;
   padding: 0 25px;
   margin: 20px auto;
 }
 
-.estado-container header {
+.usuario-container header {
   display: flex;
   align-items: center;
 }
 
-.estado-container header span {
+.usuario-container header span {
  font-size: 20px;
  margin-left: 25px;
 }
 
-.estado-container header span strong{
+.usuario-container header span strong{
   color: #333333;
 }
 
-.estado-container header img{
+.usuario-container header img{
   height: 50px;
 }
 
-.estado-container header a{
+.usuario-container header a{
   width: 250px;
   margin-left: auto;
   margin-top: 0;
 }
 
-.estado-container header button{
+.usuario-container header button{
   height: 30px;
   width: 30px;
   padding: 10px;

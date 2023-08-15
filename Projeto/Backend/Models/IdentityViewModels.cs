@@ -26,4 +26,10 @@ namespace Backend.Models
         [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 8)]
         public string Password { get; set; }
     }
+
+    public class UserResponse
+    {
+        public LoginUserViewModel User { get; set; }
+        public string Token { get; set; }
+    }
 }

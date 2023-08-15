@@ -6,9 +6,9 @@ import {FiXCircle, FiEdit, FiTrash} from 'react-icons/fi'
 import api from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
-export default function Estados(){
+export default function Usuarios(){
   const [valorPesquisa, setValorPesquisa] = useState('');
-  const [estados, setEstados] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
   const navigate = useNavigate();
 
   const login =  localStorage.getItem('login');
@@ -21,10 +21,10 @@ export default function Estados(){
   }), [token]);
 
   useEffect(() => {
-    if(estados.length <= 0){
-      api.get('Estado', authorization)
+    if(usuarios.length <= 0){
+      api.get('Auth/usuarios', authorization)
       .then(
-        response => {setEstados(response.data);
+        response => {setUsuarios(response.data);
         },token)
     }
   })
@@ -46,12 +46,12 @@ export default function Estados(){
 
         api.get('Estado/Pesquisa?valor='+valorPesquisa, authorization)
         .then(
-          response => {setEstados(response.data);
+          response => {setUsuarios(response.data);
           },token)
       }else{
         api.get('Estado', authorization)
         .then(
-          response => {setEstados(response.data);
+          response => {setUsuarios(response.data);
           },token)
       }
     }catch(error){
@@ -60,7 +60,7 @@ export default function Estados(){
   }
 
   return(
-    <div className="estado-container">
+    <div className="usuario-container">
       <header>
         <img src={logoEstado} alt="Cadastro" />
         <span>Bem-Vindo, <strong>{login}</strong></span>
@@ -75,7 +75,7 @@ export default function Estados(){
           Pesquisar
         </button>
       </form>
-      <h1>Relação de Estados</h1>
+      <h1>Relação de Usuários</h1>
 
       <table className='table table-bordered'>
         <thead>
@@ -85,17 +85,17 @@ export default function Estados(){
             <th className="thOpcoes">Opções</th>
           </tr>
 
-          {estados.map(estado => (
-            <tr key={estado.sigla}>
-              <td>{estado.sigla}</td>
-              <td>{estado.nome}</td>
+          {usuarios.map(usuario => (
+            <tr key={usuario.id}>
+              <td>{usuario.id}</td>
+              <td>{usuario.email}</td>
               <td className="tdOpcoes">
-                <Link to={`alterar/${estado.sigla}`}>
+                <Link to={`alterar/${usuario.id}`}>
                   <button type="button">
                     <FiEdit size="25" color="#17202a" />
                   </button>
                 </Link> {" "}
-                <Link to={`excluir/${estado.sigla}`}>
+                <Link to={`excluir/${usuario.id}`}>
                   <button type="button">
                     <FiTrash size="25" color="#17202a" />
                   </button>

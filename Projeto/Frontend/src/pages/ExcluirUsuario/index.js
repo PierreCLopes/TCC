@@ -4,9 +4,9 @@ import {FiFileMinus, FiCornerDownLeft} from 'react-icons/fi'
 import {Link, useParams, useNavigate} from 'react-router-dom';
 import api from '../../services/api';
 
-export default function ExcluirEstado(){
-  const {sigla} = useParams();
-  const [nome, setNome] = useState('');
+export default function ExcluirUsuario(){
+  const {id} = useParams();
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const [load,setLoad] = useState(false)
 
@@ -17,48 +17,48 @@ export default function ExcluirEstado(){
     }
   }), [token]);
 
-  const loadEstado = useCallback(async () => {
+  const loadUsuario = useCallback(async () => {
     try {
-      const response = await api.get('Estado/'+sigla, authorization);
-      setNome(response.data.nome);
+      const response = await api.get('Auth/usuario/' + id, authorization);
+      setEmail(response.data.Email);
     } catch(error) {
-      alert('Erro ao buscar estado ' + error);
-      navigate('/estados');
+      alert('Erro ao buscar usuario ' + error);
+      navigate('/usuarios');
     }
-  }, [sigla, authorization, setNome, navigate]);
+  }, [id, authorization, setEmail, navigate]);
 
   useEffect(() => {
     if(!load){
-      loadEstado();
+      loadUsuario();
       setLoad(true);
     }
-  },[setLoad,load,loadEstado])
+  },[setLoad,load,loadUsuario])
 
-  async function deleteEstado(){
+  async function deleteUsuario(){
     
     try{
-      await api.delete('Estado/'+sigla,authorization)
+      await api.delete('Auth/usuario/' + id, authorization)
     }catch(error){
-      alert('Erro ao excluir estado ' +error);
+      alert('Erro ao excluir usuario ' +error);
     }
 
-    navigate('/estados');
+    navigate('/usuarios');
 
   }
 
   return(
-    <div  className="novo-estado-container">
+    <div  className="novo-usuario-container">
       <div className="content">
         <section className="form">
           <FiFileMinus size={105} color="#17202a" />
-          <h1>Excluir estado</h1>
-          <Link className="back-link" to="/estados">
+          <h1>Excluir usuario</h1>
+          <Link className="back-link" to="/usuarios">
             <FiCornerDownLeft size={105} color="#17202a" />
           </Link>
         </section>
         <div className="formExibir">
-          <h1>{sigla} - {nome}</h1>
-          <button className="button" onClick={deleteEstado}>Excluir</button>
+          <h1>{id} - {email}</h1>
+          <button className="button" onClick={deleteUsuario}>Excluir</button>
         </div>
       </div>
     </div>

@@ -1,9 +1,11 @@
 ﻿using Backend.Models;
 using DemoToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -57,7 +59,13 @@ namespace Backend.Controllers
 
             if (result.Succeeded)
             {
-                return Ok(await GerarJWT(loginUser.Email));
+                var userResponse = new UserResponse
+                {
+                    User = loginUser,
+                    Token = await GerarJWT(loginUser.Email)
+                };
+
+                return Ok(userResponse);
             }
 
             return BadRequest("Usuário ou senha inválidos");
@@ -86,9 +94,11 @@ namespace Backend.Controllers
         }
 
         [ClaimsAuthorize("Usuario","Visualizar")]
-        [HttpGet("todos-usuarios")]
-        public IActionResult GetTodosUsuarios()
+        [HttpGet("usuarios")]
+        public IActionResult GetUsuarios()
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
             var usuarios = _userManager.Users.ToList();
 
             // Aqui você pode mapear as propriedades que deseja retornar em uma lista de objetos ViewModel
@@ -100,6 +110,43 @@ namespace Backend.Controllers
             }).ToList();
 
             return Ok(usuarios);
+        }
+
+        [ClaimsAuthorize("Usuario", "Visualizar")]
+        [HttpGet("usuario/{id}")]
+        public async Task<IActionResult> GetUsuarioAsync(string id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
+            var usuario = await _userManager.FindByIdAsync(id);
+
+            // Aqui você pode mapear as propriedades que deseja retornar em uma lista de objetos ViewModel
+
+
+            return Ok(usuario);
+        }
+
+        [ClaimsAuthorize("Usuario", "Excluir")]
+        [HttpDelete("usuario/{id}")]
+        public async Task<IActionResult> DeleteUsuario(string id)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok("Usuário excluído com sucesso.");
         }
 
     }

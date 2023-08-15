@@ -21,6 +21,18 @@ namespace Backend
                 .AddEntityFrameworkStores<Contexto>()
                 .AddDefaultTokenProviders();
 
+            //Configuração de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+            //Fim
+
             //JWT
             var appSettingsSection = builder.Configuration.GetSection("AppSettings");
             builder.Services.Configure<AppSettings>(appSettingsSection);
@@ -60,6 +72,9 @@ namespace Backend
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            //Uso do CORS
+            app.UseCors("CorsPolicy");
 
             app.UseHttpsRedirection();
 

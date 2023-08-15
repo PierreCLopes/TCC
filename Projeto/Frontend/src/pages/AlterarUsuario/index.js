@@ -4,7 +4,7 @@ import {FiFileText, FiCornerDownLeft} from 'react-icons/fi'
 import {Link, useParams, useNavigate} from 'react-router-dom';
 import api from '../../services/api';
 
-export default function AlterarEstado(){
+export default function AlterarUsuario(){
   const {sigla} = useParams();
   const [nome, setNome] = useState('');
   const navigate = useNavigate();
