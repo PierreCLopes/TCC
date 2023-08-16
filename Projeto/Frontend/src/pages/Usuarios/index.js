@@ -1,65 +1,64 @@
-import React, {useState, useEffect, useMemo} from "react";
-import {Link} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 import './styles.css';
 import logoEstado from '../../assets/estado.png';
-import {FiXCircle, FiEdit, FiTrash} from 'react-icons/fi'
+import { FiXCircle, FiEdit, FiTrash } from 'react-icons/fi'
 import api from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import GestaoPermissao from "../../tecnologia/GestaoPermissao";
 
-export default function Usuarios(){
+export default function Usuarios() {
   const [valorPesquisa, setValorPesquisa] = useState('');
   const [usuarios, setUsuarios] = useState([]);
   const navigate = useNavigate();
 
-  const login =  localStorage.getItem('login');
-  const token =  localStorage.getItem('token');
+  const login = localStorage.getItem('email');
+  const token = localStorage.getItem('token');
 
-  const authorization = useMemo(() => ({
+  const authorization = {
     headers: {
       Authorization: `Bearer ${token}`
     }
-  }), [token]);
+  };
 
   useEffect(() => {
-    if(usuarios.length <= 0){
-      api.get('Auth/usuarios', authorization)
-      .then(
-        response => {setUsuarios(response.data);
-        },token)
-    }
-  })
+    carregarUsuarios();
+  }, []); // Executa apenas uma vez ao montar o componente
 
-  async function logout(){
-    try{
+  async function carregarUsuarios() {
+    try {
+      let url = 'Auth/usuarios';
+      if (valorPesquisa.length >= 1) {
+        url = `Estado/Pesquisa?valor=${valorPesquisa}`;
+      }
+
+      const response = await api.get(url, authorization);
+      setUsuarios(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+    }
+  }
+
+  async function logout() {
+    try {
+      console.log('entrou');
       localStorage.clear();
-      localStorage.setItem('token','');
+      localStorage.setItem('token', '');
       authorization.headers = '';
       navigate('/');
-    }catch(error){
-      alert('Não foi possível efetuar logout' + error);
+    } catch (error) {
+      console.error('Não foi possível efetuar logout:', error);
     }
   }
 
-  async function pesquisa(){
-    try{
-      if(valorPesquisa.length >= 1){
-
-        api.get('Estado/Pesquisa?valor='+valorPesquisa, authorization)
-        .then(
-          response => {setUsuarios(response.data);
-          },token)
-      }else{
-        api.get('Estado', authorization)
-        .then(
-          response => {setUsuarios(response.data);
-          },token)
-      }
-    }catch(error){
-      alert('Não foi possível efetuar a pesquisa' + error);
+  async function pesquisa() {
+    try {
+      carregarUsuarios();
+    } catch (error) {
+      console.error('Erro ao efetuar a pesquisa:', error);
     }
   }
 
-  return(
+  return (
     <div className="usuario-container">
       <header>
         <img src={logoEstado} alt="Cadastro" />
@@ -70,8 +69,17 @@ export default function Usuarios(){
         </button>
       </header>
       <form>
-        <input type="text" name="valorPesquisa" placeholder="Informe" onChange={e => setValorPesquisa(e.target.value)}/>
-        <button type="button" class="button" onClick={pesquisa}>
+        <input
+          type="text"
+          name="valorPesquisa"
+          placeholder="Informe"
+          onChange={e => setValorPesquisa(e.target.value)}
+        />
+        <button
+          type="button"
+          className="button"
+          onClick={pesquisa}
+        >
           Pesquisar
         </button>
       </form>
@@ -84,7 +92,8 @@ export default function Usuarios(){
             <th>Nome</th>
             <th className="thOpcoes">Opções</th>
           </tr>
-
+        </thead>
+        <tbody>
           {usuarios.map(usuario => (
             <tr key={usuario.id}>
               <td>{usuario.id}</td>
@@ -94,19 +103,19 @@ export default function Usuarios(){
                   <button type="button">
                     <FiEdit size="25" color="#17202a" />
                   </button>
-                </Link> {" "}
-                <Link to={`excluir/${usuario.id}`}>
-                  <button type="button">
-                    <FiTrash size="25" color="#17202a" />
-                  </button>
-                </Link>
+                </Link>{" "}
+                <GestaoPermissao permissoes={['Excluir']} modulo={'Usuario'}>
+                  <Link to={`excluir/${usuario.id}`}>
+                    <button type="button">
+                      <FiTrash size="25" color="#17202a" />
+                    </button>
+                  </Link>
+                </GestaoPermissao>
               </td>
             </tr>
-          ))}  
-        </thead>
+          ))}
+        </tbody>
       </table>
-
-      
     </div>
-  )
+  );
 }

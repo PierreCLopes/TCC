@@ -39,7 +39,7 @@ export default function Login(){
           <h1>Controle Financeiro</h1>
           <input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
           <input type="password" placeholder="Senha" value={password} onChange={e => setPassword(e.target.value)}/>
-          <button class="button" type="submit">Entrar</button>
+          <button className="button" type="submit">Entrar</button>
         </form>
       </section>
     </div>
