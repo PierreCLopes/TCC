@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Backend.Models.LogModel">
+    <Position X="12" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAAAEAAKAAAAAA=</HashCode>
+      <FileName>Models\LogModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="LogusuariocadastroNavigation" />
+      <Property Name="LogusuarioalteracaoNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Pessoa">
+    <Position X="11.75" Y="5.5" Width="3" />
+    <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
+      <Path>
+        <Point X="13.375" Y="3.93" />
+        <Point X="13.375" Y="5.125" />
+        <Point X="13.25" Y="5.125" />
+        <Point X="13.25" Y="5.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AABCAAAAgCAABAIAIIAIAAIARAAAAAAIAAAABAEAAgQ=</HashCode>
+      <FileName>Models\Pessoa.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backend.Models.Pessoaendereco">
+    <Position X="11.25" Y="14" Width="2" />
+    <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
+      <Path>
+        <Point X="12.312" Y="3.93" />
+        <Point X="12.312" Y="5.25" />
+        <Point X="11.5" Y="5.25" />
+        <Point X="11.5" Y="13.625" />
+        <Point X="12.25" Y="13.625" />
+        <Point X="12.25" Y="14" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="PessoaNavigation" Type="Backend.Models.Pessoa">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.037" Y="0.568" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>CIACAAAAAAAAACAEIAAAAACAAAAAAAAAAAAAIAABAgA=</HashCode>
+      <FileName>Models\Pessoaendereco.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CidadeNavigation" />
+      <Property Name="PessoaNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Cidade">
+    <Position X="7.5" Y="14.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAIAAAAAAQAAAAAgAAAAAAAEAAAg=</HashCode>
+      <FileName>Models\Cidade.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="EstadoNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Estado">
+    <Position X="4.5" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAQAAAAAAAAAABgAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Models\Estado.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backend.Models.Proposta">
+    <Position X="20" Y="5.75" Width="3.25" />
+    <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
+      <Path>
+        <Point X="13.375" Y="3.93" />
+        <Point X="13.375" Y="4.498" />
+        <Point X="21.625" Y="4.498" />
+        <Point X="21.625" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="AvalistaNavigation" Type="Backend.Models.Pessoa">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.018" Y="-0.031" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ProponenteNavigation" Type="Backend.Models.Pessoa" FixedToPoint="true">
+      <Path>
+        <Point X="20" Y="9.312" />
+        <Point X="19.583" Y="9.312" Type="JumpStart" />
+        <Point X="19.417" Y="9.312" Type="JumpEnd" />
+        <Point X="17.333" Y="9.312" Type="JumpStart" />
+        <Point X="17.167" Y="9.312" Type="JumpEnd" />
+        <Point X="16.333" Y="9.312" Type="JumpStart" />
+        <Point X="16.167" Y="9.312" Type="JumpEnd" />
+        <Point X="14.75" Y="9.312" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.036" Y="0.024" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ResponsaveltecnicoNavigation" Type="Backend.Models.Pessoa">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.09" Y="0.042" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AABCAgBWMCAIAAAAwBgCMAgQAEQAIBCIAQAQAAIMAww=</HashCode>
+      <FileName>Models\Proposta.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AvalistaNavigation" />
+      <Property Name="CulturaNavigation" />
+      <Property Name="FilialNavigation" />
+      <Property Name="ProponenteNavigation" />
+      <Property Name="ResponsaveltecnicoNavigation" />
+      <Property Name="TipoNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Filial">
+    <Position X="24.5" Y="5.5" Width="1.5" />
+    <AssociationLine Name="PessoaNavigation" Type="Backend.Models.Pessoa" ManuallyRouted="true">
+      <Path>
+        <Point X="25.25" Y="5.5" />
+        <Point X="25.25" Y="5.266" />
+        <Point X="23.583" Y="5.266" Type="JumpStart" />
+        <Point X="23.417" Y="5.266" Type="JumpEnd" />
+        <Point X="21.708" Y="5.266" Type="JumpStart" />
+        <Point X="21.542" Y="5.266" Type="JumpEnd" />
+        <Point X="19.583" Y="5.266" Type="JumpStart" />
+        <Point X="19.417" Y="5.266" Type="JumpEnd" />
+        <Point X="17.333" Y="5.266" Type="JumpStart" />
+        <Point X="17.167" Y="5.266" Type="JumpEnd" />
+        <Point X="16.333" Y="5.266" Type="JumpStart" />
+        <Point X="16.167" Y="5.266" Type="JumpEnd" />
+        <Point X="13.406" Y="5.266" />
+        <Point X="13.406" Y="5.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-2.84" Y="0.06" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIACAAAAAAAAAAAAIAAAAAAAAAgAAAAAAAAAAAFAAgA=</HashCode>
+      <FileName>Models\Filial.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PessoaNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Propostaimovel">
+    <Position X="13.5" Y="10.75" Width="2" />
+    <InheritanceLine Type="Backend.Models.LogModel" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="12.312" Y="3.93" />
+        <Point X="12.312" Y="5.25" />
+        <Point X="11.503" Y="5.25" />
+        <Point X="11.503" Y="10.375" />
+        <Point X="12.167" Y="10.375" Type="JumpStart" />
+        <Point X="12.333" Y="10.375" Type="JumpEnd" />
+        <Point X="12.729" Y="10.375" Type="JumpStart" />
+        <Point X="12.896" Y="10.375" Type="JumpEnd" />
+        <Point X="14.5" Y="10.375" />
+        <Point X="14.5" Y="10.75" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="ImovelNavigation" Type="Backend.Models.Imovel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.188" Y="12.56" />
+        <Point X="14.188" Y="12.914" />
+        <Point X="14.187" Y="12.914" />
+        <Point X="14.187" Y="15.713" />
+        <Point X="15.5" Y="15.713" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAACAAAAgAAAACAAAAQBAAAA=</HashCode>
+      <FileName>Models\Propostaimovel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ImovelNavigation" />
+      <Property Name="PropostaNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Imovel">
+    <Position X="15.5" Y="13.75" Width="2.25" />
+    <AssociationLine Name="CidadeNavigation" Type="Backend.Models.Cidade">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-6.931" Y="0.759" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="ProprietarioNavigation" Type="Backend.Models.Pessoa" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="15.906" Y="13.75" />
+        <Point X="15.906" Y="9.812" />
+        <Point X="14.75" Y="9.812" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.08" Y="0.07" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AABCCAIQEEAAAAAAAACIAASAEAAAAEAAAAAAKAEAAgA=</HashCode>
+      <FileName>Models\Imovel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CidadeNavigation" />
+      <Property Name="ProprietarioNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Documentacao">
+    <Position X="16.5" Y="9.75" Width="1.5" />
+    <AssociationLine Name="ImovelNavigation" Type="Backend.Models.Imovel" FixedFromPoint="true">
+      <Path>
+        <Point X="17.688" Y="11.944" />
+        <Point X="17.688" Y="13.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.119" Y="1.043" Height="0.182" Width="1.403" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="TipoNavigation" Type="Backend.Models.Tipodocumentacao" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18" Y="10.847" />
+        <Point X="19.019" Y="10.847" />
+        <Point X="19.019" Y="14" />
+        <Point X="19.125" Y="14" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.021" Y="3.206" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIACAAAAAAAAAAAAIAAAAACAAAAgAAAACAAAAABAEAw=</HashCode>
+      <FileName>Models\Documentacao.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ImovelNavigation" />
+      <Property Name="PessoaNavigation" />
+      <Property Name="PropostaNavigation" />
+      <Property Name="TipoNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Tipodocumentacao">
+    <Position X="18.75" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABCAAAAAAAAAAAAAEAAAAAAAAgAAAAAAAAAAAEAAgA=</HashCode>
+      <FileName>Models\Tipodocumentacao.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backend.Models.Tipoproposta">
+    <Position X="24.75" Y="9.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAFAAgA=</HashCode>
+      <FileName>Models\Tipoproposta.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backend.Models.Tipopropostadocumentacao">
+    <Position X="25" Y="11.75" Width="2.25" />
+    <AssociationLine Name="TipodocumentacaoNavigation" Type="Backend.Models.Tipodocumentacao">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-2.069" Y="0.421" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAAAAAAAAAAAAAAAAQEAAAAAEAAAAA=</HashCode>
+      <FileName>Models\Tipopropostadocumentacao.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TipodocumentacaoNavigation" />
+      <Property Name="TipopropostaNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Cultura">
+    <Position X="22" Y="14.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAgA=</HashCode>
+      <FileName>Models\Cultura.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Backend.Models.Propostalaudo">
+    <Position X="27.75" Y="5.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>IAACAAAEIAAAiBAIAAAIAAABAAAAAAAACAEAAgBAEgQ=</HashCode>
+      <FileName>Models\Propostalaudo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PropostaNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.Propostalaudodiagnostico">
+    <Position X="28" Y="11.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>EAAKAAAABAAAQAAAACAAAAAAgBABAAAAAAAAAAAAAgg=</HashCode>
+      <FileName>Models\Propostalaudodiagnostico.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="PropostalaudoNavigation" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Backend.Models.ApplicationUser">
+    <Position X="5.5" Y="4.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAABjCwAAAggAAgIEQAAACEABQAAYgIECAgAEAAAAA=</HashCode>
+      <FileName>Models\ApplicationUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
