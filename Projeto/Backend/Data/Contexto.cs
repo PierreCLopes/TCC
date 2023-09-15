@@ -600,6 +600,7 @@ namespace Backend.Data
                     .HasColumnType("datetime")
                     .HasColumnName("DATAPLANTIO");
                 entity.Property(e => e.Ehastecfinanciada).HasColumnName("EHASTECFINANCIADA");
+                entity.Property(e => e.Ehpossuilaudoacompanhamento).HasColumnName("EHPOSSUILAUDOACOMPANHAMENTO");
                 entity.Property(e => e.Filial).HasColumnName("FILIAL");
                 entity.Property(e => e.Linhacredito)
                     .HasMaxLength(50)

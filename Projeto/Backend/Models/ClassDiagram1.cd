@@ -1,24 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Backend.Models.LogModel">
-    <Position X="12" Y="2.25" Width="2.75" />
+    <Position X="30.5" Y="11" Width="2.75" />
+    <AssociationLine Name="LogusuariocadastroNavigation" Type="Backend.Models.ApplicationUser">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.06" Y="-2.029" />
+      </MemberNameLabel>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>EAAAAAAAAAAIAAAAAAAAAAAAgAAAAAAAAEAAKAAAAAA=</HashCode>
       <FileName>Models\LogModel.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="LogusuariocadastroNavigation" />
       <Property Name="LogusuarioalteracaoNavigation" />
+      <Property Name="LogusuariocadastroNavigation" />
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Pessoa">
-    <Position X="11.75" Y="5.5" Width="3" />
+    <Position X="30.5" Y="13.5" Width="3" />
     <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
       <Path>
-        <Point X="13.375" Y="3.93" />
-        <Point X="13.375" Y="5.125" />
-        <Point X="13.25" Y="5.125" />
-        <Point X="13.25" Y="5.5" />
+        <Point X="31.875" Y="12.68" />
+        <Point X="31.875" Y="13.125" />
+        <Point X="32" Y="13.125" />
+        <Point X="32" Y="13.5" />
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
@@ -27,20 +32,22 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Backend.Models.Pessoaendereco">
-    <Position X="11.25" Y="14" Width="2" />
+    <Position X="31.5" Y="20.25" Width="2" />
     <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
       <Path>
-        <Point X="12.312" Y="3.93" />
-        <Point X="12.312" Y="5.25" />
-        <Point X="11.5" Y="5.25" />
-        <Point X="11.5" Y="13.625" />
-        <Point X="12.25" Y="13.625" />
-        <Point X="12.25" Y="14" />
+        <Point X="30.812" Y="12.68" />
+        <Point X="30.812" Y="13.125" />
+        <Point X="33.75" Y="13.125" />
+        <Point X="33.75" Y="19.875" />
+        <Point X="33.146" Y="19.875" Type="JumpStart" />
+        <Point X="32.979" Y="19.875" Type="JumpEnd" />
+        <Point X="32.5" Y="19.875" />
+        <Point X="32.5" Y="20.25" />
       </Path>
     </InheritanceLine>
     <AssociationLine Name="PessoaNavigation" Type="Backend.Models.Pessoa">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.037" Y="0.568" />
+        <Position X="-0.053" Y="1.297" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -53,7 +60,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Cidade">
-    <Position X="7.5" Y="14.25" Width="2" />
+    <Position X="28.5" Y="20.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAIAAAAAAQAAAAAgAAAAAAAEAAAg=</HashCode>
       <FileName>Models\Cidade.cs</FileName>
@@ -63,49 +70,100 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Estado">
-    <Position X="4.5" Y="14.25" Width="1.5" />
+    <Position X="28.75" Y="18" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAQAAAAAAAAAABgAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Models\Estado.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Backend.Models.Proposta">
-    <Position X="20" Y="5.75" Width="3.25" />
+    <Position X="38.75" Y="13.75" Width="3.25" />
     <InheritanceLine Type="Backend.Models.LogModel" FixedFromPoint="true">
       <Path>
-        <Point X="13.375" Y="3.93" />
-        <Point X="13.375" Y="4.498" />
-        <Point X="21.625" Y="4.498" />
-        <Point X="21.625" Y="5.75" />
+        <Point X="31.875" Y="12.68" />
+        <Point X="31.875" Y="13.125" />
+        <Point X="35" Y="13.125" />
+        <Point X="35" Y="13" />
+        <Point X="36.885" Y="13" Type="JumpStart" />
+        <Point X="37.052" Y="13" Type="JumpEnd" />
+        <Point X="39.51" Y="13" Type="JumpStart" />
+        <Point X="39.677" Y="13" Type="JumpEnd" />
+        <Point X="40.375" Y="13" />
+        <Point X="40.375" Y="13.75" />
       </Path>
     </InheritanceLine>
-    <AssociationLine Name="AvalistaNavigation" Type="Backend.Models.Pessoa">
+    <AssociationLine Name="AvalistaNavigation" Type="Backend.Models.Pessoa" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="38.75" Y="17.472" />
+        <Point X="38.583" Y="17.472" Type="JumpStart" />
+        <Point X="38.417" Y="17.472" Type="JumpEnd" />
+        <Point X="37.852" Y="17.472" Type="JumpStart" />
+        <Point X="37.686" Y="17.472" Type="JumpEnd" />
+        <Point X="37.458" Y="17.472" Type="JumpStart" />
+        <Point X="37.292" Y="17.472" Type="JumpEnd" />
+        <Point X="37.018" Y="17.472" />
+        <Point X="37.018" Y="17.599" />
+        <Point X="34.833" Y="17.599" Type="JumpStart" />
+        <Point X="34.667" Y="17.599" Type="JumpEnd" />
+        <Point X="33.689" Y="17.599" />
+        <Point X="33.689" Y="17.562" />
+        <Point X="33.5" Y="17.562" />
+      </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.018" Y="-0.031" />
+        <Position X="0.125" Y="-0.047" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="ProponenteNavigation" Type="Backend.Models.Pessoa" FixedToPoint="true">
       <Path>
-        <Point X="20" Y="9.312" />
-        <Point X="19.583" Y="9.312" Type="JumpStart" />
-        <Point X="19.417" Y="9.312" Type="JumpEnd" />
-        <Point X="17.333" Y="9.312" Type="JumpStart" />
-        <Point X="17.167" Y="9.312" Type="JumpEnd" />
-        <Point X="16.333" Y="9.312" Type="JumpStart" />
-        <Point X="16.167" Y="9.312" Type="JumpEnd" />
-        <Point X="14.75" Y="9.312" />
+        <Point X="38.75" Y="17.312" />
+        <Point X="38.583" Y="17.312" Type="JumpStart" />
+        <Point X="38.417" Y="17.312" Type="JumpEnd" />
+        <Point X="37.852" Y="17.312" Type="JumpStart" />
+        <Point X="37.686" Y="17.312" Type="JumpEnd" />
+        <Point X="35.083" Y="17.312" Type="JumpStart" />
+        <Point X="34.917" Y="17.312" Type="JumpEnd" />
+        <Point X="34.833" Y="17.312" Type="JumpStart" />
+        <Point X="34.667" Y="17.312" Type="JumpEnd" />
+        <Point X="33.833" Y="17.312" Type="JumpStart" />
+        <Point X="33.667" Y="17.312" Type="JumpEnd" />
+        <Point X="33.5" Y="17.312" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.036" Y="0.024" />
+        <Position X="-0.02" Y="0.04" />
       </MemberNameLabel>
     </AssociationLine>
-    <AssociationLine Name="ResponsaveltecnicoNavigation" Type="Backend.Models.Pessoa">
+    <AssociationLine Name="ResponsaveltecnicoNavigation" Type="Backend.Models.Pessoa" ManuallyRouted="true">
+      <Path>
+        <Point X="38.75" Y="19.398" />
+        <Point X="38.583" Y="19.398" Type="JumpStart" />
+        <Point X="38.417" Y="19.398" Type="JumpEnd" />
+        <Point X="38.333" Y="19.398" Type="JumpStart" />
+        <Point X="38.167" Y="19.398" Type="JumpEnd" />
+        <Point X="37.852" Y="19.398" Type="JumpStart" />
+        <Point X="37.686" Y="19.398" Type="JumpEnd" />
+        <Point X="37.458" Y="19.398" Type="JumpStart" />
+        <Point X="37.292" Y="19.398" Type="JumpEnd" />
+        <Point X="37.25" Y="19.398" />
+        <Point X="37.25" Y="19.663" />
+        <Point X="35.771" Y="19.663" Type="JumpStart" />
+        <Point X="35.605" Y="19.663" Type="JumpEnd" />
+        <Point X="34.833" Y="19.663" Type="JumpStart" />
+        <Point X="34.667" Y="19.663" Type="JumpEnd" />
+        <Point X="34.489" Y="19.663" Type="JumpStart" />
+        <Point X="34.323" Y="19.663" Type="JumpEnd" />
+        <Point X="33.75" Y="19.663" />
+        <Point X="33.75" Y="18.252" />
+        <Point X="33.146" Y="18.252" Type="JumpStart" />
+        <Point X="32.979" Y="18.252" Type="JumpEnd" />
+        <Point X="31.75" Y="18.252" />
+        <Point X="31.75" Y="18.002" />
+      </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.09" Y="0.042" />
+        <Position X="-1.32" Y="0.274" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AABCAgBWMCAIAAAAwBgCMAgQAEQAIBCIAQAQAAIMAww=</HashCode>
+      <HashCode>AABGAgBWMCAIAAAAwBgCMAgQAEQAIBCIAQAQAAIMAww=</HashCode>
       <FileName>Models\Proposta.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -118,23 +176,13 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Filial">
-    <Position X="24.5" Y="5.5" Width="1.5" />
-    <AssociationLine Name="PessoaNavigation" Type="Backend.Models.Pessoa" ManuallyRouted="true">
+    <Position X="34.5" Y="10.75" Width="1.5" />
+    <AssociationLine Name="PessoaNavigation" Type="Backend.Models.Pessoa" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="25.25" Y="5.5" />
-        <Point X="25.25" Y="5.266" />
-        <Point X="23.583" Y="5.266" Type="JumpStart" />
-        <Point X="23.417" Y="5.266" Type="JumpEnd" />
-        <Point X="21.708" Y="5.266" Type="JumpStart" />
-        <Point X="21.542" Y="5.266" Type="JumpEnd" />
-        <Point X="19.583" Y="5.266" Type="JumpStart" />
-        <Point X="19.417" Y="5.266" Type="JumpEnd" />
-        <Point X="17.333" Y="5.266" Type="JumpStart" />
-        <Point X="17.167" Y="5.266" Type="JumpEnd" />
-        <Point X="16.333" Y="5.266" Type="JumpStart" />
-        <Point X="16.167" Y="5.266" Type="JumpEnd" />
-        <Point X="13.406" Y="5.266" />
-        <Point X="13.406" Y="5.5" />
+        <Point X="35.25" Y="12.944" />
+        <Point X="35.25" Y="13.067" />
+        <Point X="32.156" Y="13.067" />
+        <Point X="32.156" Y="13.5" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-2.84" Y="0.06" />
@@ -149,29 +197,30 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Propostaimovel">
-    <Position X="13.5" Y="10.75" Width="2" />
-    <InheritanceLine Type="Backend.Models.LogModel" ManuallyRouted="true" FixedFromPoint="true">
+    <Position X="35" Y="17.75" Width="2" />
+    <InheritanceLine Type="Backend.Models.LogModel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="12.312" Y="3.93" />
-        <Point X="12.312" Y="5.25" />
-        <Point X="11.503" Y="5.25" />
-        <Point X="11.503" Y="10.375" />
-        <Point X="12.167" Y="10.375" Type="JumpStart" />
-        <Point X="12.333" Y="10.375" Type="JumpEnd" />
-        <Point X="12.729" Y="10.375" Type="JumpStart" />
-        <Point X="12.896" Y="10.375" Type="JumpEnd" />
-        <Point X="14.5" Y="10.375" />
-        <Point X="14.5" Y="10.75" />
+        <Point X="30.812" Y="12.68" />
+        <Point X="30.812" Y="13.125" />
+        <Point X="33.75" Y="13.125" />
+        <Point X="33.75" Y="18.563" />
+        <Point X="34.323" Y="18.563" Type="JumpStart" />
+        <Point X="34.489" Y="18.563" Type="JumpEnd" />
+        <Point X="34.667" Y="18.563" Type="JumpStart" />
+        <Point X="34.833" Y="18.563" Type="JumpEnd" />
+        <Point X="35" Y="18.563" />
       </Path>
     </InheritanceLine>
     <AssociationLine Name="ImovelNavigation" Type="Backend.Models.Imovel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="14.188" Y="12.56" />
-        <Point X="14.188" Y="12.914" />
-        <Point X="14.187" Y="12.914" />
-        <Point X="14.187" Y="15.713" />
-        <Point X="15.5" Y="15.713" />
+        <Point X="35.688" Y="19.56" />
+        <Point X="35.688" Y="19.935" />
+        <Point X="35.688" Y="19.935" />
+        <Point X="35.688" Y="20.25" />
       </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.255" Y="0.126" />
+      </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAACAAAAgAAAACAAAAQBAAAA=</HashCode>
@@ -183,7 +232,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Imovel">
-    <Position X="15.5" Y="13.75" Width="2.25" />
+    <Position X="34" Y="20.25" Width="2.25" />
     <AssociationLine Name="CidadeNavigation" Type="Backend.Models.Cidade">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-6.931" Y="0.759" />
@@ -191,12 +240,14 @@
     </AssociationLine>
     <AssociationLine Name="ProprietarioNavigation" Type="Backend.Models.Pessoa" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="15.906" Y="13.75" />
-        <Point X="15.906" Y="9.812" />
-        <Point X="14.75" Y="9.812" />
+        <Point X="34.406" Y="20.25" />
+        <Point X="34.406" Y="17.812" />
+        <Point X="33.833" Y="17.812" Type="JumpStart" />
+        <Point X="33.667" Y="17.812" Type="JumpEnd" />
+        <Point X="33.5" Y="17.812" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.08" Y="0.07" />
+        <Position X="-0.207" Y="-0.263" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -209,22 +260,25 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Documentacao">
-    <Position X="16.5" Y="9.75" Width="1.5" />
+    <Position X="35.5" Y="15" Width="1.5" />
     <AssociationLine Name="ImovelNavigation" Type="Backend.Models.Imovel" FixedFromPoint="true">
       <Path>
-        <Point X="17.688" Y="11.944" />
-        <Point X="17.688" Y="13.75" />
+        <Point X="36.688" Y="17.194" />
+        <Point X="36.688" Y="17.375" />
+        <Point X="37.375" Y="17.375" />
+        <Point X="37.375" Y="22.213" />
+        <Point X="36.25" Y="22.213" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-0.119" Y="1.043" Height="0.182" Width="1.403" />
+        <Position X="0.869" Y="0.309" Height="0.182" Width="1.403" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="TipoNavigation" Type="Backend.Models.Tipodocumentacao" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="18" Y="10.847" />
-        <Point X="19.019" Y="10.847" />
-        <Point X="19.019" Y="14" />
-        <Point X="19.125" Y="14" />
+        <Point X="37" Y="16.097" />
+        <Point X="37.769" Y="16.097" />
+        <Point X="37.769" Y="22" />
+        <Point X="37.875" Y="22" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-0.021" Y="3.206" />
@@ -242,21 +296,33 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Tipodocumentacao">
-    <Position X="18.75" Y="14" Width="1.5" />
+    <Position X="37.5" Y="22" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABCAAAAAAAAAAAAAEAAAAAAAAgAAAAAAAAAAAEAAgA=</HashCode>
       <FileName>Models\Tipodocumentacao.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Backend.Models.Tipoproposta">
-    <Position X="24.75" Y="9.25" Width="2.5" />
+    <Position X="39" Y="10.75" Width="2.5" />
+    <InheritanceLine Type="Backend.Models.LogModel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="31.875" Y="12.68" />
+        <Point X="31.875" Y="12.995" />
+        <Point X="36.885" Y="12.995" Type="JumpStart" />
+        <Point X="37.052" Y="12.995" Type="JumpEnd" />
+        <Point X="39.51" Y="12.995" Type="JumpStart" />
+        <Point X="39.677" Y="12.995" Type="JumpEnd" />
+        <Point X="40.25" Y="12.995" />
+        <Point X="40.25" Y="12.752" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAFAAgA=</HashCode>
       <FileName>Models\Tipoproposta.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Backend.Models.Tipopropostadocumentacao">
-    <Position X="25" Y="11.75" Width="2.25" />
+    <Position X="35.25" Y="13.25" Width="2.25" />
     <AssociationLine Name="TipodocumentacaoNavigation" Type="Backend.Models.Tipodocumentacao">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-2.069" Y="0.421" />
@@ -272,14 +338,14 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Cultura">
-    <Position X="22" Y="14.25" Width="2" />
+    <Position X="40.25" Y="22.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAgA=</HashCode>
       <FileName>Models\Cultura.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Backend.Models.Propostalaudo">
-    <Position X="27.75" Y="5.75" Width="2.75" />
+    <Position X="43.75" Y="14" Width="2.75" />
     <TypeIdentifier>
       <HashCode>IAACAAAEIAAAiBAIAAAIAAABAAAAAAAACAEAAgBAEgQ=</HashCode>
       <FileName>Models\Propostalaudo.cs</FileName>
@@ -289,7 +355,29 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.Propostalaudodiagnostico">
-    <Position X="28" Y="11.25" Width="2.5" />
+    <Position X="42.5" Y="19.25" Width="2.5" />
+    <InheritanceLine Type="Backend.Models.LogModel" ManuallyRouted="true">
+      <Path>
+        <Point X="31.875" Y="12.68" />
+        <Point X="31.875" Y="13.125" />
+        <Point X="34.75" Y="13.125" />
+        <Point X="34.75" Y="19.875" />
+        <Point X="37.292" Y="19.875" Type="JumpStart" />
+        <Point X="37.458" Y="19.875" Type="JumpEnd" />
+        <Point X="37.686" Y="19.875" Type="JumpStart" />
+        <Point X="37.852" Y="19.875" Type="JumpEnd" />
+        <Point X="38.25" Y="19.875" />
+        <Point X="38.25" Y="21.386" />
+        <Point X="38.417" Y="21.386" Type="JumpStart" />
+        <Point X="38.583" Y="21.386" Type="JumpEnd" />
+        <Point X="40.604" Y="21.386" Type="JumpStart" />
+        <Point X="40.771" Y="21.386" Type="JumpEnd" />
+        <Point X="42.25" Y="21.386" />
+        <Point X="42.25" Y="19" />
+        <Point X="43.75" Y="19" />
+        <Point X="43.75" Y="19.25" />
+      </Path>
+    </InheritanceLine>
     <TypeIdentifier>
       <HashCode>EAAKAAAABAAAQAAAACAAAAAAgBABAAAAAAAAAAAAAgg=</HashCode>
       <FileName>Models\Propostalaudodiagnostico.cs</FileName>
@@ -299,7 +387,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="Backend.Models.ApplicationUser">
-    <Position X="5.5" Y="4.75" Width="4.25" />
+    <Position X="34.25" Y="4.5" Width="4.25" />
     <TypeIdentifier>
       <HashCode>AAAABjCwAAAggAAgIEQAAACEABQAAYgIECAgAEAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>

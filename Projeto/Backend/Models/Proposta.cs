@@ -36,6 +36,8 @@ public partial class Proposta : LogModel
 
     public bool Ehastecfinanciada { get; set; }
 
+    public bool Ehpossuilaudoacompanhamento { get; set; }
+
     public decimal Valortotalfinanciado { get; set; }
 
     public int Prazomeses { get; set; }
