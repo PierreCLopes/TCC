@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models;
 
 [Table("TB_IMOVEL")]
-public partial class Imovel : LogModel
+public partial class Imovel
 {
     public int Id { get; set; }
 

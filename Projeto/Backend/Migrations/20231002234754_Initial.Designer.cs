@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20230913025558_Initial")]
+    [Migration("20231002234754_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -52,26 +52,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Cultura", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -93,10 +78,6 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("TB_CULTURA_PK");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.ToTable("TB_CULTURA", (string)null);
                 });
 
@@ -116,24 +97,6 @@ namespace Backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("IMOVEL");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<int?>("Pessoa")
                         .HasColumnType("int")
                         .HasColumnName("PESSOA");
@@ -150,10 +113,6 @@ namespace Backend.Migrations
                         .HasName("TB_DOCUMENTACAO_PK");
 
                     b.HasIndex("Imovel");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.HasIndex("Pessoa");
 
@@ -198,24 +157,6 @@ namespace Backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .IsUnicode(false)
@@ -242,10 +183,6 @@ namespace Backend.Migrations
 
                     b.HasKey("Id")
                         .HasName("TB_FILIAL_PK");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.HasIndex("Pessoa");
 
@@ -285,24 +222,6 @@ namespace Backend.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(max)")
                         .HasColumnName("LATITUDE");
-
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
 
                     b.Property<string>("Longitude")
                         .IsRequired()
@@ -346,10 +265,6 @@ namespace Backend.Migrations
 
                     b.HasIndex("Cidade");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.HasIndex("Proprietario");
 
                     b.ToTable("TB_IMOVEL", (string)null);
@@ -391,24 +306,6 @@ namespace Backend.Migrations
                         .HasColumnType("varchar(1)")
                         .HasColumnName("EMAIL");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -441,10 +338,6 @@ namespace Backend.Migrations
 
                     b.HasKey("Id")
                         .HasName("TB_PESSOA_PK");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.ToTable("TB_PESSOA", (string)null);
                 });
@@ -480,24 +373,6 @@ namespace Backend.Migrations
                         .HasColumnType("varchar(60)")
                         .HasColumnName("COMPLEMENTO");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<int>("Numero")
                         .HasColumnType("int")
                         .HasColumnName("NUMERO");
@@ -517,10 +392,6 @@ namespace Backend.Migrations
                         .HasName("TB_PESSOAENDERECO_PK");
 
                     b.HasIndex("Cidade");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.HasIndex("Pessoa");
 
@@ -565,6 +436,10 @@ namespace Backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("EHASTECFINANCIADA");
 
+                    b.Property<bool>("Ehpossuilaudoacompanhamento")
+                        .HasColumnType("bit")
+                        .HasColumnName("EHPOSSUILAUDOACOMPANHAMENTO");
+
                     b.Property<int>("Filial")
                         .HasColumnType("int")
                         .HasColumnName("FILIAL");
@@ -575,24 +450,6 @@ namespace Backend.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)")
                         .HasColumnName("LINHACREDITO");
-
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
 
                     b.Property<int>("Numeroparcela")
                         .HasColumnType("int")
@@ -681,10 +538,6 @@ namespace Backend.Migrations
 
                     b.HasIndex("Filial");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.HasIndex("Proponente");
 
                     b.HasIndex("Responsaveltecnico");
@@ -708,24 +561,6 @@ namespace Backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("IMOVEL");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<int>("Proposta")
                         .HasColumnType("int")
                         .HasColumnName("PROPOSTA");
@@ -734,10 +569,6 @@ namespace Backend.Migrations
                         .HasName("TB_PROPOSTAIMOVEL_PK");
 
                     b.HasIndex("Imovel");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.HasIndex("Proposta");
 
@@ -788,24 +619,6 @@ namespace Backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("EHPOSSUIAREARECURSOPROPRIO");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
-
                     b.Property<string>("Observacao")
                         .IsRequired()
                         .HasMaxLength(4000)
@@ -844,10 +657,6 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("TB_PROPOSTALAUDO_PK");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.HasIndex("Proposta");
 
                     b.ToTable("TB_PROPOSTALAUDO", (string)null);
@@ -877,23 +686,11 @@ namespace Backend.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("EHFAZERCONTROLE");
 
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
                     b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nivel")
                         .IsRequired()
@@ -915,10 +712,6 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("TB_PROPOSTALAUDODIAGNOSTICO_PK");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.HasIndex("Propostalaudo");
 
                     b.ToTable("TB_PROPOSTALAUDODIAGNOSTICO", (string)null);
@@ -929,24 +722,6 @@ namespace Backend.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int")
                         .HasColumnName("ID");
-
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -971,10 +746,6 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("TB_TIPODOCUMENTACAO_PK");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.ToTable("TB_TIPODOCUMENTACAO", (string)null);
                 });
 
@@ -983,24 +754,6 @@ namespace Backend.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int")
                         .HasColumnName("ID");
-
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -1018,10 +771,6 @@ namespace Backend.Migrations
                     b.HasKey("Id")
                         .HasName("TB_TIPOPROPOSTA_PK");
 
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
-
                     b.ToTable("TB_TIPOPROPOSTA", (string)null);
                 });
 
@@ -1030,24 +779,6 @@ namespace Backend.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int")
                         .HasColumnName("ID");
-
-                    b.Property<DateTime>("Logdataalteracao")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATAALTERACAO");
-
-                    b.Property<DateTime>("Logdatacadastro")
-                        .HasColumnType("datetime")
-                        .HasColumnName("LOGDATACADASTRO");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOALTERACAO");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("LOGUSUARIOCADASTRO");
 
                     b.Property<int>("Tipodocumentacao")
                         .HasColumnType("int")
@@ -1059,10 +790,6 @@ namespace Backend.Migrations
 
                     b.HasKey("Id")
                         .HasName("TB_TIPOPROPOSTADOCUMENTACAO_PK");
-
-                    b.HasIndex("Logusuarioalteracao");
-
-                    b.HasIndex("Logusuariocadastro");
 
                     b.HasIndex("Tipodocumentacao");
 
@@ -1123,10 +850,6 @@ namespace Backend.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -1166,10 +889,6 @@ namespace Backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -1245,13 +964,6 @@ namespace Backend.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("Backend.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
             modelBuilder.Entity("Backend.Models.Cidade", b =>
                 {
                     b.HasOne("Backend.Models.Estado", "EstadoNavigation")
@@ -1263,39 +975,12 @@ namespace Backend.Migrations
                     b.Navigation("EstadoNavigation");
                 });
 
-            modelBuilder.Entity("Backend.Models.Cultura", b =>
-                {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("CulturaLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("CulturaLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-                });
-
             modelBuilder.Entity("Backend.Models.Documentacao", b =>
                 {
                     b.HasOne("Backend.Models.Imovel", "ImovelNavigation")
                         .WithMany("Documentacoes")
                         .HasForeignKey("Imovel")
                         .HasConstraintName("TB_IMOVEL_TB_DOCUMENTACAO_fk");
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("DocumentacaoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("DocumentacaoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Backend.Models.Pessoa", "PessoaNavigation")
                         .WithMany("Documentacoes")
@@ -1315,10 +1000,6 @@ namespace Backend.Migrations
 
                     b.Navigation("ImovelNavigation");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("PessoaNavigation");
 
                     b.Navigation("PropostaNavigation");
@@ -1328,25 +1009,11 @@ namespace Backend.Migrations
 
             modelBuilder.Entity("Backend.Models.Filial", b =>
                 {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("FilialLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("FilialLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Pessoa", "PessoaNavigation")
                         .WithMany("Filiais")
                         .HasForeignKey("Pessoa")
                         .IsRequired()
                         .HasConstraintName("TB_PESSOA_TB_FILIAL_fk");
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
 
                     b.Navigation("PessoaNavigation");
                 });
@@ -1359,16 +1026,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasConstraintName("TB_CIDADE_TB_IMOVEL_fk");
 
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("ImovelLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("ImovelLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Pessoa", "ProprietarioNavigation")
                         .WithMany("Imoveis")
                         .HasForeignKey("Proprietario")
@@ -1377,28 +1034,7 @@ namespace Backend.Migrations
 
                     b.Navigation("CidadeNavigation");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("ProprietarioNavigation");
-                });
-
-            modelBuilder.Entity("Backend.Models.Pessoa", b =>
-                {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PessoaLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PessoaLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
                 });
 
             modelBuilder.Entity("Backend.Models.Pessoaendereco", b =>
@@ -1409,16 +1045,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasConstraintName("TB_CIDADE_TB_PESSOAENDERECO_fk");
 
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PessoaenderecoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PessoaenderecoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Pessoa", "PessoaNavigation")
                         .WithMany("Pessoaenderecos")
                         .HasForeignKey("Pessoa")
@@ -1426,10 +1052,6 @@ namespace Backend.Migrations
                         .HasConstraintName("TB_PESSOA_TB_PESSOAENDERECO_fk");
 
                     b.Navigation("CidadeNavigation");
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
 
                     b.Navigation("PessoaNavigation");
                 });
@@ -1453,16 +1075,6 @@ namespace Backend.Migrations
                         .HasForeignKey("Filial")
                         .IsRequired()
                         .HasConstraintName("TB_FILIAL_TB_PROPOSTA_fk");
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PropostaLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PropostaLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Backend.Models.Pessoa", "ProponenteNavigation")
                         .WithMany("PropostaProponenteNavigations")
@@ -1488,10 +1100,6 @@ namespace Backend.Migrations
 
                     b.Navigation("FilialNavigation");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("ProponenteNavigation");
 
                     b.Navigation("ResponsaveltecnicoNavigation");
@@ -1507,18 +1115,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasConstraintName("TB_IMOVEL_TB_PROPOSTAIMOVEL_fk");
 
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PropostaimovelLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_TB_PROPOSTAIMOVEL_LOGUSUARIOALTERACAO");
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PropostaimovelLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("FK_TB_PROPOSTAIMOVEL_LOGUSUARIOCADASTRO");
-
                     b.HasOne("Backend.Models.Proposta", "PropostaNavigation")
                         .WithMany("Propostaimoveis")
                         .HasForeignKey("Proposta")
@@ -1527,109 +1123,33 @@ namespace Backend.Migrations
 
                     b.Navigation("ImovelNavigation");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("PropostaNavigation");
                 });
 
             modelBuilder.Entity("Backend.Models.Propostalaudo", b =>
                 {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PropostalaudoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PropostalaudoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Proposta", "PropostaNavigation")
                         .WithMany("Propostalaudos")
                         .HasForeignKey("Proposta")
                         .IsRequired()
                         .HasConstraintName("TB_PROPOSTA_TB_PROPOSTAACOMPANHAMENTO_fk");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("PropostaNavigation");
                 });
 
             modelBuilder.Entity("Backend.Models.Propostalaudodiagnostico", b =>
                 {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("PropostalaudodiagnosticoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("PropostalaudodiagnosticoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Propostalaudo", "PropostalaudoNavigation")
                         .WithMany("Propostalaudodiagnosticos")
                         .HasForeignKey("Propostalaudo")
                         .IsRequired()
                         .HasConstraintName("TB_PROPOSTALAUDO_TB_PROPOSTALAUDODIAGNOSTICO_fk");
 
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-
                     b.Navigation("PropostalaudoNavigation");
-                });
-
-            modelBuilder.Entity("Backend.Models.Tipodocumentacao", b =>
-                {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("TipodocumentacaoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("TipodocumentacaoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
-                });
-
-            modelBuilder.Entity("Backend.Models.Tipoproposta", b =>
-                {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("TipopropostaLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("TipopropostaLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
                 });
 
             modelBuilder.Entity("Backend.Models.Tipopropostadocumentacao", b =>
                 {
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuarioalteracaoNavigation")
-                        .WithMany("TipopropostadocumentacaoLogusuarioalteracaoNavigations")
-                        .HasForeignKey("Logusuarioalteracao")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Backend.Models.ApplicationUser", "LogusuariocadastroNavigation")
-                        .WithMany("TipopropostadocumentacaoLogusuariocadastroNavigations")
-                        .HasForeignKey("Logusuariocadastro")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Backend.Models.Tipodocumentacao", "TipodocumentacaoNavigation")
                         .WithMany("Tipopropostadocumentacoes")
                         .HasForeignKey("Tipodocumentacao")
@@ -1641,10 +1161,6 @@ namespace Backend.Migrations
                         .HasForeignKey("Tipoproposta")
                         .IsRequired()
                         .HasConstraintName("TB_TIPOPROPOSTA_TB_TIPOPROPOSTADOCUMENTACAO_fk");
-
-                    b.Navigation("LogusuarioalteracaoNavigation");
-
-                    b.Navigation("LogusuariocadastroNavigation");
 
                     b.Navigation("TipodocumentacaoNavigation");
 
@@ -1723,61 +1239,6 @@ namespace Backend.Migrations
                     b.Navigation("Proposta");
 
                     b.Navigation("Tipopropostadocumentacoes");
-                });
-
-            modelBuilder.Entity("Backend.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("CulturaLogusuarioalteracaoNavigations");
-
-                    b.Navigation("CulturaLogusuariocadastroNavigations");
-
-                    b.Navigation("DocumentacaoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("DocumentacaoLogusuariocadastroNavigations");
-
-                    b.Navigation("FilialLogusuarioalteracaoNavigations");
-
-                    b.Navigation("FilialLogusuariocadastroNavigations");
-
-                    b.Navigation("ImovelLogusuarioalteracaoNavigations");
-
-                    b.Navigation("ImovelLogusuariocadastroNavigations");
-
-                    b.Navigation("PessoaLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PessoaLogusuariocadastroNavigations");
-
-                    b.Navigation("PessoaenderecoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PessoaenderecoLogusuariocadastroNavigations");
-
-                    b.Navigation("PropostaLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PropostaLogusuariocadastroNavigations");
-
-                    b.Navigation("PropostaimovelLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PropostaimovelLogusuariocadastroNavigations");
-
-                    b.Navigation("PropostalaudoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PropostalaudoLogusuariocadastroNavigations");
-
-                    b.Navigation("PropostalaudodiagnosticoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("PropostalaudodiagnosticoLogusuariocadastroNavigations");
-
-                    b.Navigation("TipodocumentacaoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("TipodocumentacaoLogusuariocadastroNavigations");
-
-                    b.Navigation("TipopropostaLogusuarioalteracaoNavigations");
-
-                    b.Navigation("TipopropostaLogusuariocadastroNavigations");
-
-                    b.Navigation("TipopropostadocumentacaoLogusuarioalteracaoNavigations");
-
-                    b.Navigation("TipopropostadocumentacaoLogusuariocadastroNavigations");
                 });
 #pragma warning restore 612, 618
         }

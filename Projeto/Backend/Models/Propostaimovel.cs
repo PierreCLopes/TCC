@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Backend.Models;
 
 [Table("TB_PROPOSTAIMOVEL")]
-public partial class Propostaimovel : LogModel
+public partial class Propostaimovel
 {
     public int Id { get; set; }
 

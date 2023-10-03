@@ -108,20 +108,8 @@ namespace Backend.Data
                 entity.ToTable("TB_CULTURA");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
+                    .HasColumnName("ID")
+                    .UseIdentityColumn();
                 entity.Property(e => e.Nome)
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -148,18 +136,6 @@ namespace Backend.Data
                     .IsUnicode(false)
                     .HasColumnName("ARQUIVO");
                 entity.Property(e => e.Imovel).HasColumnName("IMOVEL");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Pessoa).HasColumnName("PESSOA");
                 entity.Property(e => e.Proposta).HasColumnName("PROPOSTA");
                 entity.Property(e => e.Tipo).HasColumnName("TIPO");
@@ -209,18 +185,6 @@ namespace Backend.Data
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
                     .HasColumnName("NOME");
@@ -265,18 +229,6 @@ namespace Backend.Data
                 entity.Property(e => e.Latitude)
                     .IsUnicode(false)
                     .HasColumnName("LATITUDE");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Longitude)
                     .IsUnicode(false)
                     .HasColumnName("LONGITUDE");
@@ -334,18 +286,6 @@ namespace Backend.Data
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasColumnName("EMAIL");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Nome)
                     .HasMaxLength(100)
                     .IsUnicode(false)
@@ -387,18 +327,6 @@ namespace Backend.Data
                     .HasMaxLength(60)
                     .IsUnicode(false)
                     .HasColumnName("COMPLEMENTO");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Numero).HasColumnName("NUMERO");
                 entity.Property(e => e.Observacao)
                     .HasMaxLength(4000)
@@ -430,18 +358,6 @@ namespace Backend.Data
                     .HasColumnType("decimal(15, 2)")
                     .HasColumnName("AREA");
                 entity.Property(e => e.Imovel).HasColumnName("IMOVEL");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Proposta).HasColumnName("PROPOSTA");
 
                 entity.HasOne(d => d.ImovelNavigation).WithMany(p => p.Propostaimoveis)
@@ -453,22 +369,6 @@ namespace Backend.Data
                     .HasForeignKey(d => d.Proposta)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("TB_PROPOSTA_TB_PROPOSTAIMOVEL_fk");
-
-                // Relacionamento com o usuário de cadastro
-                entity.HasOne<ApplicationUser>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Logusuariocadastro)
-                    .HasPrincipalKey(u => u.Id)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_TB_PROPOSTAIMOVEL_LOGUSUARIOCADASTRO");
-
-                // Relacionamento com o usuário de alteração
-                entity.HasOne<ApplicationUser>()
-                    .WithMany()
-                    .HasForeignKey(e => e.Logusuarioalteracao)
-                    .HasPrincipalKey(u => u.Id)
-                    .OnDelete(DeleteBehavior.Restrict)
-                    .HasConstraintName("FK_TB_PROPOSTAIMOVEL_LOGUSUARIOALTERACAO");
             });
 
             modelBuilder.Entity<Propostalaudo>(entity =>
@@ -493,18 +393,6 @@ namespace Backend.Data
                 entity.Property(e => e.Ehepocaplantiozoneamento).HasColumnName("EHEPOCAPLANTIOZONEAMENTO");
                 entity.Property(e => e.Ehlavouraplantadafinanciada).HasColumnName("EHLAVOURAPLANTADAFINANCIADA");
                 entity.Property(e => e.Ehpossuiarearecursoproprio).HasColumnName("EHPOSSUIAREARECURSOPROPRIO");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Observacao)
                     .HasMaxLength(4000)
                     .IsUnicode(false)
@@ -547,18 +435,6 @@ namespace Backend.Data
                     .HasColumnName("DIAGNOSTICO");
                 entity.Property(e => e.Ehalterouprodutividade).HasColumnName("EHALTEROUPRODUTIVIDADE");
                 entity.Property(e => e.Ehfazercontrole).HasColumnName("EHFAZERCONTROLE");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Nivel)
                     .IsUnicode(false)
                     .HasColumnName("NIVEL");
@@ -606,18 +482,6 @@ namespace Backend.Data
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("LINHACREDITO");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Numeroparcela).HasColumnName("NUMEROPARCELA");
                 entity.Property(e => e.Observacao)
                     .HasMaxLength(4000)
@@ -703,18 +567,6 @@ namespace Backend.Data
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
                     .HasColumnName("NOME");
@@ -737,18 +589,6 @@ namespace Backend.Data
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Tipodocumentacao).HasColumnName("TIPODOCUMENTACAO");
                 entity.Property(e => e.Tipoproposta).HasColumnName("TIPOPROPOSTA");
 
@@ -772,18 +612,6 @@ namespace Backend.Data
                 entity.Property(e => e.Id)
                     .ValueGeneratedNever()
                     .HasColumnName("ID");
-                entity.Property(e => e.Logdataalteracao)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATAALTERACAO");
-                entity.Property(e => e.Logdatacadastro)
-                    .HasColumnType("datetime")
-                    .HasColumnName("LOGDATACADASTRO");
-                entity.Property(e => e.Logusuarioalteracao)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOALTERACAO");
-                entity.Property(e => e.Logusuariocadastro)
-                    .HasMaxLength(450)
-                    .HasColumnName("LOGUSUARIOCADASTRO");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
                     .HasColumnName("NOME");
@@ -792,189 +620,6 @@ namespace Backend.Data
                     .IsUnicode(false)
                     .HasColumnName("OBSERVACAO");
             });
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PessoaLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PessoaLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PessoaenderecoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PessoaenderecoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.CulturaLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.CulturaLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.DocumentacaoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.DocumentacaoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.FilialLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.FilialLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.ImovelLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.ImovelLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostaLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostaLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostaimovelLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostaimovelLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostalaudoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostalaudoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostalaudodiagnosticoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.PropostalaudodiagnosticoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipodocumentacaoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipodocumentacaoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipopropostaLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipopropostaLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipopropostadocumentacaoLogusuariocadastroNavigations)
-                .WithOne(e => e.LogusuariocadastroNavigation)
-                .HasForeignKey(e => e.Logusuariocadastro)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(u => u.TipopropostadocumentacaoLogusuarioalteracaoNavigations)
-                .WithOne(e => e.LogusuarioalteracaoNavigation)
-                .HasForeignKey(e => e.Logusuarioalteracao)
-                .HasPrincipalKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Restrict);
 
             OnModelCreatingPartial(modelBuilder);
         }

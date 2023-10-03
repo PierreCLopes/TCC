@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Backend.Models;
 
 [Table("TB_FILIAL")]
-public partial class Filial : LogModel
+public partial class Filial
 {
     public int Id { get; set; }
 

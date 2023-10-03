@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Backend.Models;
 
 [Table("TB_PROPOSTALAUDO")]
-public partial class Propostalaudo : LogModel
+public partial class Propostalaudo
 {
     public int Id { get; set; }
 
