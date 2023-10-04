@@ -1,16 +1,16 @@
 import { Enviroment } from "../../../environment";
 import { Api } from "../axios-config";
 
-interface IDetalheCultura{
+export interface IDetalheCultura{
     id: number,
-    precoKg: number,
+    precokg: number,
     nome: string,
     observacao: string
 }
 
-interface IListagemCultura{
+export interface IListagemCultura{
     id: number,
-    precoKg: number,
+    precokg: number,
     nome: string
 }
 

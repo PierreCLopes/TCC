@@ -39,11 +39,11 @@ namespace Backend.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            var totalCount = culturas.Count();
+            //var totalCount = culturas.Count();
 
-            var response = new ApiResponse<List<Cultura>>(culturas, totalCount);
+            //var response = new ApiResponse<List<Cultura>>(culturas, totalCount);
 
-            return Ok(response);
+            return Ok(culturas);
         }
 
         [HttpGet("{id}")]
