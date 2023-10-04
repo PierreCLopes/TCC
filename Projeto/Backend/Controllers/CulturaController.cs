@@ -21,13 +21,32 @@ namespace Backend.Controllers
             _context = context;
         }
 
-        [HttpGet("culturas")]
-        public async Task<ActionResult<IEnumerable<Cultura>>> GetCulturas()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Cultura>>> GetCulturas(
+            [FromQuery] int page = 1, 
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? nome = null)
         {
-            return await _context.Culturas.ToListAsync();
+            IQueryable<Cultura> query = _context.Culturas;
+
+            if (!string.IsNullOrEmpty(nome))
+            {
+                query = query.Where(p => p.Nome.Contains(nome));
+            }
+
+            var culturas = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalCount = culturas.Count();
+
+            var response = new ApiResponse<List<Cultura>>(culturas, totalCount);
+
+            return Ok(response);
         }
 
-        [HttpGet("cultura/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Cultura>> GetCultura(int id)
         {
             var cultura = await _context.Culturas.FindAsync(id);
@@ -40,7 +59,7 @@ namespace Backend.Controllers
             return cultura;
         }
 
-        [HttpPost("cultura")]
+        [HttpPost]
         public async Task<ActionResult<Cultura>> PostCultura(Cultura cultura)
         {
             _context.Culturas.Add(cultura);
@@ -49,7 +68,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetCultura", new { id = cultura.Id }, cultura);
         }
 
-        [HttpPut("cultura/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutCultura(int id, Cultura cultura)
         {
             if (id != cultura.Id)
@@ -78,7 +97,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
-        [HttpDelete("cultura/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCultura(int id)
         {
             var cultura = await _context.Culturas.FindAsync(id);

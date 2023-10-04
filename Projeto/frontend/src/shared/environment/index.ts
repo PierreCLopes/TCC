@@ -8,5 +8,5 @@ export const Enviroment = {
 
     LISTAGEM_VAZIA: 'Nenhum registro encontrado.',
 
-    URL_BASE: 'https://localhost:7263/api',
+    URL_BASE: 'http://localhost:5286/api',
 };
