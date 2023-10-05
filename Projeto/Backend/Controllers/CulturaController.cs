@@ -34,14 +34,16 @@ namespace Backend.Controllers
                 query = query.Where(p => p.Nome.Contains(nome));
             }
 
+            //-- Pega o total de registros da base com o filtro de nome
+            var totalCount = await query.CountAsync();
+
+            //-- Pega os registros filtrando pelos query paramns
             var culturas = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            //var totalCount = culturas.Count();
-
-            //var response = new ApiResponse<List<Cultura>>(culturas, totalCount);
+            Response.Headers.Add("X-Total-Count", totalCount.ToString());
 
             return Ok(culturas);
         }

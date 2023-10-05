@@ -1,4 +1,4 @@
-export const Enviroment = {
+export const Environment = {
     /**
      * Define a quantidade de linhas a ser carregada por padrão nas listagens
      */

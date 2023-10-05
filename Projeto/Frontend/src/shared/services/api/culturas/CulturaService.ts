@@ -1,4 +1,4 @@
-import { Enviroment } from "../../../environment";
+import { Environment } from "../../../environment";
 import { Api } from "../axios-config";
 
 export interface IDetalheCultura{
@@ -14,30 +14,31 @@ export interface IListagemCultura{
     nome: string
 }
 
-type TCulturas = {
+type TCulturasComTotalCount = {
     data: IListagemCultura[];
+    totalCount: number;
 }
 
-const getAll = async (page = 1, filter = ''): Promise<TCulturas | Error> => { 
+const getAll = async (page = 1, filter = ''): Promise<TCulturasComTotalCount | Error> => {
     try {
-        const urlRelativa = `/cultura?page=${page}&pageSize=${Enviroment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/cultura?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+  
+      const { data, headers } = await Api.get(urlRelativa);
 
-        const { data } = await Api.get(urlRelativa);
-
-        if(data){
-            return{
-                data
-            };
-        }
-
-        return new Error('Erro ao listar os registros.');
-
+      if (data) {
+        return {
+          data,
+          totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
+        };
+      }
+  
+      return new Error('Erro ao listar os registros.');
     } catch (error) {
-        console.error(error);
-
-        return new Error((error as {message: string}).message || 'Erro ao listar os registros.');
+      console.error(error);
+      return new Error((error as { message: string }).message || 'Erro ao listar os registros.');
     }
-};
+  };
+
 
 const getById = async (id: number): Promise<IDetalheCultura | Error> => {
     try {
