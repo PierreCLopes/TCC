@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
-import { useSearchParams } from "react-router-dom";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination } from '@mui/material';
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon } from '@mui/material';
 
 import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -12,6 +12,7 @@ import { Environment } from '../../shared/environment';
 export const ListagemDeCultura: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
+    const navigate = useNavigate();
 
     const [rows, setRows] = useState<IListagemCultura[]>([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -46,6 +47,24 @@ export const ListagemDeCultura: React.FC = () => {
 
     }, [busca, pagina]);
 
+    const handleDelete = (id: number) => {
+        if(confirm('Deseja realmente excluir a cultura?')){
+            CulturaService.deleteById(id)
+            .then(result => {
+                if (result instanceof Error){
+                    alert(result.message);
+                } else {
+                    setRows(oldRows =>{
+                        return[
+                            ...oldRows.filter(oldRow => oldRow.id !== id),
+                        ]
+                    });
+                    alert('Registro apagado com sucesso!');
+                }
+            })
+        }
+    }
+
     return(
         <LayoutBaseDePagina 
             titulo="Listagem de culturas"
@@ -54,6 +73,7 @@ export const ListagemDeCultura: React.FC = () => {
                     textoBotaoNovo="Nova"
                     mostrarInputBusca
                     textoDaBusca={busca}
+                    aoClicarEmNovo={() => navigate(`/cultura/nova`)}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1'}, {replace: true})}
                 ></FerramentasDaListagem>
             }
@@ -75,7 +95,14 @@ export const ListagemDeCultura: React.FC = () => {
                                 <TableCell>{row.id}</TableCell>
                                 <TableCell>{row.nome}</TableCell>
                                 <TableCell>{row.precokg}</TableCell>
-                                <TableCell>Ações</TableCell>
+                                <TableCell>
+                                    <IconButton size='small' onClick={() => navigate(`/cultura/${row.id}`)}>
+                                        <Icon>edit</Icon>
+                                    </IconButton>
+                                    <IconButton size='small' onClick={() => handleDelete(row.id)}>
+                                        <Icon>delete</Icon>
+                                    </IconButton>
+                                </TableCell>
                             </TableRow> 
                         ))}
 

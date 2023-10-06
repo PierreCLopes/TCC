@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useDrawerContext } from '../shared/contexts';
 import { useEffect } from 'react';
-import { Dashboard, ListagemDeCultura } from '../pages';
+import { Dashboard, DetalheDeCultura, ListagemDeCultura } from '../pages';
 
 export const AppRoutes = () => {
     const { toggleDrawerOpen, setDrawerOptions } = useDrawerContext();
@@ -26,6 +26,7 @@ export const AppRoutes = () => {
         <Routes>
             <Route path="/home" element={<Dashboard/>}/>
             <Route path="/culturas" element={<ListagemDeCultura/>}/>
+            <Route path="/cultura/:id" element={<DetalheDeCultura/>}/>
             <Route path="*" element={<Navigate to="/home"/>}/>
         </Routes>
     )
