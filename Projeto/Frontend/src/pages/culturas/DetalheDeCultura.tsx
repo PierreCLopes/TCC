@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, TextField } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography } from "@mui/material";
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
@@ -111,20 +111,69 @@ export const DetalheDeCultura: React.FC = () => {
                     aoClicarEmSalvarEFechar={() => {handleSave}}
                     aoClicarEmNovo={() => {navigate('/cultura/nova')}}
                     aoClicarEmVoltar={() => {navigate('/culturas')}}
+
+                    mostrarBotaoSalvarCarregando={isLoading}
+                    mostrarBotaoApagarCarregando={isLoading}
+                    mostrarBotaoNovoCarregando={isLoading}
+                    mostrarBotaoSalvarEFecharCarregando={isLoading}
                 />
             }
         >
             <Form ref={formRef} onSubmit={handleSave}>
-                <VTextField placeholder="Nome" name="nome" required={true}/>
-                <VTextField placeholder="Preço por Kg" name="precokg" type="number" required={true}/>
-                <VTextField placeholder="Observação" name="observacao"/>
+                <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
+                    <Grid container direction="column" padding={2} spacing={2}>
+
+                        {isLoading &&(
+                            <Grid item>
+                            <LinearProgress variant="indeterminate"/>
+                            </Grid>
+                        )}
+
+                        <Grid item>
+                            <Typography variant="h6">Geral</Typography>
+                        </Grid>
+                        <Grid container item direction="row" spacing={2}>
+                            <Grid item xs={6}>
+                                <VTextField 
+                                    fullWidth 
+                                    label="Nome"
+                                    placeholder="Nome" 
+                                    name="nome"
+                                    disabled={isLoading}
+                                    onChange={e => setNome(e.target.value)}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <VTextField 
+                                    fullWidth 
+                                    label="Preço por Kg"
+                                    placeholder="Preço por Kg" 
+                                    name="precokg" 
+                                    type="number"
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                                        inputMode: "decimal"
+                                    }}
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item direction="row">
+                            <Grid item xs={12}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Observação"
+                                    placeholder="Observação" 
+                                    name="observacao"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                        </Grid>
+
+                    </Grid> 
+                </Box>
             </Form>
-
-            {isLoading &&(
-                <LinearProgress variant="indeterminate"/>
-            )}
-
-            <p>DetalheDeCultura</p>
         </LayoutBaseDePagina>
     );
 };
