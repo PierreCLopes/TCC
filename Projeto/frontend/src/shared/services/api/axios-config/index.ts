@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { errorInterceptor, responseInterceptor } from './interceptors';
+import { errorInterceptor, responseInterceptor, requestInterceptor } from './interceptors';
 import { Environment } from '../../../environment';
 
 const Api = axios.create(
@@ -11,6 +11,11 @@ const Api = axios.create(
 Api.interceptors.response.use(
     (response) => responseInterceptor(response),
     (error) => errorInterceptor(error)
+);
+
+Api.interceptors.request.use(
+  (request) => requestInterceptor(request),
+  (error) => errorInterceptor(error)
 );
 
 export { Api };

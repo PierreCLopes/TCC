@@ -1,25 +1,30 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography } from "@mui/material";
+import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { CulturaService } from "../../shared/services/api/culturas/CulturaService";
-import { Form } from "@unform/web";
-import { FormHandles } from "@unform/core";
-import { VTextField } from "../../shared/forms";
+import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 
 interface IFormData {
     nome: string;
-    observacao: string;
     precokg: number;
+    observacao: string;
 }
+
+const formValitationSchema: yup.Schema<IFormData> = yup.object({
+    nome: yup.string().required(),
+    precokg: yup.number().required().min(0.01),
+    observacao: yup.string().default(''),
+});
 
 export const DetalheDeCultura: React.FC = () => {
     const navigate = useNavigate();
     const {id = 'nova'} = useParams<'id'>();
 
-    const formRef = useRef<FormHandles>(null);
+    const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
@@ -45,41 +50,79 @@ export const DetalheDeCultura: React.FC = () => {
                     formRef.current?.setData(result);
                 }
             })
+        } else {
+            formRef.current?.setData({
+                nome: '',
+                precokg: 0,
+                observacao: ''
+            });
         }
     }, [id])
 
     const handleSave = (dados: IFormData) => {
 
+        formValitationSchema
+            .validate(dados, { abortEarly: false })
+            .then((dadosValidados) => {
+                if(id === 'nova'){
+                    CulturaService.create(dadosValidados)
+                    .then((result) => {
+        
+                        setIsLoading(false);
+        
+                        if (result instanceof Error){
+                            alert(result.message);
+        
+                        } else {
+        
+                            if(isSaveAndClose()){
+                                navigate('/culturas');
+        
+                            } else {
+                                alert('Registro criado com sucesso!');
+                                navigate(`/cultura/${result.id}`);
+                            }
+                        }  
+                    })
+                } else {
+                    CulturaService.updateById(Number(id), {id: Number(id), ...dadosValidados})
+                    .then((result) => {
+        
+                        setIsLoading(false);
+        
+                        if (result instanceof Error){
+                            alert(result.message);
+        
+                        } else {
+        
+                            if(isSaveAndClose()){
+                                navigate('/culturas');
+        
+                            } else {
+                                alert('Registro alterado com sucesso!');
+                            }
+                        }  
+                    })
+                }
+            })
+            .catch((errors: yup.ValidationError) => {
+                
+                setIsLoading(false);
+
+                const validationErrors: IVFormErrors = {};
+
+                errors.inner.forEach(error => {
+                    if (!error.path) return;
+
+                    validationErrors[error.path] = error.message;
+                })
+                
+                formRef.current?.setErrors(validationErrors);
+            });
+
         setIsLoading(true);
 
-        if(id === 'nova'){
-            CulturaService.create(dados)
-            .then((result) => {
-
-                setIsLoading(false);
-
-                if (result instanceof Error){
-                    alert(result.message);
-
-                } else {
-                    alert('Registro criado com sucesso!');
-                    navigate(`/cultura/${result.id}`)
-                }  
-            })
-        } else {
-            CulturaService.updateById(Number(id), {id: Number(id), ...dados})
-            .then((result) => {
-
-                setIsLoading(false);
-
-                if (result instanceof Error){
-                    alert(result.message);
-
-                } else {
-                    alert('Registro alterado com sucesso!');
-                }  
-            })
-        }
+        
     };
 
     const handleDelete = (id: number) => {
@@ -107,8 +150,8 @@ export const DetalheDeCultura: React.FC = () => {
                     mostrarBotaoApagar={id !== 'nova'}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
-                    aoClicarEmSalvar={() =>  formRef.current?.submitForm()}
-                    aoClicarEmSalvarEFechar={() => {handleSave}}
+                    aoClicarEmSalvar={save}
+                    aoClicarEmSalvarEFechar={saveAndClose}
                     aoClicarEmNovo={() => {navigate('/cultura/nova')}}
                     aoClicarEmVoltar={() => {navigate('/culturas')}}
 
@@ -119,7 +162,7 @@ export const DetalheDeCultura: React.FC = () => {
                 />
             }
         >
-            <Form ref={formRef} onSubmit={handleSave}>
+            <VForm ref={formRef} onSubmit={handleSave}>
                 <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
                     <Grid container direction="column" padding={2} spacing={2}>
 
@@ -152,7 +195,8 @@ export const DetalheDeCultura: React.FC = () => {
                                     type="number"
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                                        inputMode: "decimal"
+                                        inputMode: "decimal",
+                                        
                                     }}
                                     disabled={isLoading}
                                 />
@@ -173,7 +217,7 @@ export const DetalheDeCultura: React.FC = () => {
 
                     </Grid> 
                 </Box>
-            </Form>
+            </VForm>
         </LayoutBaseDePagina>
     );
 };
