@@ -78,11 +78,11 @@ namespace Backend.Migrations
                     APELIDO = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
                     CNPJCPF = table.Column<string>(type: "varchar(14)", unicode: false, maxLength: 14, nullable: false),
                     TELEFONE = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
-                    OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
+                    OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: true),
                     RG = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
                     EMAIL = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
                     EHTECNICO = table.Column<bool>(type: "bit", nullable: false),
-                    CFTA = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: false),
+                    CFTA = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
                     TIPO = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -203,7 +203,8 @@ namespace Backend.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false),
                     NOME = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
-                    ESTADO = table.Column<int>(type: "int", nullable: false)
+                    ESTADO = table.Column<int>(type: "int", nullable: false),
+                    CODIGOIBGE = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +263,8 @@ namespace Backend.Migrations
                 name: "TB_IMOVEL",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     NOME = table.Column<string>(type: "varchar(80)", unicode: false, maxLength: 80, nullable: false),
                     PROPRIETARIO = table.Column<int>(type: "int", nullable: false),

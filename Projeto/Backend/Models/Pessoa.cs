@@ -18,7 +18,7 @@ public partial class Pessoa
 
     public string? Telefone { get; set; }
 
-    public string Observacao { get; set; } = null!;
+    public string? Observacao { get; set; } = null!;
 
     public string? Rg { get; set; }
 
@@ -26,7 +26,7 @@ public partial class Pessoa
 
     public bool Ehtecnico { get; set; }
 
-    public string Cfta { get; set; } = null!;
+    public string? Cfta { get; set; } = null!;
 
     public int Tipo { get; set; }
 

@@ -28,6 +28,10 @@ namespace Backend.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ID");
 
+                    b.Property<int>("Codigoibge")
+                        .HasColumnType("int")
+                        .HasColumnName("CODIGOIBGE");
+
                     b.Property<int>("Estado")
                         .HasColumnType("int")
                         .HasColumnName("ESTADO");
@@ -189,8 +193,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Imovel", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Areaagricola")
                         .HasColumnType("decimal(15, 2)")
@@ -280,7 +287,6 @@ namespace Backend.Migrations
                         .HasColumnName("APELIDO");
 
                     b.Property<string>("Cfta")
-                        .IsRequired()
                         .HasMaxLength(11)
                         .IsUnicode(false)
                         .HasColumnType("varchar(11)")
@@ -311,7 +317,6 @@ namespace Backend.Migrations
                         .HasColumnName("NOME");
 
                     b.Property<string>("Observacao")
-                        .IsRequired()
                         .HasMaxLength(4000)
                         .IsUnicode(false)
                         .HasColumnType("varchar(4000)")

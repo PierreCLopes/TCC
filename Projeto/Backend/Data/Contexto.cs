@@ -94,6 +94,7 @@ namespace Backend.Data
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
                     .HasColumnName("NOME");
+                entity.Property(e => e.Codigoibge).HasColumnName("CODIGOIBGE");
 
                 entity.HasOne(d => d.EstadoNavigation).WithMany(p => p.Cidades)
                     .HasForeignKey(d => d.Estado)
@@ -211,8 +212,8 @@ namespace Backend.Data
                 entity.ToTable("TB_IMOVEL");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("ID");
+                    .HasColumnName("ID")
+                    .UseIdentityColumn();
                 entity.Property(e => e.Areaagricola)
                     .HasColumnType("decimal(15, 2)")
                     .HasColumnName("AREAAGRICOLA");
