@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231015021410_Initial")]
+    [Migration("20231015191705_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -214,10 +214,8 @@ namespace Backend.Migrations
                         .HasColumnType("decimal(15, 2)")
                         .HasColumnName("AREATOTAL");
 
-                    b.Property<string>("Arquivokml")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                    b.Property<byte[]>("Arquivokml")
+                        .HasColumnType("VARBINARY(MAX)")
                         .HasColumnName("ARQUIVOKML");
 
                     b.Property<int>("Cidade")

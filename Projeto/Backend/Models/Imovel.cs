@@ -36,7 +36,7 @@ public partial class Imovel
 
     public string Roteiroacesso { get; set; } = null!;
 
-    public string Arquivokml { get; set; } = null!;
+    public byte[]? Arquivokml { get; set; }
 
     [JsonIgnore]
     public virtual Cidade CidadeNavigation { get; set; } = null!;

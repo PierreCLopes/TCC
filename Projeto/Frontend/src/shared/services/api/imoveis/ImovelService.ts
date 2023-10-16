@@ -13,9 +13,12 @@ export interface IDetalheImovel{
     areaagricola: number,
     areapastagem: number,
     cidade: number,
-    roteiroacesso: string,
-    arquivokml: string
+    roteiroacesso: string
 }
+
+export type IDetalheImovelComArquivoKml = IDetalheImovel & {
+    arquivokml: File
+} 
 
 export interface IListagemImovel{
     id: number,
@@ -50,7 +53,7 @@ const getAll = async (page = 1, filter = ''): Promise<TImoveisComTotalCount | Er
   };
 
 
-const getById = async (id: number): Promise<IDetalheImovel | Error> => {
+const getById = async (id: number): Promise<IDetalheImovelComArquivoKml | Error> => {
     try {
         const { data } = await Api.get(`/imovel/${id}`);
 
@@ -106,11 +109,34 @@ const deleteById = async (id: number): Promise<void | Error> => {
     }  
 };
 
+const uploadFile = async (id: number, file: File): Promise<void | Error> => {
+    try {
+      const formData = new FormData();
+      formData.append('arquivokml', file);
+  
+      const { data } = await Api.post(`/imovel/${id}/uploadFile`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      if (data) {
+        return data;
+      }
+  
+      return new Error('Erro ao fazer upload do arquivo.');
+    } catch (error) {
+      console.error(error);
+  
+      return new Error((error as { message: string }).message || 'Erro ao fazer upload do arquivo.');
+    }
+  };
 
 export const ImovelService = {
     getAll,
     getById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    uploadFile
 };

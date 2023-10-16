@@ -224,8 +224,8 @@ namespace Backend.Data
                     .HasColumnType("decimal(15, 2)")
                     .HasColumnName("AREATOTAL");
                 entity.Property(e => e.Arquivokml)
-                    .IsUnicode(false)
-                    .HasColumnName("ARQUIVOKML");
+                      .HasColumnType("VARBINARY(MAX)")
+                      .HasColumnName("ARQUIVOKML");
                 entity.Property(e => e.Cidade).HasColumnName("CIDADE");
                 entity.Property(e => e.Latitude)
                     .IsUnicode(false)

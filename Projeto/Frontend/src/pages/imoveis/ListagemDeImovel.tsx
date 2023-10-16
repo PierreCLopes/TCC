@@ -85,7 +85,7 @@ export const ListagemDeImovel: React.FC = () => {
                             <TableCell>Código</TableCell>
                             <TableCell>Nome</TableCell>
                             <TableCell>Matrícula</TableCell>
-                            <TableCell>Área total</TableCell>
+                            <TableCell>Área total (ha)</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>

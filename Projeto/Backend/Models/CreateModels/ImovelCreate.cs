@@ -6,7 +6,6 @@
         public decimal Areatotal { get; set; }
         public decimal Areaagricola { get; set; }
         public decimal Areapastagem { get; set; }
-        public string Arquivokml { get; set; }
         public int Proprietario { get; set; }
         public int Cidade { get; set; }
         public string Matricula { get; set; }

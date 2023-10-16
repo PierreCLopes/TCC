@@ -276,7 +276,7 @@ namespace Backend.Migrations
                     AREAPASTAGEM = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
                     CIDADE = table.Column<int>(type: "int", nullable: false),
                     ROTEIROACESSO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
-                    ARQUIVOKML = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false)
+                    ARQUIVOKML = table.Column<byte[]>(type: "VARBINARY(MAX)", nullable: true)
                 },
                 constraints: table =>
                 {

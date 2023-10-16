@@ -7,6 +7,7 @@ import { LayoutBaseDePagina } from "../../shared/layouts";
 import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/components";
 import { ImovelService } from "../../shared/services/api/imoveis/ImovelService";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
+import { FileInput } from "../../shared/components/file-input/FileInput";
 
 interface IFormData {
     observacao: string,
@@ -20,10 +21,10 @@ interface IFormData {
     areapastagem: number,
     cidade: number,
     roteiroacesso: string,
-    arquivokml: string
+    arquivokml: File
 }
 
-const formValitationSchema: yup.Schema<IFormData> = yup.object({
+const formValitationSchema: yup.Schema<Omit<IFormData, 'arquivokml'>> = yup.object({
     nome: yup.string().required(),
     proprietario: yup.number().default(0),
     observacao: yup.string().default(''),
@@ -34,8 +35,7 @@ const formValitationSchema: yup.Schema<IFormData> = yup.object({
     areaagricola: yup.number().default(0),
     areapastagem: yup.number().default(0),
     cidade: yup.number().required().moreThan(0),
-    roteiroacesso: yup.string().required(), 
-    arquivokml: yup.string().required()
+    roteiroacesso: yup.string().required()
 });
 
 export const DetalheDeImovel: React.FC = () => {
@@ -62,8 +62,28 @@ export const DetalheDeImovel: React.FC = () => {
                     navigate('/imoveis');
 
                 } else {
+
                     console.log(result);
                     setNome(result.nome);
+
+                    console.log(String(result.arquivokml));
+
+                    // Decodifique a representação Base64
+                    const decodedData = atob(String(result.arquivokml));
+
+                    // Converta a representação decodificada em um ArrayBuffer
+                    const arrayBuffer = new ArrayBuffer(decodedData.length);
+                    const uint8Array = new Uint8Array(arrayBuffer);
+                    for (let i = 0; i < decodedData.length; i++) {
+                        uint8Array[i] = decodedData.charCodeAt(i);
+                    }
+
+                    // Crie um Blob a partir do ArrayBuffer
+                    const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
+
+                    result.arquivokml = new File([blob], 'arquivo.kml', { lastModified: Date.now() });
+
+                    console.log(result.arquivokml);
 
                     formRef.current?.setData(result);
                 }
@@ -79,9 +99,9 @@ export const DetalheDeImovel: React.FC = () => {
                 longitude: '',
                 areaagricola: 0,
                 areapastagem: 0,
-                cidade: 0,
+                cidade: undefined,
                 roteiroacesso: '',
-                arquivokml: ''
+                arquivokml: undefined
             });
         }
     }, [id])
@@ -100,6 +120,12 @@ export const DetalheDeImovel: React.FC = () => {
                             alert(result.message);
         
                         } else {
+                            // Envie o arquivo do imóvel
+                            ImovelService.uploadFile(result.id, dados.arquivokml)
+                            .then((resultFile) => {
+                                if (resultFile instanceof Error) 
+                                    alert(resultFile.message);
+                            });
         
                             if(isSaveAndClose()){
                                 navigate('/imoveis');
@@ -121,7 +147,13 @@ export const DetalheDeImovel: React.FC = () => {
                             alert(result.message);
         
                         } else {
-        
+                            // Envie o arquivo do imóvel
+                            ImovelService.uploadFile(Number(id), dados.arquivokml)
+                            .then((resultFile) => {
+                                if (resultFile instanceof Error) 
+                                    alert(resultFile.message);
+                            });
+
                             if(isSaveAndClose()){
                                 navigate('/imoveis');
         
@@ -257,12 +289,9 @@ export const DetalheDeImovel: React.FC = () => {
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
-                                <VTextField 
-                                    fullWidth 
-                                    label="Arquivo KML"
-                                    placeholder="Arquivo KML" 
-                                    name="arquivokml" 
-                                    disabled={isLoading}
+                                <FileInput
+                                    name="arquivokml"
+                                    extensao=".kml"
                                 />
                             </Grid>
                         </Grid>

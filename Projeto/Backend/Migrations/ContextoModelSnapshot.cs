@@ -211,10 +211,8 @@ namespace Backend.Migrations
                         .HasColumnType("decimal(15, 2)")
                         .HasColumnName("AREATOTAL");
 
-                    b.Property<string>("Arquivokml")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                    b.Property<byte[]>("Arquivokml")
+                        .HasColumnType("VARBINARY(MAX)")
                         .HasColumnName("ARQUIVOKML");
 
                     b.Property<int>("Cidade")

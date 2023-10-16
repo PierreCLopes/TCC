@@ -71,7 +71,6 @@ namespace Backend.Controllers
                 Areatotal = imovelDTO.Areatotal,
                 Areaagricola = imovelDTO.Areaagricola,
                 Areapastagem = imovelDTO.Areapastagem,
-                Arquivokml = imovelDTO.Arquivokml,
                 Matricula = imovelDTO.Matricula,
                 Latitude = imovelDTO.Latitude,
                 Longitude = imovelDTO.Longitude,
@@ -106,7 +105,6 @@ namespace Backend.Controllers
                 Areatotal = imovelDTO.Areatotal,
                 Areaagricola = imovelDTO.Areaagricola,
                 Areapastagem = imovelDTO.Areapastagem,
-                Arquivokml = imovelDTO.Arquivokml,
                 Matricula = imovelDTO.Matricula,
                 Latitude = imovelDTO.Latitude,
                 Longitude = imovelDTO.Longitude,
@@ -155,6 +153,38 @@ namespace Backend.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{imovelId}/uploadFile")]
+        public async Task<IActionResult> UploadFile(int imovelId, [FromForm] IFormFile arquivokml)
+        {
+            if (arquivokml == null || arquivokml.Length == 0)
+            {
+                return BadRequest("Nenhum arquivo enviado.");
+            }
+
+            // Converta o arquivo em um array de bytes
+            using (var memoryStream = new MemoryStream())
+            {
+                await arquivokml.CopyToAsync(memoryStream);
+                var fileBytes = memoryStream.ToArray();
+
+                // Salve o array de bytes na coluna BLOB do banco de dados
+                // Certifique-se de associá-lo ao imóvel com o ID especificado
+                // Exemplo de uso do Entity Framework Core:
+                var imovel = await _context.Imoveis.FindAsync(imovelId);
+                if (imovel != null)
+                {
+                    imovel.Arquivokml = fileBytes;
+                    await _context.SaveChangesAsync();
+                    return Ok("Arquivo enviado e salvo no banco de dados com sucesso.");
+                }
+                else
+                {
+                    return NotFound("Imóvel não encontrado.");
+                }
+            }
+        }
+
 
         private bool ImovelExists(int id)
         {
