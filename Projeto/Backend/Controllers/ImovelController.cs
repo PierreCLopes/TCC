@@ -10,7 +10,7 @@ using Backend.Models.CreateModels;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ImovelController : ControllerBase

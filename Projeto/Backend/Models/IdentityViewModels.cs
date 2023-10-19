@@ -30,6 +30,6 @@ namespace Backend.Models
     public class UserResponse
     {
         public LoginUserViewModel User { get; set; }
-        public string Token { get; set; }
+        public string accessToken { get; set; }
     }
 }

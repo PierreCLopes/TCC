@@ -62,7 +62,7 @@ namespace Backend.Controllers
                 var userResponse = new UserResponse
                 {
                     User = loginUser,
-                    Token = await GerarJWT(loginUser.Email)
+                    accessToken = await GerarJWT(loginUser.Email)
                 };
 
                 return Ok(userResponse);
