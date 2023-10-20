@@ -8,6 +8,7 @@ import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/component
 import { ImovelService } from "../../shared/services/api/imoveis/ImovelService";
 import { VTextField, VForm, useVForm, IVFormErrors, formatCNPJCPF } from "../../shared/forms";
 import { FileInput } from "../../shared/components/file-input/FileInput";
+import { detectFileTypeFromBase64 } from "../../shared/helpers/FileTypeFromBase64";
 
 interface IFormData {
     observacao: string,
@@ -46,6 +47,7 @@ export const DetalheDeImovel: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
+    const [extensao, setExtensao] = useState('');
 
     useEffect(() => {
         if (id !== 'novo'){    
@@ -62,11 +64,11 @@ export const DetalheDeImovel: React.FC = () => {
                     navigate('/imoveis');
 
                 } else {
-
-                    console.log(result);
                     setNome(result.nome);
-
-                    console.log(String(result.arquivokml));
+                    
+                    // Não sei pq esse diabo não funciona com a extensao do state, então tive que criar uma constante separada
+                    const ext = detectFileTypeFromBase64(String(result.arquivokml)); 
+                    setExtensao(detectFileTypeFromBase64(String(result.arquivokml)));
 
                     // Decodifique a representação Base64
                     const decodedData = atob(String(result.arquivokml));
@@ -79,11 +81,9 @@ export const DetalheDeImovel: React.FC = () => {
                     }
 
                     // Crie um Blob a partir do ArrayBuffer
-                    const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
+                    const blob = new Blob([arrayBuffer]);
 
-                    result.arquivokml = new File([blob], 'arquivo.kml', { lastModified: Date.now() });
-
-                    console.log(result.arquivokml);
+                    result.arquivokml = new File([blob], `arquivo.${ext}`, { lastModified: Date.now() });
 
                     formRef.current?.setData(result);
                 }
@@ -297,7 +297,7 @@ export const DetalheDeImovel: React.FC = () => {
                             <Grid item xs={6} md={2}>
                                 <FileInput
                                     name="arquivokml"
-                                    extensao=".kml"
+                                    extensao={extensao}
                                 />
                             </Grid>
                         </Grid>

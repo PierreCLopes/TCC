@@ -38,7 +38,7 @@ export const FileInput: React.FC<FileInputProps> = ({ name, extensao, ...rest })
       const downloadLink = document.createElement('a');
       downloadLink.style.display = 'none';
       downloadLink.href = downloadURL;
-      downloadLink.download = `arquivo${extensao}`;
+      downloadLink.download = `arquivo.${extensao}`;
 
       // Anexe o link ao corpo do documento
       document.body.appendChild(downloadLink);
@@ -65,7 +65,6 @@ export const FileInput: React.FC<FileInputProps> = ({ name, extensao, ...rest })
         }}
         onChange={(file) => {
           setValue(file);
-          console.log(file);
 
           if(file){
             // Crie um Blob a partir do arquivo

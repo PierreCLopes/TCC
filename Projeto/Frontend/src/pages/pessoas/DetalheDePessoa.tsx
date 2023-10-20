@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, FormControlLabel } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/components";
+import { FerramentasDeDetalhe } from "../../shared/components";
 import { PessoaService } from "../../shared/services/api/pessoas/PessoaService";
-import { VTextField, VForm, useVForm, IVFormErrors, formatCNPJCPF } from "../../shared/forms";
-import { FileInput } from "../../shared/components/file-input/FileInput";
+import { VTextField, VForm, useVForm, IVFormErrors, VSelectField } from "../../shared/forms";
 import { VCheckBox } from "../../shared/forms/VCheckBox";
 
 interface IFormData {
@@ -161,12 +160,6 @@ export const DetalheDePessoa: React.FC = () => {
         }
     }
 
-    const handleCpfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const input = event.target.value;
-        const formattedCnpjCpf = formatCNPJCPF(input);
-        formRef.current?.setFieldValue('cnpjcpf', formattedCnpjCpf);
-      };
-
     return(
         <LayoutBaseDePagina 
             titulo={id === 'nova' ? 'Nova pessoa' : nome}
@@ -190,7 +183,7 @@ export const DetalheDePessoa: React.FC = () => {
                 />
             }
         >
-            <VForm ref={formRef} onSubmit={handleSave}>
+            <VForm ref={formRef} onSubmit={handleSave} >
                 <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
                     <Grid container direction="column" padding={2} spacing={2}>
 
@@ -224,18 +217,30 @@ export const DetalheDePessoa: React.FC = () => {
                                 />
                             </Grid>
                             <Grid item xs={12} md={4}>
+                                <VSelectField
+                                    fullWidth 
+                                    label="Tipo"
+                                    placeholder="Tipo" 
+                                    name="tipo"
+                                    disabled={isLoading}
+                                    options={[
+                                        { value: 1, label: 'Física' },
+                                        { value: 2, label: 'Jurídica' }
+                                      ]}
+                                />
+                            </Grid> 
+                        </Grid>
+
+                        <Grid container item direction="row" spacing={2}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
                                     label="CNPJ/CPF"
                                     placeholder="CNPJ/CPF" 
                                     name="cnpjcpf"
                                     disabled={isLoading}
-                                    onChange={handleCpfChange}
                                 />
                             </Grid>
-                        </Grid>
-
-                        <Grid container item direction="row" spacing={2}>
                             <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth
@@ -310,6 +315,9 @@ export const DetalheDePessoa: React.FC = () => {
                                     }
                                 />
                             </Grid>
+                        </Grid>
+                        <Grid item>
+                            <Typography variant="h6">Endereço</Typography>
                         </Grid>
 
                     </Grid> 
