@@ -67,8 +67,8 @@ export const DetalheDeImovel: React.FC = () => {
                     setNome(result.nome);
                     
                     // Não sei pq esse diabo não funciona com a extensao do state, então tive que criar uma constante separada
-                    const ext = detectFileTypeFromBase64(String(result.arquivokml)); 
-                    setExtensao(detectFileTypeFromBase64(String(result.arquivokml)));
+                    const ext = detectFileTypeFromBase64(String(result.arquivokml), 'kml'); 
+                    setExtensao(detectFileTypeFromBase64(String(result.arquivokml), 'kml'));
 
                     // Decodifique a representação Base64
                     const decodedData = atob(String(result.arquivokml));

@@ -1,4 +1,4 @@
-function detectFileTypeFromBase64(base64String: string): string {
+function detectFileTypeFromBase64(base64String: string, padrao: string): string {
     const upperCaseBase64 = base64String.toUpperCase();
 
     if (upperCaseBase64.startsWith("IVBOR", 0)) {
@@ -20,7 +20,7 @@ function detectFileTypeFromBase64(base64String: string): string {
     } else if (upperCaseBase64.startsWith("MQOWM", 0) || upperCaseBase64.startsWith("77U/M", 0)) {
         return "srt";
     } else {
-        return "";
+        return padrao;
     }
 }
 
