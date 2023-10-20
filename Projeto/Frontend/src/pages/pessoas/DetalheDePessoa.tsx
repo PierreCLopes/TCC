@@ -1,46 +1,44 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, FormControlLabel } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/components";
-import { ImovelService } from "../../shared/services/api/imoveis/ImovelService";
+import { PessoaService } from "../../shared/services/api/pessoas/PessoaService";
 import { VTextField, VForm, useVForm, IVFormErrors, formatCNPJCPF } from "../../shared/forms";
 import { FileInput } from "../../shared/components/file-input/FileInput";
+import { VCheckBox } from "../../shared/forms/VCheckBox";
 
 interface IFormData {
-    observacao: string,
     nome: string,
-    proprietario: number,
-    matricula: string,
-    areatotal: number,
-    latitude: string,
-    longitude: string,
-    areaagricola: number,
-    areapastagem: number,
-    cidade: number,
-    roteiroacesso: string,
-    arquivokml: File
+    apelido: string,
+    cnpjcpf: string,
+    telefone: string,
+    observacao: string,
+    rg: string,
+    email: string,
+    ehtecnico: boolean,
+    cfta: string,
+    tipo: number
 }
 
-const formValitationSchema: yup.Schema<Omit<IFormData, 'arquivokml'>> = yup.object({
+const formValitationSchema: yup.Schema<IFormData> = yup.object({
     nome: yup.string().required(),
-    proprietario: yup.number().default(0),
+    apelido: yup.string().max(30).default(''),
+    cnpjcpf: yup.string().required(),
+    telefone: yup.string().default(''),
     observacao: yup.string().default(''),
-    matricula: yup.string().required(),
-    latitude: yup.string().required(),
-    longitude: yup.string().required(),
-    areatotal: yup.number().required().min(0.01),
-    areaagricola: yup.number().default(0),
-    areapastagem: yup.number().default(0),
-    cidade: yup.number().required().moreThan(0),
-    roteiroacesso: yup.string().required()
+    rg: yup.string().default(''),
+    email: yup.string().email().default(''),
+    ehtecnico: yup.boolean().default(false),
+    cfta: yup.string().required().default(''),
+    tipo: yup.number().required(),
 });
 
-export const DetalheDeImovel: React.FC = () => {
+export const DetalheDePessoa: React.FC = () => {
     const navigate = useNavigate();
-    const {id = 'novo'} = useParams<'id'>();
+    const {id = 'nova'} = useParams<'id'>();
 
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
@@ -48,70 +46,50 @@ export const DetalheDeImovel: React.FC = () => {
     const [nome, setNome] = useState('');
 
     useEffect(() => {
-        if (id !== 'novo'){    
+        if (id !== 'nova'){    
 
             setIsLoading(true);
 
-            ImovelService.getById(Number(id))
+            PessoaService.getById(Number(id))
             .then((result)=> {
                 
                 setIsLoading(false);
 
                 if (result instanceof Error){
                     alert(result.message);
-                    navigate('/imoveis');
+                    navigate('/pessoas');
 
                 } else {
-
                     console.log(result);
+
                     setNome(result.nome);
-
-                    console.log(String(result.arquivokml));
-
-                    // Decodifique a representação Base64
-                    const decodedData = atob(String(result.arquivokml));
-
-                    // Converta a representação decodificada em um ArrayBuffer
-                    const arrayBuffer = new ArrayBuffer(decodedData.length);
-                    const uint8Array = new Uint8Array(arrayBuffer);
-                    for (let i = 0; i < decodedData.length; i++) {
-                        uint8Array[i] = decodedData.charCodeAt(i);
-                    }
-
-                    // Crie um Blob a partir do ArrayBuffer
-                    const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
-
-                    result.arquivokml = new File([blob], 'arquivo.kml', { lastModified: Date.now() });
-
-                    console.log(result.arquivokml);
 
                     formRef.current?.setData(result);
                 }
             })
         } else {
             formRef.current?.setData({
-                observacao: '',
                 nome: '',
-                proprietario: 0,
-                matricula: '',
-                areatotal: 0,
-                latitude: '',
-                longitude: '',
-                areaagricola: 0,
-                areapastagem: 0,
-                cidade: undefined,
-                roteiroacesso: '',
-                arquivokml: undefined
+                apelido: '',
+                cnpjcpf: '',
+                telefone: '',
+                observacao: '',
+                rg: '',
+                email: '',
+                ehtecnico: false,
+                cfta: '',
+                tipo: undefined
             });
         }
     }, [id])
 
     const handleSave = (dados: IFormData) => {
+        console.log(dados);
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
-                if(id === 'novo'){
-                    ImovelService.create(dadosValidados)
+                if(id === 'nova'){
+                    PessoaService.create(dadosValidados)
                     .then((result) => {
         
                         setIsLoading(false);
@@ -120,25 +98,19 @@ export const DetalheDeImovel: React.FC = () => {
                             alert(result.message);
         
                         } else {
-                            // Envie o arquivo do imóvel
-                            ImovelService.uploadFile(result.id, dados.arquivokml)
-                            .then((resultFile) => {
-                                if (resultFile instanceof Error) 
-                                    alert(resultFile.message);
-                            });
         
                             if(isSaveAndClose()){
-                                navigate('/imoveis');
+                                navigate('/pessoas');
         
                             } else {
                                 alert('Registro criado com sucesso!');
-                                navigate(`/imovel/${result.id}`);
+                                navigate(`/pessoa/${result.id}`);
                             }
                         }  
                     })
                 } else {
                     console.log(dadosValidados);
-                    ImovelService.updateById(Number(id), dadosValidados)
+                    PessoaService.updateById(Number(id), dadosValidados)
                     .then((result) => {
                         
                         setIsLoading(false);
@@ -147,15 +119,8 @@ export const DetalheDeImovel: React.FC = () => {
                             alert(result.message);
         
                         } else {
-                            // Envie o arquivo do imóvel
-                            ImovelService.uploadFile(Number(id), dados.arquivokml)
-                            .then((resultFile) => {
-                                if (resultFile instanceof Error) 
-                                    alert(resultFile.message);
-                            });
-
                             if(isSaveAndClose()){
-                                navigate('/imoveis');
+                                navigate('/pessoas');
         
                             } else {
                                 alert('Registro alterado com sucesso!');
@@ -183,14 +148,14 @@ export const DetalheDeImovel: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir o imóvel?')){
-            ImovelService.deleteById(id)
+        if(confirm('Deseja realmente excluir a pessoa?')){
+            PessoaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     alert(result.message);
                 } else {
                     alert('Registro apagado com sucesso!');
-                    navigate('/imoveis');
+                    navigate('/pessoas');
                 }
             })
         }
@@ -198,25 +163,25 @@ export const DetalheDeImovel: React.FC = () => {
 
     const handleCpfChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const input = event.target.value;
-        const formattedCpf = formatCNPJCPF(input);
-        formRef.current?.setFieldValue('cpf', formattedCpf);
+        const formattedCnpjCpf = formatCNPJCPF(input);
+        formRef.current?.setFieldValue('cnpjcpf', formattedCnpjCpf);
       };
 
     return(
         <LayoutBaseDePagina 
-            titulo={id === 'novo' ? 'Novo imóvel' : nome}
+            titulo={id === 'nova' ? 'Nova pessoa' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
-                    textoBotaoNovo="Novo"
+                    textoBotaoNovo="Nova"
                     mostrarBotaoSalvarEFechar
-                    mostrarBotaoNovo={id !== 'novo'}
-                    mostrarBotaoApagar={id !== 'novo'}
+                    mostrarBotaoNovo={id !== 'nova'}
+                    mostrarBotaoApagar={id !== 'nova'}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
-                    aoClicarEmNovo={() => {navigate('/imovel/novo')}}
-                    aoClicarEmVoltar={() => {navigate('/imoveis')}}
+                    aoClicarEmNovo={() => {navigate('/pessoa/nova')}}
+                    aoClicarEmVoltar={() => {navigate('/pessoas')}}
 
                     mostrarBotaoSalvarCarregando={isLoading}
                     mostrarBotaoApagarCarregando={isLoading}
@@ -249,55 +214,23 @@ export const DetalheDeImovel: React.FC = () => {
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={2}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
-                                    label="Área total"
-                                    placeholder="Área total" 
-                                    name="areatotal" 
-                                    type="number"
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
-                                        inputMode: "decimal",
-                                        
-                                    }}
+                                    label="Apelido"
+                                    placeholder="Apelido" 
+                                    name="apelido"
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={2}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
-                                    label="Área agrícola"
-                                    placeholder="Área agrícola" 
-                                    name="areaagricola" 
-                                    type="number"
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
-                                        inputMode: "decimal",
-                                        
-                                    }}
+                                    label="CNPJ/CPF"
+                                    placeholder="CNPJ/CPF" 
+                                    name="cnpjcpf"
                                     disabled={isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs={6} md={2}>
-                                <VTextField 
-                                    fullWidth 
-                                    label="Área de pastagem"
-                                    placeholder="Área de pastagem" 
-                                    name="areapastagem" 
-                                    type="number"
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
-                                        inputMode: "decimal",
-                                        
-                                    }}
-                                    disabled={isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs={6} md={2}>
-                                <FileInput
-                                    name="arquivokml"
-                                    extensao=".kml"
+                                    onChange={handleCpfChange}
                                 />
                             </Grid>
                         </Grid>
@@ -306,32 +239,27 @@ export const DetalheDeImovel: React.FC = () => {
                             <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth
-                                    label="Proprietário"
-                                    placeholder="Proprietário" 
-                                    name="proprietario"
-                                    disabled={isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs={6} md={2}>
-                                <AutoCompleteCidade 
-                                    isExternalLoading={isLoading}
-                                />
-                            </Grid>
-                            <Grid item xs={6} md={2}>
-                                <VTextField 
-                                    fullWidth
-                                    label="Matrícula"
-                                    placeholder="Matrícula" 
-                                    name="matricula"
+                                    label="Telefone"
+                                    placeholder="Telefone" 
+                                    name="telefone"
                                     disabled={isLoading}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
                                 <VTextField 
                                     fullWidth
-                                    label="Latitude"
-                                    placeholder="Latitude" 
-                                    name="latitude"
+                                    label="RG"
+                                    placeholder="RG" 
+                                    name="rg"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={6} md={2}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Email"
+                                    placeholder="Email" 
+                                    name="email"
                                     disabled={isLoading}
                                 />
                             </Grid>
@@ -369,6 +297,21 @@ export const DetalheDeImovel: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+                        <Grid container item direction="row">
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    label="Técnico"
+                                    control={
+                                        <VCheckBox 
+                                            placeholder="É Técnico" 
+                                            name="ehtecnico"
+                                            disabled={isLoading}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                        </Grid>
+
                     </Grid> 
                 </Box>
             </VForm>

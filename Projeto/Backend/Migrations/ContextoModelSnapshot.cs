@@ -85,8 +85,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Documentacao", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Arquivo")
                         .IsRequired()
@@ -155,8 +158,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Filial", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -275,8 +281,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Pessoa", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Apelido")
                         .HasMaxLength(30)
@@ -285,16 +294,16 @@ namespace Backend.Migrations
                         .HasColumnName("APELIDO");
 
                     b.Property<string>("Cfta")
-                        .HasMaxLength(11)
+                        .HasMaxLength(14)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(11)")
+                        .HasColumnType("varchar(14)")
                         .HasColumnName("CFTA");
 
                     b.Property<string>("Cnpjcpf")
                         .IsRequired()
-                        .HasMaxLength(14)
+                        .HasMaxLength(18)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(14)")
+                        .HasColumnType("varchar(18)")
                         .HasColumnName("CNPJCPF");
 
                     b.Property<bool>("Ehtecnico")
@@ -321,15 +330,15 @@ namespace Backend.Migrations
                         .HasColumnName("OBSERVACAO");
 
                     b.Property<string>("Rg")
-                        .HasMaxLength(1)
+                        .HasMaxLength(11)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1)")
+                        .HasColumnType("varchar(11)")
                         .HasColumnName("RG");
 
                     b.Property<string>("Telefone")
-                        .HasMaxLength(1)
+                        .HasMaxLength(30)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1)")
+                        .HasColumnType("varchar(30)")
                         .HasColumnName("TELEFONE");
 
                     b.Property<int>("Tipo")
@@ -345,8 +354,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Pessoaendereco", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bairro")
                         .IsRequired()
@@ -401,8 +413,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Proposta", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Areafinanciada")
                         .HasColumnType("decimal(15, 2)")
@@ -550,8 +565,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Propostaimovel", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Area")
                         .HasColumnType("decimal(15, 2)")
@@ -578,8 +596,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Propostalaudo", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Datalaudo")
                         .HasColumnType("datetime")
@@ -665,8 +686,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Propostalaudodiagnostico", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Areaafetada")
                         .HasColumnType("decimal(15, 2)")
@@ -720,8 +744,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Tipodocumentacao", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -752,8 +779,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Tipoproposta", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -777,8 +807,11 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.Tipopropostadocumentacao", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Tipodocumentacao")
                         .HasColumnType("int")

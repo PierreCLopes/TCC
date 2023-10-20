@@ -73,16 +73,17 @@ namespace Backend.Migrations
                 name: "TB_PESSOA",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     NOME = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     APELIDO = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
-                    CNPJCPF = table.Column<string>(type: "varchar(14)", unicode: false, maxLength: 14, nullable: false),
-                    TELEFONE = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
+                    CNPJCPF = table.Column<string>(type: "varchar(18)", unicode: false, maxLength: 18, nullable: false),
+                    TELEFONE = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: true),
-                    RG = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
+                    RG = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
                     EMAIL = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
                     EHTECNICO = table.Column<bool>(type: "bit", nullable: false),
-                    CFTA = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
+                    CFTA = table.Column<string>(type: "varchar(14)", unicode: false, maxLength: 14, nullable: true),
                     TIPO = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -94,7 +95,8 @@ namespace Backend.Migrations
                 name: "TB_TIPODOCUMENTACAO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     NOME = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     SIGLA = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false)
@@ -108,7 +110,8 @@ namespace Backend.Migrations
                 name: "TB_TIPOPROPOSTA",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     NOME = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false)
                 },
@@ -220,7 +223,8 @@ namespace Backend.Migrations
                 name: "TB_FILIAL",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     NOME = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     PESSOA = table.Column<int>(type: "int", nullable: false),
@@ -240,7 +244,8 @@ namespace Backend.Migrations
                 name: "TB_TIPOPROPOSTADOCUMENTACAO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TIPOPROPOSTA = table.Column<int>(type: "int", nullable: false),
                     TIPODOCUMENTACAO = table.Column<int>(type: "int", nullable: false)
                 },
@@ -297,7 +302,8 @@ namespace Backend.Migrations
                 name: "TB_PESSOAENDERECO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     COMPLEMENTO = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: false),
                     NUMERO = table.Column<int>(type: "int", nullable: false),
@@ -325,7 +331,8 @@ namespace Backend.Migrations
                 name: "TB_PROPOSTA",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     CULTURA = table.Column<int>(type: "int", nullable: false),
                     PROPONENTE = table.Column<int>(type: "int", nullable: false),
@@ -395,7 +402,8 @@ namespace Backend.Migrations
                 name: "TB_DOCUMENTACAO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ARQUIVO = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     TIPO = table.Column<int>(type: "int", nullable: false),
                     PROPOSTA = table.Column<int>(type: "int", nullable: true),
@@ -431,7 +439,8 @@ namespace Backend.Migrations
                 name: "TB_PROPOSTAIMOVEL",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     AREA = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
                     IMOVEL = table.Column<int>(type: "int", nullable: false),
                     PROPOSTA = table.Column<int>(type: "int", nullable: false)
@@ -455,7 +464,8 @@ namespace Backend.Migrations
                 name: "TB_PROPOSTALAUDO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     PROPOSTA = table.Column<int>(type: "int", nullable: false),
                     DATALAUDO = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -487,7 +497,8 @@ namespace Backend.Migrations
                 name: "TB_PROPOSTALAUDODIAGNOSTICO",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     EHALTEROUPRODUTIVIDADE = table.Column<bool>(type: "bit", nullable: false),
                     EHFAZERCONTROLE = table.Column<bool>(type: "bit", nullable: false),

@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useDrawerContext } from '../shared/contexts';
 import { useEffect } from 'react';
-import { Dashboard, DetalheDeCultura, ListagemDeCultura, ListagemDeImovel } from '../pages';
+import { Dashboard, DetalheDeCultura, DetalheDePessoa, ListagemDeCultura, ListagemDeImovel, ListagemDePessoa } from '../pages';
 import { DetalheDeImovel } from '../pages/imoveis/DetalheDeImovel';
 
 export const AppRoutes = () => {
@@ -14,6 +14,11 @@ export const AppRoutes = () => {
                 label: 'Página inicial',
                 path: '/home',
                 icon: 'home'
+            },
+            {
+                label: 'Pessoas',
+                path: '/pessoas',
+                icon: 'people'
             },
             {
                 label: 'Culturas',
@@ -31,6 +36,9 @@ export const AppRoutes = () => {
     return(
         <Routes>
             <Route path="/home" element={<Dashboard/>}/>
+
+            <Route path="/pessoas" element={<ListagemDePessoa/>}/>
+            <Route path="/pessoa/:id" element={<DetalheDePessoa/>}/>
 
             <Route path="/culturas" element={<ListagemDeCultura/>}/>
             <Route path="/cultura/:id" element={<DetalheDeCultura/>}/>

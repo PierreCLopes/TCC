@@ -131,7 +131,7 @@ namespace Backend.Data
                 entity.ToTable("TB_DOCUMENTACAO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Arquivo)
                     .IsUnicode(false)
@@ -184,7 +184,7 @@ namespace Backend.Data
                 entity.ToTable("TB_FILIAL");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
@@ -268,18 +268,18 @@ namespace Backend.Data
                 entity.ToTable("TB_PESSOA");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Apelido)
                     .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("APELIDO");
                 entity.Property(e => e.Cfta)
-                    .HasMaxLength(11)
+                    .HasMaxLength(14)
                     .IsUnicode(false)
                     .HasColumnName("CFTA");
                 entity.Property(e => e.Cnpjcpf)
-                    .HasMaxLength(14)
+                    .HasMaxLength(18)
                     .IsUnicode(false)
                     .HasColumnName("CNPJCPF");
                 entity.Property(e => e.Ehtecnico).HasColumnName("EHTECNICO");
@@ -296,11 +296,11 @@ namespace Backend.Data
                     .IsUnicode(false)
                     .HasColumnName("OBSERVACAO");
                 entity.Property(e => e.Rg)
-                    .HasMaxLength(1)
+                    .HasMaxLength(11)
                     .IsUnicode(false)
                     .HasColumnName("RG");
                 entity.Property(e => e.Telefone)
-                    .HasMaxLength(1)
+                    .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("TELEFONE");
                 entity.Property(e => e.Tipo).HasColumnName("TIPO");
@@ -313,7 +313,7 @@ namespace Backend.Data
                 entity.ToTable("TB_PESSOAENDERECO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Bairro)
                     .HasMaxLength(20)
@@ -353,7 +353,7 @@ namespace Backend.Data
                 entity.ToTable("TB_PROPOSTAIMOVEL");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Area)
                     .HasColumnType("decimal(15, 2)")
@@ -379,7 +379,7 @@ namespace Backend.Data
                 entity.ToTable("TB_PROPOSTALAUDO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Datalaudo)
                     .HasColumnType("datetime")
@@ -426,7 +426,7 @@ namespace Backend.Data
                 entity.ToTable("TB_PROPOSTALAUDODIAGNOSTICO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Areaafetada)
                     .HasColumnType("decimal(15, 2)")
@@ -459,7 +459,7 @@ namespace Backend.Data
                 entity.ToTable("TB_PROPOSTA");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Areafinanciada)
                     .HasColumnType("decimal(15, 2)")
@@ -566,7 +566,7 @@ namespace Backend.Data
                 entity.ToTable("TB_TIPODOCUMENTACAO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
@@ -588,7 +588,7 @@ namespace Backend.Data
                 entity.ToTable("TB_TIPOPROPOSTADOCUMENTACAO");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Tipodocumentacao).HasColumnName("TIPODOCUMENTACAO");
                 entity.Property(e => e.Tipoproposta).HasColumnName("TIPOPROPOSTA");
@@ -611,7 +611,7 @@ namespace Backend.Data
                 entity.ToTable("TB_TIPOPROPOSTA");
 
                 entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
+                    .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Nome)
                     .IsUnicode(false)
