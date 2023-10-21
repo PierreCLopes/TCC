@@ -2,12 +2,11 @@ import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon } from '@mui/material';
 
-import { FerramentasDaListagem } from "../../shared/components";
+import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { CulturaService, IListagemCultura } from '../../shared/services/api/culturas/CulturaService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
-
 
 export const ListagemDeCultura: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +16,9 @@ export const ListagemDeCultura: React.FC = () => {
     const [rows, setRows] = useState<IListagemCultura[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [alertOpen, setAlertOpen] = useState(false); // Adicione o estado para controlar o alert
+    const [alertMessage, setAlertMessage] = useState(''); // Mensagem do alert
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -34,7 +36,9 @@ export const ListagemDeCultura: React.FC = () => {
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
-                    alert(result.message);
+                    // Substitua o alert padrão pelo CustomAlert
+                    setAlertMessage(result.message);
+                    setAlertOpen(true);
                 } else {
                     console.log(result);
                     console.log(result.totalCount);
@@ -52,20 +56,24 @@ export const ListagemDeCultura: React.FC = () => {
             CulturaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
-                    alert(result.message);
+                    // Substitua o alert padrão pelo CustomAlert
+                    setAlertMessage(result.message);
+                    setAlertOpen(true);
                 } else {
-                    setRows(oldRows =>{
-                        return[
+                    setRows(oldRows => {
+                        return [
                             ...oldRows.filter(oldRow => oldRow.id !== id),
                         ]
                     });
-                    alert('Registro apagado com sucesso!');
+                    // Substitua o alert padrão pelo CustomAlert
+                    setAlertMessage('Registro apagado com sucesso!');
+                    setAlertOpen(true);
                 }
             })
         }
     }
 
-    return(
+    return (
         <LayoutBaseDePagina 
             titulo="Listagem de culturas"
             barraDeFerramentas={
@@ -74,7 +82,7 @@ export const ListagemDeCultura: React.FC = () => {
                     mostrarInputBusca
                     textoDaBusca={busca}
                     aoClicarEmNovo={() => navigate(`/cultura/nova`)}
-                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1'}, {replace: true})}
+                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
         >
@@ -126,7 +134,7 @@ export const ListagemDeCultura: React.FC = () => {
                                     <Pagination 
                                         page={pagina}
                                         count={Math.ceil(totalCount / Environment.LIMITE_DE_LINHAS)}
-                                        onChange={(e, newPage) => setSearchParams({ busca, pagina: newPage.toString()}, {replace: true})}
+                                        onChange={(e, newPage) => setSearchParams({ busca, pagina: newPage.toString() }, {replace: true})}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -134,6 +142,9 @@ export const ListagemDeCultura: React.FC = () => {
                     </TableFooter>
                 </Table>
             </TableContainer>
+
+            {/* Renderize o CustomAlert quando alertOpen for verdadeiro */}
+            <VAlert open={alertOpen} message={alertMessage} onClose={() => setAlertOpen(false)} />
         </LayoutBaseDePagina>
     );
 };
