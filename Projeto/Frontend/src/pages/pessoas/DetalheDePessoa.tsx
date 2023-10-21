@@ -19,7 +19,15 @@ interface IFormData {
     email: string,
     ehtecnico: boolean,
     cfta: string,
-    tipo: number
+    tipo: number,
+    endereco: {
+        bairro: string,
+        cep: string,
+        cidade: number,
+        observacao: string,
+        complemento: string,
+        numero: string,
+    }
 }
 
 const formValitationSchema: yup.Schema<IFormData> = yup.object({
@@ -47,6 +55,14 @@ const formValitationSchema: yup.Schema<IFormData> = yup.object({
     ehtecnico: yup.boolean().default(false),
     cfta: yup.string().required().default(''),
     tipo: yup.number().required(),
+    endereco: yup.object({
+        bairro: yup.string().default(''),
+        cep: yup.string().default(''),
+        cidade: yup.number().required(),
+        observacao: yup.string().default(''),
+        complemento: yup.string().default(''),
+        numero: yup.string().default(''),
+    })
 });
 
 export const DetalheDePessoa: React.FC = () => {
@@ -91,7 +107,15 @@ export const DetalheDePessoa: React.FC = () => {
                 email: '',
                 ehtecnico: false,
                 cfta: '',
-                tipo: undefined
+                tipo: undefined,
+                endereco: {
+                    bairro: '',
+                    cep: '',
+                    cidade: undefined,
+                    observacao: '',
+                    complemento: '',
+                    numero: '',
+                }
             });
         }
     }, [id])
@@ -325,13 +349,13 @@ export const DetalheDePessoa: React.FC = () => {
                         </Grid>
 
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={6} md={4}>
                                 <AutoCompleteCidade 
                                     isExternalLoading={isLoading}
                                     nomeField="endereco.cidade"
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={6} md={2}>
                                 <VTextField 
                                     fullWidth
                                     label="CEP"
@@ -340,7 +364,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={6} md={4}>
                                 <VTextField 
                                     fullWidth
                                     label="Bairro"
@@ -349,7 +373,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={6} md={2}>
                                 <VTextField 
                                     fullWidth
                                     label="Número"

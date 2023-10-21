@@ -16,7 +16,10 @@ export interface IDetalhePessoa{
     endereco: {
         bairro: string,
         cep: string,
-        cidade: number
+        cidade: number,
+        observacao: string,
+        complemento: string,
+        numero: string,
     }
 }
 

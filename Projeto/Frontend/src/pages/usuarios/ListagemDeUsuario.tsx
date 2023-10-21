@@ -4,24 +4,24 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper
 
 import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { CulturaService, IListagemCultura } from '../../shared/services/api/culturas/CulturaService';
+import { UsuarioService, IListagemUsuario } from '../../shared/services/api/usuarios/UsuarioService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
-export const ListagemDeCultura: React.FC = () => {
+export const ListagemDeUsuario: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemCultura[]>([]);
+    const [rows, setRows] = useState<IListagemUsuario[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Cultura');
+    const permissions = useUserPermissions('Usuario');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -35,7 +35,7 @@ export const ListagemDeCultura: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            CulturaService.getAll(pagina, busca)
+            UsuarioService.getAll(pagina, busca)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
@@ -53,9 +53,9 @@ export const ListagemDeCultura: React.FC = () => {
 
     }, [busca, pagina]);
 
-    const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir a cultura?')){
-            CulturaService.deleteById(id)
+    const handleDelete = (id: string) => {
+        if(confirm('Deseja realmente excluir o usuario?')){
+            UsuarioService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -75,14 +75,14 @@ export const ListagemDeCultura: React.FC = () => {
 
     return (
         <LayoutBaseDePagina 
-            titulo="Listagem de culturas"
+            titulo="Listagem de usuarios"
             barraDeFerramentas={
                 <FerramentasDaListagem 
-                    textoBotaoNovo="Nova"
+                    textoBotaoNovo="Novo"
                     mostrarInputBusca
                     mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigate(`/cultura/nova`)}
+                    aoClicarEmNovo={() => navigate(`/usuario/novo`)}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
@@ -95,8 +95,7 @@ export const ListagemDeCultura: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Código</TableCell>
-                            <TableCell>Nome</TableCell>
-                            <TableCell>Preço por Kg</TableCell>
+                            <TableCell>Email</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -105,12 +104,11 @@ export const ListagemDeCultura: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.nome}</TableCell>
-                                <TableCell>{row.precokg}</TableCell>
+                                <TableCell>{row.email}</TableCell>
                                 <TableCell>
                                     <IconButton 
                                         size='small' 
-                                        onClick={() => navigate(`/cultura/${row.id}`)} 
+                                        onClick={() => navigate(`/usuario/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
                                         <Icon>edit</Icon>

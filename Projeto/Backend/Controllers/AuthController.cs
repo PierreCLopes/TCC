@@ -3,6 +3,7 @@ using DemoToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
@@ -29,7 +30,7 @@ namespace Backend.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [HttpPost("registrar")]
+        [HttpPost("usuario")]
         public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
@@ -93,26 +94,33 @@ namespace Backend.Controllers
             return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }
 
-        [ClaimsAuthorize("Usuario","Visualizar")]
+        //[ClaimsAuthorize("Usuario","Visualizar")]
         [HttpGet("usuarios")]
-        public IActionResult GetUsuarios()
+        public async Task<ActionResult<IEnumerable<IdentityUser>>> GetUsers(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? userName = null)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+            IQueryable<IdentityUser> query = _userManager.Users;
 
-            var usuarios = _userManager.Users.ToList();
-
-            // Aqui você pode mapear as propriedades que deseja retornar em uma lista de objetos ViewModel
-            var usuariosViewModel = usuarios.Select(user => new IdentityUser
+            if (!string.IsNullOrEmpty(userName))
             {
-                Id = user.Id,
-                Email = user.Email,
-                // Outras propriedades do usuário
-            }).ToList();
+                query = query.Where(u => u.UserName.Contains(userName));
+            }
 
-            return Ok(usuarios);
+            var totalCount = await query.CountAsync();
+
+            var users = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            Response.Headers.Add("X-Total-Count", totalCount.ToString());
+
+            return Ok(users);
         }
 
-        [ClaimsAuthorize("Usuario", "Visualizar")]
+        //[ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("usuario/{id}")]
         public async Task<IActionResult> GetUsuarioAsync(string id)
         {
@@ -126,7 +134,7 @@ namespace Backend.Controllers
             return Ok(usuario);
         }
 
-        [ClaimsAuthorize("Usuario", "Excluir")]
+        //[ClaimsAuthorize("Usuario", "Excluir")]
         [HttpDelete("usuario/{id}")]
         public async Task<IActionResult> DeleteUsuario(string id)
         {

@@ -5,24 +5,24 @@ import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
-import { CulturaService } from "../../shared/services/api/culturas/CulturaService";
+import { UsuarioService } from "../../shared/services/api/usuarios/UsuarioService";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 
 interface IFormData {
-    nome: string;
-    precokg: number;
-    observacao: string;
+    email: string,
+    password: string,
+    confirmpassword: string
 }
 
 const formValitationSchema: yup.Schema<IFormData> = yup.object({
-    nome: yup.string().required(),
-    precokg: yup.number().required().min(0.01),
-    observacao: yup.string().default(''),
+    email: yup.string().required().email(),
+    password: yup.string().required(),
+    confirmpassword: yup.string().required(),
 });
 
-export const DetalheDeCultura: React.FC = () => {
+export const DetalheDeUsuario: React.FC = () => {
     const navigate = useNavigate();
-    const {id = 'nova'} = useParams<'id'>();
+    const {id = 'novo'} = useParams<'id'>();
 
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
@@ -33,11 +33,11 @@ export const DetalheDeCultura: React.FC = () => {
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
     useEffect(() => {
-        if (id !== 'nova'){    
+        if (id !== 'novo'){    
 
             setIsLoading(true);
 
-            CulturaService.getById(Number(id))
+            UsuarioService.getById(id)
             .then((result)=> {
                 
                 setIsLoading(false);
@@ -46,20 +46,20 @@ export const DetalheDeCultura: React.FC = () => {
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
 
-                    navigate('/culturas');
+                    navigate('/usuarios');
 
                 } else {
                     console.log(result);
-                    setNome(result.nome);
+                    setNome(result.email);
 
                     formRef.current?.setData(result);
                 }
             })
         } else {
             formRef.current?.setData({
-                nome: '',
-                precokg: undefined,
-                observacao: ''
+                email: '',
+                password: undefined,
+                confirmpassword: ''
             });
         }
     }, [id])
@@ -69,8 +69,8 @@ export const DetalheDeCultura: React.FC = () => {
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
-                if(id === 'nova'){
-                    CulturaService.create(dadosValidados)
+                if(id === 'novo'){
+                    UsuarioService.create(dadosValidados)
                     .then((result) => {
         
                         setIsLoading(false);
@@ -82,37 +82,16 @@ export const DetalheDeCultura: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigate('/culturas');
+                                navigate('/usuarios');
         
                             } else {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
-                                navigate(`/cultura/${result.id}`);
+                                navigate(`/usuario/${result.id}`);
                             }
                         }  
                     })
-                } else {
-                    CulturaService.updateById(Number(id), {id: Number(id), ...dadosValidados})
-                    .then((result) => {
-        
-                        setIsLoading(false);
-        
-                        if (result instanceof Error){
-                            setAlertMessage(result.message);
-                            setAlertSeverity("error");
-        
-                        } else {
-        
-                            if(isSaveAndClose()){
-                                navigate('/culturas');
-        
-                            } else {
-                                setAlertMessage('Registro alterado com sucesso!');
-                                setAlertSeverity("success");
-                            }
-                        }  
-                    })
-                }
+                };
             })
             .catch((errors: yup.ValidationError) => {
                 
@@ -133,9 +112,9 @@ export const DetalheDeCultura: React.FC = () => {
 
     };
 
-    const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir a cultura?')){
-            CulturaService.deleteById(id)
+    const handleDelete = (id: string) => {
+        if(confirm('Deseja realmente excluir o usuario?')){
+            UsuarioService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -144,7 +123,7 @@ export const DetalheDeCultura: React.FC = () => {
                 } else {
                     alert('Registro apagado com sucesso!');
 
-                    navigate('/culturas');
+                    navigate('/usuarios');
                 }
             })
         }
@@ -152,19 +131,20 @@ export const DetalheDeCultura: React.FC = () => {
 
     return(
         <LayoutBaseDePagina 
-            titulo={id === 'nova' ? 'Nova cultura' : nome}
+            titulo={id === 'novo' ? 'Novo usuario' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
-                    textoBotaoNovo="Nova"
-                    mostrarBotaoSalvarEFechar
-                    mostrarBotaoNovo={id !== 'nova'}
-                    mostrarBotaoApagar={id !== 'nova'}
+                    textoBotaoNovo="Novo"
+                    mostrarBotaoSalvarEFechar={id === 'novo'}
+                    mostrarBotaoSalvar={id === 'novo'}
+                    mostrarBotaoNovo={id !== 'novo'}
+                    mostrarBotaoApagar={id !== 'novo'}
      
-                    aoClicarEmApagar={() => {handleDelete(Number(id))}}
+                    aoClicarEmApagar={() => {handleDelete(id)}}
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
-                    aoClicarEmNovo={() => {navigate('/cultura/nova')}}
-                    aoClicarEmVoltar={() => {navigate('/culturas')}}
+                    aoClicarEmNovo={() => {navigate('/usuario/novo')}}
+                    aoClicarEmVoltar={() => {navigate('/usuarios')}}
 
                     mostrarBotaoSalvarCarregando={isLoading}
                     mostrarBotaoApagarCarregando={isLoading}
@@ -190,45 +170,37 @@ export const DetalheDeCultura: React.FC = () => {
                             <Typography variant="h6">Geral</Typography>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <VTextField 
                                     fullWidth 
-                                    label="Nome"
-                                    placeholder="Nome" 
-                                    name="nome"
-                                    disabled={isLoading}
+                                    label="Email"
+                                    placeholder="Email" 
+                                    name="email"
+                                    disabled={isLoading || id != 'novo'}
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={4}>
                                 <VTextField 
                                     fullWidth 
-                                    label="Preço por Kg"
-                                    placeholder="Preço por Kg" 
-                                    name="precokg" 
-                                    type="number"
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                                        inputMode: "decimal",
-                                        
-                                    }}
-                                    disabled={isLoading}
+                                    label="Senha"
+                                    placeholder="Senha" 
+                                    name="password"
+                                    type="password"
+                                    disabled={isLoading || id != 'novo'}
                                 />
                             </Grid>
-                        </Grid>
-
-                        <Grid container item direction="row">
-                            <Grid item xs={12}>
+                            <Grid item xs={4}>
                                 <VTextField 
-                                    fullWidth
-                                    label="Observação"
-                                    placeholder="Observação" 
-                                    name="observacao"
-                                    disabled={isLoading}
+                                    fullWidth 
+                                    label="Confirmar senha"
+                                    placeholder="Confirmar senha" 
+                                    type="password"
+                                    name="confirmpassword"
+                                    disabled={isLoading || id != 'novo'}
                                 />
                             </Grid>
                         </Grid>
-
                     </Grid> 
                 </Box>
             </VForm>

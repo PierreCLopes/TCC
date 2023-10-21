@@ -36,7 +36,7 @@ const formValitationSchema: yup.Schema<Omit<IFormData, 'arquivokml'>> = yup.obje
     areatotal: yup.number().required().min(0.01),
     areaagricola: yup.number().default(0),
     areapastagem: yup.number().default(0),
-    cidade: yup.number().required().moreThan(0),
+    cidade: yup.number().required(),
     roteiroacesso: yup.string().required()
 });
 
