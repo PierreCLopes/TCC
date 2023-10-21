@@ -1,24 +1,20 @@
-import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Alert, AlertTitle, AlertProps } from '@mui/material';
 
-interface CustomAlertProps {
-  open: boolean;
-  message: string;
+type VAlertProps = AlertProps & {
+  message: string; 
   onClose: () => void;
 }
 
-export const VAlert: React.FC<CustomAlertProps> = ({ open, message, onClose }) => {
+export const VAlert: React.FC<VAlertProps> = ({ message, onClose, ...rest}) => {
+
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Alerta</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary" autoFocus>
-          OK
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <Alert
+      {...rest}
+      variant="filled"
+      onClose={onClose}
+    >
+      <AlertTitle>Alerta</AlertTitle>
+      {message}
+    </Alert>
   );
 };

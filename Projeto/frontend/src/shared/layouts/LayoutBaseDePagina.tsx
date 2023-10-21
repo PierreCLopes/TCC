@@ -1,13 +1,17 @@
-import { Box, Icon, IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Icon, IconButton, Typography, useMediaQuery, useTheme, AlertColor } from "@mui/material";
 import { useDrawerContext } from "../contexts";
+import { VAlert } from "../components";
 
 interface ILayoutBaseDePaginaProps{
     children: React.ReactNode;
     titulo: string;
     barraDeFerramentas?: React.ReactNode;
+    alertMessage?: string;
+    alertSeverity?: AlertColor;
+    onCloseAlert?: () => void;
 }
 
-export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({ children, titulo, barraDeFerramentas }) => {
+export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({ children, titulo, barraDeFerramentas, alertMessage, alertSeverity, onCloseAlert = () => {}}) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
     const mdDown = useMediaQuery(theme.breakpoints.down('md'));
@@ -35,9 +39,20 @@ export const LayoutBaseDePagina: React.FC<ILayoutBaseDePaginaProps> = ({ childre
                 {barraDeFerramentas}
             </Box>)}
 
+            {alertMessage &&(
+                <Box margin={1}>
+                    <VAlert
+                        message={alertMessage}
+                        onClose={onCloseAlert}
+                        severity={alertSeverity}
+                    />
+                </Box>
+            )}
+
             <Box flex={1} overflow={'auto'}>
                 {children}
             </Box>
+
         </Box>
     );
 };

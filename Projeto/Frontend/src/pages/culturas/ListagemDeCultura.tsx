@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon } from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor, Box } from '@mui/material';
 
 import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -17,8 +17,8 @@ export const ListagemDeCultura: React.FC = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [alertOpen, setAlertOpen] = useState(false); // Adicione o estado para controlar o alert
-    const [alertMessage, setAlertMessage] = useState(''); // Mensagem do alert
+    const [alertMessage, setAlertMessage] = useState(''); 
+    const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -36,9 +36,8 @@ export const ListagemDeCultura: React.FC = () => {
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
-                    // Substitua o alert padrão pelo CustomAlert
                     setAlertMessage(result.message);
-                    setAlertOpen(true);
+                    setAlertSeverity("error");
                 } else {
                     console.log(result);
                     console.log(result.totalCount);
@@ -56,18 +55,16 @@ export const ListagemDeCultura: React.FC = () => {
             CulturaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
-                    // Substitua o alert padrão pelo CustomAlert
                     setAlertMessage(result.message);
-                    setAlertOpen(true);
+                    setAlertSeverity("error");
                 } else {
                     setRows(oldRows => {
                         return [
                             ...oldRows.filter(oldRow => oldRow.id !== id),
                         ]
                     });
-                    // Substitua o alert padrão pelo CustomAlert
                     setAlertMessage('Registro apagado com sucesso!');
-                    setAlertOpen(true);
+                    setAlertSeverity("info");
                 }
             })
         }
@@ -85,6 +82,9 @@ export const ListagemDeCultura: React.FC = () => {
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
         >
             <TableContainer component={Paper} variant='outlined' sx={{ m: 1, width: 'auto' }}>
                 <Table>
@@ -142,9 +142,6 @@ export const ListagemDeCultura: React.FC = () => {
                     </TableFooter>
                 </Table>
             </TableContainer>
-
-            {/* Renderize o CustomAlert quando alertOpen for verdadeiro */}
-            <VAlert open={alertOpen} message={alertMessage} onClose={() => setAlertOpen(false)} />
         </LayoutBaseDePagina>
     );
 };
