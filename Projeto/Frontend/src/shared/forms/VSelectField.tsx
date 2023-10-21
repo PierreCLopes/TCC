@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { FormControl, InputLabel, Select, MenuItem, SelectProps } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, SelectProps, FormHelperText } from '@mui/material';
 import { useField } from '@unform/core';
 
 interface SelectOption {
@@ -14,7 +14,7 @@ interface SelectFieldProps extends SelectProps {
 }
 
 export const VSelectField: React.FC<SelectFieldProps> = ({ name, label, options, ...rest }) => {
-  const { fieldName, defaultValue, registerField, error } = useField(name);
+  const { fieldName, defaultValue, registerField, error, clearError } = useField(name);
   const selectRef = useRef(null);
 
   useEffect(() => {
@@ -45,6 +45,7 @@ export const VSelectField: React.FC<SelectFieldProps> = ({ name, label, options,
         }}
         {...rest}
         inputRef={selectRef}
+        onChange={e => {error && clearError()}}
       >
         <option value="" />
         {options.map(option => (
@@ -53,6 +54,7 @@ export const VSelectField: React.FC<SelectFieldProps> = ({ name, label, options,
           </option>
         ))}
       </Select>
+      <FormHelperText>{error}</FormHelperText>
     </FormControl>
   );
 };

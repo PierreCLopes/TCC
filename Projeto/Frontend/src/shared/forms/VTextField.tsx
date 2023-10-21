@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 import { useField } from '@unform/core';
-import { formatCNPJCPF } from './FormatCnpjCpf';
+import { formatCNPJCPF, formatCPF, formatRG } from './FormatInput';
 
 
 type TVTextFieldProps = TextFieldProps & {
@@ -29,7 +29,19 @@ export const VTextField: React.FC<TVTextFieldProps> = ({ name, ...rest }) => {
       defaultValue={defaultValue}
 
       value={value}
-      onChange={e => { fieldName === "cnpjcpf" ? setValue(formatCNPJCPF(e.target.value)) : setValue(e.target.value); rest.onChange?.(e); }}
+      onChange={e => { if (fieldName === "cnpjcpf"){
+                        setValue(formatCNPJCPF(e.target.value));
+
+                      } else if (fieldName === "cfta") {
+                        setValue(formatCPF(e.target.value));
+
+                      } else if (fieldName === "rg") {
+                        setValue(formatRG(e.target.value));
+
+                      } else {
+                        setValue(e.target.value);
+
+                      }; rest.onChange?.(e); }}
 
       onKeyDown={e => {error && clearError(); rest.onKeyDown?.(e)}}
       />

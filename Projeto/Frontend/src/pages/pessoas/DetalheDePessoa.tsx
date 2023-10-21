@@ -4,7 +4,7 @@ import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel } from "
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { FerramentasDeDetalhe } from "../../shared/components";
+import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/components";
 import { PessoaService } from "../../shared/services/api/pessoas/PessoaService";
 import { VTextField, VForm, useVForm, IVFormErrors, VSelectField } from "../../shared/forms";
 import { VCheckBox } from "../../shared/forms/VCheckBox";
@@ -25,7 +25,21 @@ interface IFormData {
 const formValitationSchema: yup.Schema<IFormData> = yup.object({
     nome: yup.string().required(),
     apelido: yup.string().max(30).default(''),
-    cnpjcpf: yup.string().required(),
+    cnpjcpf: yup.string().test('valid-cnpj-cpf', 'CNPJ ou CPF inválido', function (value) {
+        const { tipo } = this.parent; // Obtém o valor de 'tipo' do objeto
+    
+        console.log(tipo);
+        
+        if (typeof value === 'string') { // Verifica se 'cnpjcpf' é uma string válida
+            if (tipo === 1) { // Se o tipo for 1 (Física), valida como CPF (deve ter 14 caracteres)
+                return value.length === 14;
+            } else { // Senão, valida como CNPJ (deve ter 18 caracteres)
+                return value.length === 18;
+            }
+        }
+    
+        return false; // Se 'cnpjcpf' não for uma string válida, retorna false
+    }).required(),
     telefone: yup.string().default(''),
     observacao: yup.string().default(''),
     rg: yup.string().default(''),
@@ -216,7 +230,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={6} md={2}>
                                 <VSelectField
                                     fullWidth 
                                     label="Tipo"
@@ -229,10 +243,7 @@ export const DetalheDePessoa: React.FC = () => {
                                       ]}
                                 />
                             </Grid> 
-                        </Grid>
-
-                        <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={6} md={2}>
                                 <VTextField 
                                     fullWidth 
                                     label="CNPJ/CPF"
@@ -241,7 +252,19 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={4}>
+                        </Grid>
+
+                        <Grid container item direction="row" spacing={2}>
+                            <Grid item xs={6} md={3}>
+                                <VTextField 
+                                    fullWidth 
+                                    label="CFTA"
+                                    placeholder="CFTA" 
+                                    name="cfta"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={6} md={3}>
                                 <VTextField 
                                     fullWidth
                                     label="Telefone"
@@ -250,7 +273,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={2}>
+                            <Grid item xs={6} md={3}>
                                 <VTextField 
                                     fullWidth
                                     label="RG"
@@ -259,7 +282,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={2}>
+                            <Grid item xs={6} md={3}>
                                 <VTextField 
                                     fullWidth
                                     label="Email"
@@ -268,30 +291,9 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading}
                                 />
                             </Grid>
-                            <Grid item xs={6} md={2}>
-                                <VTextField 
-                                    fullWidth
-                                    label="Longitude"
-                                    placeholder="Longitude" 
-                                    name="longitude"
-                                    disabled={isLoading}
-                                />
-                            </Grid>
                         </Grid>
 
-                        <Grid container item direction="row">
-                            <Grid item xs={12}>
-                                <VTextField 
-                                    fullWidth
-                                    label="Roteiro de acesso"
-                                    placeholder="Roteiro de acesso" 
-                                    name="roteiroacesso"
-                                    disabled={isLoading}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <Grid container item direction="row">
+                        <Grid container item direction="row" spacing={2}>
                             <Grid item xs={12}>
                                 <VTextField 
                                     fullWidth
@@ -302,6 +304,7 @@ export const DetalheDePessoa: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+
                         <Grid container item direction="row">
                             <Grid item xs={12}>
                                 <FormControlLabel
@@ -316,10 +319,69 @@ export const DetalheDePessoa: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+
                         <Grid item>
                             <Typography variant="h6">Endereço</Typography>
                         </Grid>
 
+                        <Grid container item direction="row" spacing={2}>
+                            <Grid item xs={4}>
+                                <AutoCompleteCidade 
+                                    isExternalLoading={isLoading}
+                                    nomeField="endereco.cidade"
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <VTextField 
+                                    fullWidth
+                                    label="CEP"
+                                    placeholder="CEP" 
+                                    name="endereco.cep"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Bairro"
+                                    placeholder="Bairro" 
+                                    name="endereco.bairro"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Número"
+                                    placeholder="Número" 
+                                    name="endereco.numero"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid container item direction="row">
+                            <Grid item xs={12}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Complemento"
+                                    placeholder="Complemento" 
+                                    name="endereco.complemento"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container item direction="row">
+                            <Grid item xs={12}>
+                                <VTextField 
+                                    fullWidth
+                                    label="Observação"
+                                    placeholder="Observação" 
+                                    name="endereco.observacao"
+                                    disabled={isLoading}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid> 
                 </Box>
             </VForm>

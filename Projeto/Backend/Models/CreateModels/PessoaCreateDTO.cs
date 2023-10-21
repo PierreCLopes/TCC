@@ -21,5 +21,7 @@
         public string? Cfta { get; set; } = null!;
 
         public int Tipo { get; set; }
+
+        public PessoaEnderecoDTO Endereco { get; set; }
     }
 }

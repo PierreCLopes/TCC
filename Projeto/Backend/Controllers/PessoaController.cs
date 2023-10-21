@@ -7,6 +7,7 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
+using System.Text.RegularExpressions;
 
 namespace Backend.Controllers
 {
@@ -50,7 +51,7 @@ namespace Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pessoa>> GetPessoa(int id)
+        public async Task<ActionResult<PessoaCreateDTO>> GetPessoa(int id)
         {
             var Pessoa = await _context.Pessoas.FindAsync(id);
 
@@ -59,63 +60,156 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
-            return Pessoa;
+            var Endereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == Pessoa.Id);
+
+            if (Endereco != null)
+            {
+                var PessoaDTO = new PessoaCreateDTO
+                {
+                    Nome = Pessoa.Nome,
+                    Apelido = Pessoa.Apelido,
+                    Cfta = Pessoa.Cfta,
+                    Cnpjcpf = Pessoa.Cnpjcpf,
+                    Ehtecnico = Pessoa.Ehtecnico,
+                    Email = Pessoa.Email,
+                    Rg = Pessoa.Rg,
+                    Telefone = Pessoa.Telefone,
+                    Tipo = Pessoa.Tipo,
+                    Observacao = Pessoa.Observacao,
+                    Endereco = new PessoaEnderecoDTO
+                    {
+                        Bairro = Endereco.Bairro,
+                        Cep = Endereco.Cep,
+                        Cidade = Endereco.Cidade,
+                        Complemento = Endereco.Complemento,
+                        Numero = Endereco.Numero,
+                        Observacao = Endereco.Observacao
+                    }
+                };
+
+                return PessoaDTO;
+            }
+
+            return NotFound();
+        }
+
+        // Função para validar CPF
+        private bool ValidateCPF(string cpf)
+        {
+            // Lógica de validação do CPF aqui
+            // Retorna true se válido, false se inválido
+            // Exemplo de validação simples:
+            return Regex.IsMatch(cpf, @"^\d{3}\.\d{3}\.\d{3}-\d{2}$");
+        }
+
+        // Função para validar CNPJ
+        private bool ValidateCNPJ(string cnpj)
+        {
+            // Lógica de validação do CNPJ aqui
+            // Retorna true se válido, false se inválido
+            // Exemplo de validação simples:
+            return Regex.IsMatch(cnpj, @"^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$");
         }
 
         [HttpPost]
-        public async Task<ActionResult<Pessoa>> PostPessoa(PessoaCreateDTO PessoaDTO)
+        public async Task<ActionResult<Pessoa>> PostPessoa(PessoaCreateDTO pessoaDTO)
         {
-            var Pessoa = new Pessoa
+            // Verifique se o tipo de pessoa é válido (1 para física, 2 para jurídica)
+            if (pessoaDTO.Tipo != 1 && pessoaDTO.Tipo != 2)
             {
-                Nome = PessoaDTO.Nome,
-                Apelido = PessoaDTO.Apelido,
-                Cfta = PessoaDTO.Cfta,
-                Cnpjcpf = PessoaDTO.Cnpjcpf,
-                Ehtecnico = PessoaDTO.Ehtecnico,
-                Email = PessoaDTO.Email,    
-                Rg = PessoaDTO.Rg,
-                Telefone = PessoaDTO.Telefone,
-                Tipo = PessoaDTO.Tipo,
-                Observacao = PessoaDTO.Observacao
+                return BadRequest("Tipo de pessoa inválido. Use 1 para pessoa física ou 2 para pessoa jurídica.");
+            }
+
+            // Valide o CNPJ/CPF com base no tipo de pessoa
+            if ((pessoaDTO.Tipo == 1 && !ValidateCPF(pessoaDTO.Cnpjcpf)) ||
+                (pessoaDTO.Tipo == 2 && !ValidateCNPJ(pessoaDTO.Cnpjcpf)))
+            {
+                return BadRequest("CNPJ/CPF inválido.");
+            }
+
+            // Verifique se já existe uma pessoa com o mesmo CNPJ/CPF na base
+            var pessoaExistente = await _context.Pessoas.FirstOrDefaultAsync(p => p.Cnpjcpf == pessoaDTO.Cnpjcpf);
+
+            if (pessoaExistente != null)
+            {
+                return Conflict("Já existe uma pessoa com o mesmo CNPJ/CPF na base.");
+            }
+
+            var pessoa = new Pessoa
+            {
+                Nome = pessoaDTO.Nome,
+                Apelido = pessoaDTO.Apelido,
+                Cfta = pessoaDTO.Cfta,
+                Cnpjcpf = pessoaDTO.Cnpjcpf,
+                Ehtecnico = pessoaDTO.Ehtecnico,
+                Email = pessoaDTO.Email,
+                Rg = pessoaDTO.Rg,
+                Telefone = pessoaDTO.Telefone,
+                Tipo = pessoaDTO.Tipo,
+                Observacao = pessoaDTO.Observacao
             };
 
-            // Encontre a cidade relacionada com base no ID fornecido no DTO
-            // Pessoa. = await _context.Cidades.FindAsync(PessoaDTO.Cidade);
-
-
-            // Adicione o Pessoa ao contexto
-            _context.Pessoas.Add(Pessoa);
+            // Adicione a pessoa ao contexto
+            _context.Pessoas.Add(pessoa);
 
             // Salve as alterações no contexto
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPessoa", new { id = Pessoa.Id }, Pessoa);
+            var endereco = new Pessoaendereco
+            {
+                Bairro = pessoaDTO.Endereco.Bairro,
+                Cep = pessoaDTO.Endereco.Cep,
+                Cidade = pessoaDTO.Endereco.Cidade,
+                Complemento = pessoaDTO.Endereco.Complemento,
+                Numero = pessoaDTO.Endereco.Numero,
+                Observacao = pessoaDTO.Endereco.Observacao,
+                Pessoa = pessoa.Id
+            };
+
+            // Adicione o Endereço ao contexto
+            _context.Pessoaenderecos.Add(endereco);
+
+            // Salve as alterações no contexto
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPessoa", new { id = pessoa.Id }, pessoa);
         }
 
 
-
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPessoa(int id, PessoaCreateDTO PessoaDTO)
+        public async Task<IActionResult> PutPessoa(int id, PessoaCreateDTO pessoaDTO)
         {
-            var Pessoa = new Pessoa
+            var pessoa = await _context.Pessoas.FindAsync(id);
+
+            if (pessoa == null)
             {
-                Id = id,
-                Nome = PessoaDTO.Nome,
-                Apelido = PessoaDTO.Apelido,
-                Cfta = PessoaDTO.Cfta,
-                Cnpjcpf = PessoaDTO.Cnpjcpf,
-                Ehtecnico = PessoaDTO.Ehtecnico,
-                Email = PessoaDTO.Email,
-                Rg = PessoaDTO.Rg,
-                Telefone = PessoaDTO.Telefone,
-                Tipo = PessoaDTO.Tipo,
-                Observacao = PessoaDTO.Observacao
-            };
+                return NotFound("Pessoa não encontrada");
+            }
 
-            // Encontre a cidade relacionada com base no ID fornecido no DTO
-            // Pessoa.CidadeNavigation = await _context.Cidades.FindAsync(PessoaDTO.Cidade);
+            // Atualize as propriedades da instância existente de Pessoa
+            pessoa.Nome = pessoaDTO.Nome;
+            pessoa.Apelido = pessoaDTO.Apelido;
+            pessoa.Cfta = pessoaDTO.Cfta;
+            pessoa.Cnpjcpf = pessoaDTO.Cnpjcpf;
+            pessoa.Ehtecnico = pessoaDTO.Ehtecnico;
+            pessoa.Email = pessoaDTO.Email;
+            pessoa.Rg = pessoaDTO.Rg;
+            pessoa.Telefone = pessoaDTO.Telefone;
+            pessoa.Tipo = pessoaDTO.Tipo;
+            pessoa.Observacao = pessoaDTO.Observacao;
 
-            _context.Entry(Pessoa).State = EntityState.Modified;
+            var endereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == pessoa.Id);
+
+            if (endereco != null)
+            {
+                // Atualize as propriedades da instância existente de Pessoaendereco
+                endereco.Bairro = pessoaDTO.Endereco.Bairro;
+                endereco.Cep = pessoaDTO.Endereco.Cep;
+                endereco.Cidade = pessoaDTO.Endereco.Cidade;
+                endereco.Complemento = pessoaDTO.Endereco.Complemento;
+                endereco.Numero = pessoaDTO.Endereco.Numero;
+                endereco.Observacao = pessoaDTO.Endereco.Observacao;
+            }
 
             try
             {
@@ -123,22 +217,23 @@ namespace Backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PessoaExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound("Erro de concorrência ao salvar os dados");
             }
 
             return NoContent();
         }
 
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePessoa(int id)
         {
+            var PessoaEndereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == id);
+
+            if (PessoaEndereco != null)
+            {
+                _context.Pessoaenderecos.Remove(PessoaEndereco);
+            }
+            
             var Pessoa = await _context.Pessoas.FindAsync(id);
             if (Pessoa == null)
             {
