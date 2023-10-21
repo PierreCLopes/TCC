@@ -27,7 +27,8 @@ namespace Backend.Controllers
         public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
-            [FromQuery] string? nome = null)
+            [FromQuery] string? nome = null,
+            [FromQuery] int? id = null)
         {
             IQueryable<Pessoa> query = _context.Pessoas;
 
@@ -36,18 +37,37 @@ namespace Backend.Controllers
                 query = query.Where(p => p.Nome.Contains(nome));
             }
 
-            //-- Pega o total de registros da base com o filtro de nome
             var totalCount = await query.CountAsync();
 
-            //-- Pega os registros filtrando pelos query paramns
-            var Pessoas = await query
+            if (id.HasValue)
+            {
+                var PessoaById = await query.FirstOrDefaultAsync(p => p.Id == id);
+                if (PessoaById != null)
+                {
+                    // Obtenha os registros da paginação, excluindo o registro do ID
+                    var Pessoas = await query
+                        .Where(p => p.Id != id)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+
+                    // Inclua o registro do ID na lista
+                    Pessoas.Add(PessoaById);
+
+                    Response.Headers.Add("X-Total-Count", (totalCount - 1).ToString());
+
+                    return Ok(Pessoas);
+                }
+            }
+
+            var pessoas = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
             Response.Headers.Add("X-Total-Count", totalCount.ToString());
 
-            return Ok(Pessoas);
+            return Ok(pessoas);
         }
 
         [HttpGet("{id}")]

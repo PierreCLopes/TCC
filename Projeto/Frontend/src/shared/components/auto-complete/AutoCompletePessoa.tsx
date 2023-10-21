@@ -1,20 +1,21 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../hooks";
-import { CidadeService } from "../../services/api/cidades/CidadeService";
 import { useField } from "@unform/core";
+import { PessoaService } from "../../services/api/pessoas/PessoaService";
 
 type TAutoCompleteOption = {
     id: number,
     label: string
 }
 
-interface IAutoCompleteCidadeProps {
+interface IAutoCompletePessoaProps {
     isExternalLoading?: boolean;
-    nomeField?: string
+    nomeField?: string;
+    label: string
 }
 
-export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExternalLoading = false, nomeField = 'cidade'}) => {
+export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExternalLoading = false, nomeField = 'pessoa', label = 'Pessoa'}) => {
     const {fieldName, registerField, defaultValue, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -37,7 +38,7 @@ export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExtern
         setIsLoading(true);
 
         debounce(() => {
-            CidadeService.getAll(1, busca, selectedId?.toString())
+            PessoaService.getAll(1, busca, selectedId?.toString())
             .then((result) => {
                 setIsLoading(false);
 
@@ -46,7 +47,7 @@ export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExtern
                 } else {
                     console.log(result);
 
-                    setOpcoes(result.data.map(cidade => ({id: cidade.id, label: cidade.nome})));
+                    setOpcoes(result.data.map(pessoa => ({id: pessoa.id, label: pessoa.nome})));
                 }
             });
         })
@@ -81,7 +82,7 @@ export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExtern
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Cidade"
+                    label={label}
                     error={!!error}
                     helperText={error}
                 />

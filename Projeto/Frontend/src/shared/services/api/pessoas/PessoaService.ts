@@ -12,7 +12,12 @@ export interface IDetalhePessoa{
     email: string,
     ehtecnico: boolean,
     cfta: string,
-    tipo: number
+    tipo: number,
+    endereco: {
+        bairro: string,
+        cep: string,
+        cidade: number
+    }
 }
 
 export interface IListagemPessoa{
@@ -27,9 +32,9 @@ type TPessoasComTotalCount = {
     totalCount: number;
 }
 
-const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Error> => {
+const getAll = async (page = 1, filter = '', id = ''): Promise<TPessoasComTotalCount | Error> => {
     try {
-      const urlRelativa = `/pessoa?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/pessoa?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}&id=${id}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 

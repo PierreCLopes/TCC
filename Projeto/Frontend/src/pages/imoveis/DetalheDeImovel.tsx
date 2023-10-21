@@ -9,6 +9,7 @@ import { ImovelService } from "../../shared/services/api/imoveis/ImovelService";
 import { VTextField, VForm, useVForm, IVFormErrors, formatCNPJCPF } from "../../shared/forms";
 import { FileInput } from "../../shared/components/file-input/FileInput";
 import { detectFileTypeFromBase64 } from "../../shared/helpers/FileTypeFromBase64";
+import { AutoCompletePessoa } from "../../shared/components/auto-complete/AutoCompletePessoa";
 
 interface IFormData {
     observacao: string,
@@ -304,12 +305,10 @@ export const DetalheDeImovel: React.FC = () => {
 
                         <Grid container item direction="row" spacing={2}>
                             <Grid item xs={12} md={4}>
-                                <VTextField 
-                                    fullWidth
+                                <AutoCompletePessoa
+                                    isExternalLoading={isLoading}
                                     label="Proprietário"
-                                    placeholder="Proprietário" 
-                                    name="proprietario"
-                                    disabled={isLoading}
+                                    nomeField="proprietario"
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
