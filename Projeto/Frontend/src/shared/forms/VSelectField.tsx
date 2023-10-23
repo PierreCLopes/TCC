@@ -3,7 +3,7 @@ import { FormControl, InputLabel, Select, MenuItem, SelectProps, FormHelperText 
 import { useField } from '@unform/core';
 
 interface SelectOption {
-  value: number; // Alterado para número
+  value: number | string;
   label: string;
 }
 

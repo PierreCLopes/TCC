@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColor } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColor, Button } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -170,7 +170,7 @@ export const DetalheDeUsuario: React.FC = () => {
                             <Typography variant="h6">Geral</Typography>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
                                     label="Email"
@@ -180,7 +180,7 @@ export const DetalheDeUsuario: React.FC = () => {
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
                                     label="Senha"
@@ -190,7 +190,7 @@ export const DetalheDeUsuario: React.FC = () => {
                                     disabled={isLoading || id != 'novo'}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={12} md={4}>
                                 <VTextField 
                                     fullWidth 
                                     label="Confirmar senha"
@@ -201,7 +201,21 @@ export const DetalheDeUsuario: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+                        <Grid item xs={2} >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    if (id !== 'novo') {
+                                        navigate(`/usuario/${id}/permissoes`);
+                                    }
+                                }}
+                            >
+                                Permissões
+                            </Button>
+                        </Grid>
                     </Grid> 
+                    
                 </Box>
             </VForm>
         </LayoutBaseDePagina>

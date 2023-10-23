@@ -5,3 +5,4 @@ export * from './auto-complete/AutoCompleteCidade';
 export * from './file-input/FileInput';
 export * from './login/Login';
 export * from './alert/VAlert';
+export * from './toggle-button/VToggleButton';

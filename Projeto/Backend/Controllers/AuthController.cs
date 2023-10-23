@@ -46,10 +46,26 @@ namespace Backend.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
+            // Crie reivindicações padrão para o usuário
+            var defaultClaims = new List<System.Security.Claims.Claim>
+            {
+                new System.Security.Claims.Claim("Pessoa", ""),
+                new System.Security.Claims.Claim("Cultura", ""),
+                new System.Security.Claims.Claim("Usuario", "")
+            };
+
+            result = await _userManager.AddClaimsAsync(user, defaultClaims);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
             await _signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(await GerarJWT(registerUser.Email));
         }
+
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUserViewModel loginUser)
@@ -99,13 +115,24 @@ namespace Backend.Controllers
         public async Task<ActionResult<IEnumerable<IdentityUser>>> GetUsers(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
-            [FromQuery] string? userName = null)
+            [FromQuery] string? userName = null,
+            [FromQuery] string? id = null) // Parâmetro para incluir um usuário por ID
         {
             IQueryable<IdentityUser> query = _userManager.Users;
 
             if (!string.IsNullOrEmpty(userName))
             {
                 query = query.Where(u => u.UserName.Contains(userName));
+            }
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                // Inclua o usuário com o ID especificado
+                var userToInclude = await _userManager.FindByIdAsync(id);
+                if (userToInclude != null)
+                {
+                    query = query.Union(new[] { userToInclude }.AsQueryable());
+                }
             }
 
             var totalCount = await query.CountAsync();
@@ -119,6 +146,7 @@ namespace Backend.Controllers
 
             return Ok(users);
         }
+
 
         //[ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("usuario/{id}")]
@@ -134,7 +162,6 @@ namespace Backend.Controllers
             return Ok(usuario);
         }
 
-        //[ClaimsAuthorize("Usuario", "Excluir")]
         [HttpDelete("usuario/{id}")]
         public async Task<IActionResult> DeleteUsuario(string id)
         {
@@ -147,6 +174,17 @@ namespace Backend.Controllers
                 return NotFound("Usuário não encontrado.");
             }
 
+            // Exclua as claims do usuário
+            var claims = await _userManager.GetClaimsAsync(user);
+            foreach (var claim in claims)
+            {
+                var resultClaim = await _userManager.RemoveClaimAsync(user, claim);
+                if (!resultClaim.Succeeded)
+                {
+                    return BadRequest(resultClaim.Errors);
+                }
+            }
+
             var result = await _userManager.DeleteAsync(user);
 
             if (!result.Succeeded)
@@ -156,6 +194,7 @@ namespace Backend.Controllers
 
             return Ok("Usuário excluído com sucesso.");
         }
+
 
     }
 }

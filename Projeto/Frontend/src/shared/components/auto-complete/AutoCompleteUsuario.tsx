@@ -12,10 +12,11 @@ type TAutoCompleteOption = {
 interface IAutoCompleteUsuarioProps {
     isExternalLoading?: boolean;
     nomeField?: string;
-    label: string
+    label: string;
+    disabled?: boolean;
 }
 
-export const AutoCompleteUsuario: React.FC<IAutoCompleteUsuarioProps> = ({isExternalLoading = false, nomeField = 'usuario', label = 'Usuario'}) => {
+export const AutoCompleteUsuario: React.FC<IAutoCompleteUsuarioProps> = ({isExternalLoading = false, nomeField = 'usuario', label = 'Usuario', disabled = false}) => {
     const {fieldName, registerField, defaultValue, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -75,7 +76,7 @@ export const AutoCompleteUsuario: React.FC<IAutoCompleteUsuarioProps> = ({isExte
             value={autoCompleteSelectedOption}
             options={opcoes}
             loading={isLoading}
-            disabled={isExternalLoading}
+            disabled={isExternalLoading || disabled}
             onInputChange={(e, newValue) => { setBusca(newValue) }}
             onChange={(e, newValue) => { setSelectedId(newValue?.id); setBusca(''); clearError(); }}
             popupIcon={(isExternalLoading || isLoading) ? <CircularProgress size={28}/> : undefined}

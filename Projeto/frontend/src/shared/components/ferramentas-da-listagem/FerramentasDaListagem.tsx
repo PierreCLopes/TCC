@@ -39,6 +39,20 @@ export const FerramentasDaListagem: React.FC<IBarraDeFerramentasProps> = ({texto
                 />
             )}
 
+            <Box flex={50} display={'flex'} justifyContent={'end'}>
+                {mostrarBotaoNovo &&(
+                    <Button 
+                        color={'primary'}
+                        variant={'outlined'}
+                        disableElevation
+                        endIcon={<Icon>arrow_back</Icon>}
+                        onClick={aoClicarEmNovo}
+                    >
+                        Voltar
+                    </Button>
+                )}
+            </Box>
+
             <Box flex={1} display={'flex'} justifyContent={'end'}>
                 {mostrarBotaoNovo &&(
                     <Button 

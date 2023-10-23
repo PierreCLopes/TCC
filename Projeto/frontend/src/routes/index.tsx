@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useDrawerContext } from '../shared/contexts';
 import { useEffect } from 'react';
-import { Dashboard, DetalheDeCultura, DetalheDePessoa, ListagemDeCultura, ListagemDeImovel, ListagemDePessoa } from '../pages';
+import { Dashboard, DetalheDePermissaoUsuario, ListagemDePermissaoUsuario, DetalheDePessoa, ListagemDeImovel, ListagemDePessoa, ListagemDeCultura, DetalheDeCultura } from '../pages';
 import { DetalheDeImovel } from '../pages/imoveis/DetalheDeImovel';
 import { DetalheDeUsuario } from '../pages/usuarios/DetalheDeUsuario';
 import { ListagemDeUsuario } from '../pages/usuarios/ListagemDeUsuario';
@@ -55,6 +55,9 @@ export const AppRoutes = () => {
 
             <Route path="/usuarios" element={<ListagemDeUsuario/>}/>
             <Route path="/usuario/:id" element={<DetalheDeUsuario/>}/>
+
+            <Route path="/usuario/:userId/permissoes" element={<ListagemDePermissaoUsuario/>}/>
+            <Route path="/usuario/:userId/permissao/:tipo" element={<DetalheDePermissaoUsuario/>}/>
 
             <Route path="*" element={<Navigate to="/home"/>}/>
         </Routes>
