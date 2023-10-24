@@ -108,6 +108,7 @@ export const ListagemDeCultura: React.FC = () => {
                                 <TableCell>{row.nome}</TableCell>
                                 <TableCell>{row.precokg}</TableCell>
                                 <TableCell>
+
                                     <IconButton 
                                         size='small' 
                                         onClick={() => navigate(`/cultura/${row.id}`)} 
@@ -123,6 +124,7 @@ export const ListagemDeCultura: React.FC = () => {
                                     >
                                         <Icon>delete</Icon>
                                     </IconButton>
+
                                 </TableCell>
                             </TableRow> 
                         ))}

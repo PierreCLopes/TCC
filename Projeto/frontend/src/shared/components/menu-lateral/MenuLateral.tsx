@@ -11,10 +11,11 @@ interface IListItemLink{
     to: string;
     icon: string;
     label: string;
+    disabled: boolean;
     onClick: (() => void) | undefined;
 }
 
-const ListItemLink: React.FC<IListItemLink> = ({ to, icon, label, onClick }) => {
+const ListItemLink: React.FC<IListItemLink> = ({ to, icon, label, disabled, onClick }) => {
     const navigate = useNavigate();
 
     const resolvedPath = useResolvedPath(to);
@@ -26,7 +27,7 @@ const ListItemLink: React.FC<IListItemLink> = ({ to, icon, label, onClick }) => 
     };
 
     return(
-        <ListItemButton selected={!!match} onClick={handleClick}>
+        <ListItemButton selected={!!match} onClick={handleClick} disabled={disabled}>
             <ListItemIcon>
                 <Icon>{icon}</Icon>
             </ListItemIcon>  
@@ -61,6 +62,7 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                                 icon={drawerOptions.icon}
                                 to={drawerOptions.path}
                                 label={drawerOptions.label}
+                                disabled={drawerOptions.disabled}
                                 onClick={smDown ? toggleDrawerOpen : undefined}
                             />
                         ))}

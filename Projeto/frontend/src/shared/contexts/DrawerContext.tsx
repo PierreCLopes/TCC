@@ -4,6 +4,7 @@ interface IDrawerOptions{
   icon: string;
   path: string;
   label: string;
+  disabled: boolean;
 }
 
 interface IDrawerContextData {

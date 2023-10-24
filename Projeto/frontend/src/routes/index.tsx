@@ -6,39 +6,53 @@ import { Dashboard, DetalheDePermissaoUsuario, ListagemDePermissaoUsuario, Detal
 import { DetalheDeImovel } from '../pages/imoveis/DetalheDeImovel';
 import { DetalheDeUsuario } from '../pages/usuarios/DetalheDeUsuario';
 import { ListagemDeUsuario } from '../pages/usuarios/ListagemDeUsuario';
+import useUserPermissions from '../shared/hooks/UseUserPermissions';
 
 export const AppRoutes = () => {
-    const { toggleDrawerOpen, setDrawerOptions } = useDrawerContext();
+    const {setDrawerOptions } = useDrawerContext();
+    
+    // Retrieve user permissions for each class
+    const pessoasPermissions = useUserPermissions('Pessoa');
+    const culturasPermissions = useUserPermissions('Cultura');
+    const imoveisPermissions = useUserPermissions('Imovel');
+    const usuariosPermissions = useUserPermissions('Usuario');
 
     useEffect(() => {
+        // Set drawer options based on permissions
         setDrawerOptions([
             {
                 label: 'Página inicial',
                 path: '/home',
-                icon: 'home'
+                icon: 'home',
+                disabled: false,
             },
             {
                 label: 'Pessoas',
                 path: '/pessoas',
-                icon: 'people'
+                icon: 'people',
+                disabled: !pessoasPermissions?.Visualizar,
             },
             {
                 label: 'Culturas',
                 path: '/culturas',
-                icon: 'spa'
+                icon: 'spa',
+                disabled: !culturasPermissions?.Visualizar,
             },
             {
                 label: 'Imóveis',
                 path: '/imoveis',
-                icon: 'location_on'
+                icon: 'location_on',
+                disabled: !imoveisPermissions?.Visualizar,
             },
             {
                 label: 'Usuários',
                 path: '/usuarios',
-                icon: 'account_circle'
+                icon: 'account_circle',
+                disabled: !usuariosPermissions?.Visualizar,
             },
         ])
-    },[]);
+    }, [pessoasPermissions, culturasPermissions, imoveisPermissions, usuariosPermissions]);
+
 
     return(
         <Routes>

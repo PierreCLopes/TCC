@@ -7,6 +7,7 @@ import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { CulturaService } from "../../shared/services/api/culturas/CulturaService";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
+import useUserPermissions from "../../shared/hooks/UseUserPermissions";
 
 interface IFormData {
     nome: string;
@@ -31,6 +32,8 @@ export const DetalheDeCultura: React.FC = () => {
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
+    const permissions = useUserPermissions('Cultura');
 
     useEffect(() => {
         if (id !== 'nova'){    
@@ -156,9 +159,10 @@ export const DetalheDeCultura: React.FC = () => {
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Nova"
-                    mostrarBotaoSalvarEFechar
-                    mostrarBotaoNovo={id !== 'nova'}
-                    mostrarBotaoApagar={id !== 'nova'}
+                    mostrarBotaoSalvar={permissions?.Editar}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar}
+                    mostrarBotaoNovo={id !== 'nova' && permissions?.Editar}
+                    mostrarBotaoApagar={id !== 'nova' && permissions?.Excluir}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
@@ -196,7 +200,7 @@ export const DetalheDeCultura: React.FC = () => {
                                     label="Nome"
                                     placeholder="Nome" 
                                     name="nome"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
@@ -212,7 +216,7 @@ export const DetalheDeCultura: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -224,7 +228,7 @@ export const DetalheDeCultura: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="observacao"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>

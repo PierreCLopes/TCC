@@ -6,10 +6,10 @@ type ClassPermissions = {
   Editar: boolean;
   Visualizar: boolean;
   Excluir: boolean;
-  // Adicione outras permissões conforme necessário
+  Processar: boolean;
 };
 
-type ClassType = 'Pessoa' | 'Cultura' | 'Usuario';
+type ClassType = 'Pessoa' | 'Cultura' | 'Usuario' | 'Imovel';
 
 const useUserPermissions = (classe: ClassType) => {
   const [permissions, setPermissions] = useState<ClassPermissions | null>(null);
@@ -21,6 +21,7 @@ const useUserPermissions = (classe: ClassType) => {
 
     const jwtToken = getJWTFromStorage();
 
+    console.log(jwtToken);
     if (jwtToken) {
       try {
         const decodedToken: Record<string, any> = jwtDecode(jwtToken);
@@ -30,6 +31,7 @@ const useUserPermissions = (classe: ClassType) => {
           Editar: false,
           Visualizar: false,
           Excluir: false,
+          Processar: false
         };
 
         switch (classe) {
@@ -38,23 +40,34 @@ const useUserPermissions = (classe: ClassType) => {
               Editar: decodedToken.Pessoa && decodedToken.Pessoa.includes('Editar'),
               Visualizar: decodedToken.Pessoa && decodedToken.Pessoa.includes('Visualizar'),
               Excluir: decodedToken.Pessoa && decodedToken.Pessoa.includes('Excluir'),
+              Processar: decodedToken.Pessoa && decodedToken.Pessoa.includes('Processar'),
             };
             break;
 
           case 'Cultura':
-              classPermissions = {
-                Editar: decodedToken.Cultura && decodedToken.Cultura.includes('Editar'),
-                Visualizar: decodedToken.Cultura && decodedToken.Cultura.includes('Visualizar'),
-                Excluir: decodedToken.Cultura && decodedToken.Cultura.includes('Excluir'),
-              };
-              break;
+            classPermissions = {
+              Editar: decodedToken.Cultura && decodedToken.Cultura.includes('Editar'),
+              Visualizar: decodedToken.Cultura && decodedToken.Cultura.includes('Visualizar'),
+              Excluir: decodedToken.Cultura && decodedToken.Cultura.includes('Excluir'),
+              Processar: decodedToken.Cultura && decodedToken.Cultura.includes('Processar'),
+            };
+            break;
 
           case 'Usuario':
             classPermissions = {
               Editar: decodedToken.Usuario && decodedToken.Usuario.includes('Editar'),
               Visualizar: decodedToken.Usuario && decodedToken.Usuario.includes('Visualizar'),
               Excluir: decodedToken.Usuario && decodedToken.Usuario.includes('Excluir'),
-              // Adicione outras permissões específicas para a classe 'Pessoa' conforme necessário
+              Processar: decodedToken.Usuario && decodedToken.Usuario.includes('Processar'),
+            };
+            break;
+
+          case 'Imovel':
+            classPermissions = {
+              Editar: decodedToken.Imovel && decodedToken.Imovel.includes('Editar'),
+              Visualizar: decodedToken.Imovel && decodedToken.Imovel.includes('Visualizar'),
+              Excluir: decodedToken.Imovel && decodedToken.Imovel.includes('Excluir'),
+              Processar: decodedToken.Imovel && decodedToken.Imovel.includes('Processar'),
             };
             break;
           // Adicione outros casos para outras classes

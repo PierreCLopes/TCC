@@ -7,6 +7,7 @@ import { LayoutBaseDePagina } from "../../shared/layouts";
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import { PessoaService, IListagemPessoa } from '../../shared/services/api/pessoas/PessoaService';
+import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
 
 export const ListagemDePessoa: React.FC = () => {
@@ -17,6 +18,8 @@ export const ListagemDePessoa: React.FC = () => {
     const [rows, setRows] = useState<IListagemPessoa[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+
+    const permissions = useUserPermissions('Pessoa');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -67,10 +70,11 @@ export const ListagemDePessoa: React.FC = () => {
 
     return(
         <LayoutBaseDePagina 
-            titulo="Listagem de imóveis"
+            titulo="Listagem de pessoas"
             barraDeFerramentas={
                 <FerramentasDaListagem 
                     textoBotaoNovo="Nova"
+                    mostrarBotaoNovo={permissions?.Editar}
                     mostrarInputBusca
                     textoDaBusca={busca}
                     aoClicarEmNovo={() => navigate(`/pessoa/nova`)}
@@ -98,12 +102,17 @@ export const ListagemDePessoa: React.FC = () => {
                                 <TableCell>{row.cnpjcpf}</TableCell>
                                 <TableCell>{row.telefone}</TableCell>
                                 <TableCell>
+
                                     <IconButton size='small' onClick={() => navigate(`/pessoa/${row.id}`)}>
                                         <Icon>edit</Icon>
                                     </IconButton>
-                                    <IconButton size='small' onClick={() => handleDelete(row.id)}>
-                                        <Icon>delete</Icon>
-                                    </IconButton>
+
+                                    {permissions?.Excluir &&(
+                                        <IconButton size='small' onClick={() => handleDelete(row.id)}>
+                                            <Icon>delete</Icon>
+                                        </IconButton>
+                                    )}
+
                                 </TableCell>
                             </TableRow> 
                         ))}

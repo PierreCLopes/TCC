@@ -5,7 +5,7 @@ export interface IDetalheUsuario{
     id: string,
     email: string,
     password: string,
-    confirmpassword: string
+    confirmPassword: string
 }
 
 export interface IListagemUsuario{
@@ -20,7 +20,7 @@ type TUsuariosComTotalCount = {
 
 const getAll = async (page = 1, filter = '', id = ''): Promise<TUsuariosComTotalCount | Error> => {
     try {
-      const urlRelativa = `/Auth/usuarios?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}&id=${id}`;
+      const urlRelativa = `/Auth/usuarios?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&userName=${filter}&id=${id}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 

@@ -1,12 +1,13 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon } from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor } from '@mui/material';
 
 import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import { IListagemImovel, ImovelService } from '../../shared/services/api/imoveis/ImovelService';
+import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
 
 export const ListagemDeImovel: React.FC = () => {
@@ -17,6 +18,11 @@ export const ListagemDeImovel: React.FC = () => {
     const [rows, setRows] = useState<IListagemImovel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    
+    const [alertMessage, setAlertMessage] = useState(''); 
+    const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
+    const permissions = useUserPermissions('Imovel');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -34,7 +40,8 @@ export const ListagemDeImovel: React.FC = () => {
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
-                    alert(result.message);
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
                 } else {
                     console.log(result);
                     console.log(result.totalCount);
@@ -52,14 +59,17 @@ export const ListagemDeImovel: React.FC = () => {
             ImovelService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
-                    alert(result.message);
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
                 } else {
                     setRows(oldRows =>{
                         return[
                             ...oldRows.filter(oldRow => oldRow.id !== id),
                         ]
                     });
-                    alert('Registro apagado com sucesso!');
+
+                    setAlertMessage('Registro apagado com sucesso!');
+                    setAlertSeverity("success");
                 }
             })
         }
@@ -68,10 +78,14 @@ export const ListagemDeImovel: React.FC = () => {
     return(
         <LayoutBaseDePagina 
             titulo="Listagem de imóveis"
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
             barraDeFerramentas={
                 <FerramentasDaListagem 
                     textoBotaoNovo="Novo"
                     mostrarInputBusca
+                    mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
                     aoClicarEmNovo={() => navigate(`/imovel/novo`)}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1'}, {replace: true})}
@@ -98,12 +112,21 @@ export const ListagemDeImovel: React.FC = () => {
                                 <TableCell>{row.matricula}</TableCell>
                                 <TableCell>{row.areatotal}</TableCell>
                                 <TableCell>
-                                    <IconButton size='small' onClick={() => navigate(`/imovel/${row.id}`)}>
+
+                                    <IconButton 
+                                        size='small' 
+                                        onClick={() => navigate(`/imovel/${row.id}`)}
+                                        disabled={!permissions?.Visualizar}>
                                         <Icon>edit</Icon>
                                     </IconButton>
-                                    <IconButton size='small' onClick={() => handleDelete(row.id)}>
+
+                                    <IconButton 
+                                        size='small' 
+                                        onClick={() => handleDelete(row.id)}
+                                        disabled={!permissions?.Excluir}>
                                         <Icon>delete</Icon>
                                     </IconButton>
+
                                 </TableCell>
                             </TableRow> 
                         ))}

@@ -8,6 +8,7 @@ import { FerramentasDeDetalhe } from "../../shared/components";
 import { VTextField, VForm, useVForm, IVFormErrors, VSelectField } from "../../shared/forms";
 import { AutoCompleteUsuario } from "../../shared/components/auto-complete/AutoCompleteUsuario";
 import { PermissaoUsuarioService } from "../../shared/services/api/permissoes-usuario/PermissaoUsuarioService";
+import useUserPermissions from "../../shared/hooks/UseUserPermissions";
 
 interface IFormData {
     userId: string;
@@ -34,6 +35,8 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info");
 
     const [valor, setValor] = useState("");
+
+    const permissions = useUserPermissions('Usuario');
 
     useEffect(() => {
         setIsLoading(true);
@@ -116,7 +119,8 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Nova"
-                    mostrarBotaoSalvarEFechar
+                    mostrarBotaoSalvar={permissions?.Editar}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar}
                     mostrarBotaoNovo={false}
                     mostrarBotaoApagar={false}
 
@@ -156,25 +160,27 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
                             </Grid>
                             <Grid item xs={6}>
                                 <VTextField
+                                    disabled
                                     fullWidth
                                     label="Tipo"
                                     placeholder="Tipo"
                                     name="tipo"
-                                    disabled={true}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <FormControlLabel
-                                    label="Visualizar"
+                                    disabled={!permissions?.Editar}
+                                    label="Editar"
                                     control={
                                         <Checkbox 
-                                            checked={isCheckBoxChecked("Visualizar")}
-                                            onChange={() => handleCheckBoxChange("Visualizar")}
+                                            checked={isCheckBoxChecked("Editar")}
+                                            onChange={() => handleCheckBoxChange("Editar")}
                                             disabled={isLoading}
                                         />
                                     }
                                 />
                                 <FormControlLabel
+                                    disabled={!permissions?.Editar}
                                     label="Excluir"
                                     control={
                                         <Checkbox 
@@ -185,11 +191,23 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
                                     }
                                 />
                                 <FormControlLabel
-                                    label="Editar"
+                                    disabled={!permissions?.Editar}
+                                    label="Processar"
                                     control={
                                         <Checkbox 
-                                            checked={isCheckBoxChecked("Editar")}
-                                            onChange={() => handleCheckBoxChange("Editar")}
+                                            checked={isCheckBoxChecked("Processar")}
+                                            onChange={() => handleCheckBoxChange("Processar")}
+                                            disabled={isLoading}
+                                        />
+                                    }
+                                />
+                                <FormControlLabel
+                                    disabled={!permissions?.Editar}
+                                    label="Visualizar"
+                                    control={
+                                        <Checkbox 
+                                            checked={isCheckBoxChecked("Visualizar")}
+                                            onChange={() => handleCheckBoxChange("Visualizar")}
                                             disabled={isLoading}
                                         />
                                     }

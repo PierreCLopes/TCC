@@ -54,7 +54,7 @@ export const ListagemDeUsuario: React.FC = () => {
     }, [busca, pagina]);
 
     const handleDelete = (id: string) => {
-        if(confirm('Deseja realmente excluir o usuario?')){
+        if(confirm('Deseja realmente excluir o usuário?')){
             UsuarioService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
@@ -111,7 +111,7 @@ export const ListagemDeUsuario: React.FC = () => {
                                         onClick={() => navigate(`/usuario/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
-                                        <Icon>edit</Icon>
+                                        <Icon>visibility</Icon>
                                     </IconButton>
 
                                     <IconButton 

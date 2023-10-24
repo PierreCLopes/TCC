@@ -42,5 +42,3 @@ setLocale({
         noUnknown: "Deve ser passado um valor definido"
     }
 });
-
-console.log('entrou');

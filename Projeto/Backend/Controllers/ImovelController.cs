@@ -7,6 +7,7 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
+using DemoToken;
 
 namespace Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Imovel", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Imovel>>> GetImoveis(
             [FromQuery] int page = 1,
@@ -49,6 +51,7 @@ namespace Backend.Controllers
             return Ok(Imoveis);
         }
 
+        [ClaimsAuthorize("Imovel", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Imovel>> GetImovel(int id)
         {
@@ -62,6 +65,7 @@ namespace Backend.Controllers
             return Imovel;
         }
 
+        [ClaimsAuthorize("Imovel", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Imovel>> PostImovel(ImovelCreateDTO imovelDTO)
         {
@@ -93,8 +97,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetImovel", new { id = imovel.Id }, imovel);
         }
 
-
-
+        [ClaimsAuthorize("Imovel", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutImovel(int id, ImovelCreateDTO imovelDTO)
         {
@@ -139,6 +142,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Imovel", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImovel(int id)
         {
@@ -154,6 +158,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Imovel", "Editar")]
         [HttpPost("{imovelId}/uploadFile")]
         public async Task<IActionResult> UploadFile(int imovelId, [FromForm] IFormFile arquivokml)
         {
@@ -184,7 +189,6 @@ namespace Backend.Controllers
                 }
             }
         }
-
 
         private bool ImovelExists(int id)
         {

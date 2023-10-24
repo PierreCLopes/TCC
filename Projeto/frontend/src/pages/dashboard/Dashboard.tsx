@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { AlertColor, Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { FerramentasDaListagem, FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { useEffect, useState } from "react";
@@ -12,6 +12,9 @@ export const Dashboard = () => {
     const [isLoadingCultura, setIsLoadingCultura] = useState(true);
     const [totalCountCultura, setTotalCountCultura] = useState(0);
 
+    const [alertMessage, setAlertMessage] = useState(''); 
+    const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
     useEffect(() => {
         setIsLoadingImovel(true);
         setIsLoadingCultura(true);
@@ -21,7 +24,8 @@ export const Dashboard = () => {
             setIsLoadingImovel(false);
             
             if (result instanceof Error){
-                alert(result.message);
+                setAlertMessage(result.message);
+                setAlertSeverity("error");
             } else {
                 setTotalCountImovel(result.totalCount);
             }
@@ -32,7 +36,8 @@ export const Dashboard = () => {
             setIsLoadingCultura(false);
             
             if (result instanceof Error){
-                alert(result.message);
+                setAlertMessage(result.message);
+                setAlertSeverity("error");
             } else {
                 setTotalCountCultura(result.totalCount);
             }
@@ -43,6 +48,9 @@ export const Dashboard = () => {
     return(
         <LayoutBaseDePagina 
             titulo='Página inicial' 
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
             barraDeFerramentas={(<FerramentasDaListagem mostrarBotaoNovo={false}/>)}
         >
             <Box width="100%" display="flex">

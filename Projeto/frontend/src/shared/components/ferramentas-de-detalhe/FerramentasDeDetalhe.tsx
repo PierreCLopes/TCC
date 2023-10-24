@@ -67,7 +67,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({text
                     </Typography>
                 </Button>
             )}
-            {mostrarBotaoSalvarCarregando && (
+            {mostrarBotaoSalvarCarregando && mostrarBotaoSalvar &&(
                 <Skeleton width={110} height={60}/>
             )}
 
@@ -84,7 +84,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({text
                     </Typography>
                 </Button>
             )}
-            {(mostrarBotaoSalvarEFecharCarregando && !smDown && !mdDown) && (
+            {(mostrarBotaoSalvarEFecharCarregando && !smDown && !mdDown && mostrarBotaoSalvarEFechar) && (
                 <Skeleton width={180} height={60}/>
             )}
 
@@ -101,7 +101,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({text
                     </Typography>
                 </Button>
             )}
-            {mostrarBotaoApagarCarregando && (
+            {mostrarBotaoApagarCarregando && mostrarBotaoApagar &&(
                 <Skeleton width={110} height={60}/>
             )}
 
@@ -118,7 +118,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({text
                     </Typography>
                 </Button>
             )}
-            {(mostrarBotaoNovoCarregando && !smDown) && (
+            {(mostrarBotaoNovoCarregando && !smDown && mostrarBotaoNovo) && (
                 <Skeleton width={110} height={60}/>
             )}
 
@@ -139,7 +139,7 @@ export const FerramentasDeDetalhe: React.FC<IFerramentasDeDetalheProps> = ({text
                     </Typography>
                 </Button>
             )}
-            {mostrarBotaoVoltarCarregando && (
+            {mostrarBotaoVoltarCarregando && mostrarBotaoVoltar && (
                 <Skeleton width={110} height={60}/>
             )}
         </Box>  

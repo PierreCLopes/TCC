@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColor } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -10,6 +10,7 @@ import { VTextField, VForm, useVForm, IVFormErrors, formatCNPJCPF } from "../../
 import { FileInput } from "../../shared/components/file-input/FileInput";
 import { detectFileTypeFromBase64 } from "../../shared/helpers/FileTypeFromBase64";
 import { AutoCompletePessoa } from "../../shared/components/auto-complete/AutoCompletePessoa";
+import useUserPermissions from "../../shared/hooks/UseUserPermissions";
 
 interface IFormData {
     observacao: string,
@@ -49,6 +50,11 @@ export const DetalheDeImovel: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
     const [extensao, setExtensao] = useState('');
+
+    const [alertMessage, setAlertMessage] = useState(''); 
+    const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
+    const permissions = useUserPermissions('Imovel');
 
     useEffect(() => {
         if (id !== 'novo'){    
@@ -118,21 +124,25 @@ export const DetalheDeImovel: React.FC = () => {
                         setIsLoading(false);
         
                         if (result instanceof Error){
-                            alert(result.message);
+                            setAlertMessage(result.message);
+                            setAlertSeverity("error");
         
                         } else {
                             // Envie o arquivo do imóvel
                             ImovelService.uploadFile(result.id, dados.arquivokml)
                             .then((resultFile) => {
-                                if (resultFile instanceof Error) 
-                                    alert(resultFile.message);
+                                if (resultFile instanceof Error){
+                                    setAlertMessage(resultFile.message);
+                                    setAlertSeverity("error");
+                                }
                             });
         
                             if(isSaveAndClose()){
                                 navigate('/imoveis');
         
                             } else {
-                                alert('Registro criado com sucesso!');
+                                setAlertMessage('Registro criado com sucesso');
+                                setAlertSeverity("success");
                                 navigate(`/imovel/${result.id}`);
                             }
                         }  
@@ -145,21 +155,25 @@ export const DetalheDeImovel: React.FC = () => {
                         setIsLoading(false);
         
                         if (result instanceof Error){
-                            alert(result.message);
+                            setAlertMessage(result.message);
+                            setAlertSeverity("error");
         
                         } else {
                             // Envie o arquivo do imóvel
                             ImovelService.uploadFile(Number(id), dados.arquivokml)
                             .then((resultFile) => {
-                                if (resultFile instanceof Error) 
-                                    alert(resultFile.message);
+                                if (resultFile instanceof Error){
+                                    setAlertMessage(resultFile.message);
+                                    setAlertSeverity("error");
+                                }
                             });
 
                             if(isSaveAndClose()){
                                 navigate('/imoveis');
         
                             } else {
-                                alert('Registro alterado com sucesso!');
+                                setAlertMessage('Registro alterado com sucesso!');
+                                setAlertSeverity("success");
                             }
                         }  
                     })
@@ -188,9 +202,11 @@ export const DetalheDeImovel: React.FC = () => {
             ImovelService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
-                    alert(result.message);
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
                 } else {
-                    alert('Registro apagado com sucesso!');
+                    setAlertMessage('Registro apagado com sucesso!');
+                    setAlertSeverity("success");
                     navigate('/imoveis');
                 }
             })
@@ -206,12 +222,16 @@ export const DetalheDeImovel: React.FC = () => {
     return(
         <LayoutBaseDePagina 
             titulo={id === 'novo' ? 'Novo imóvel' : nome}
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Novo"
-                    mostrarBotaoSalvarEFechar
-                    mostrarBotaoNovo={id !== 'novo'}
-                    mostrarBotaoApagar={id !== 'novo'}
+                    mostrarBotaoSalvar={permissions?.Editar}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar}
+                    mostrarBotaoNovo={id !== 'novo' && permissions?.Editar}
+                    mostrarBotaoApagar={id !== 'novo' && permissions?.Excluir}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
@@ -246,7 +266,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Nome"
                                     placeholder="Nome" 
                                     name="nome"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
@@ -262,7 +282,7 @@ export const DetalheDeImovel: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -277,7 +297,7 @@ export const DetalheDeImovel: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -292,13 +312,14 @@ export const DetalheDeImovel: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
                                 <FileInput
                                     name="arquivokml"
                                     extensao={extensao}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -307,6 +328,7 @@ export const DetalheDeImovel: React.FC = () => {
                             <Grid item xs={12} md={4}>
                                 <AutoCompletePessoa
                                     isExternalLoading={isLoading}
+                                    disabled={!permissions?.Editar}
                                     label="Proprietário"
                                     nomeField="proprietario"
                                 />
@@ -314,6 +336,7 @@ export const DetalheDeImovel: React.FC = () => {
                             <Grid item xs={6} md={2}>
                                 <AutoCompleteCidade 
                                     isExternalLoading={isLoading}
+                                    disabled={!permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -322,7 +345,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Matrícula"
                                     placeholder="Matrícula" 
                                     name="matricula"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -331,7 +354,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Latitude"
                                     placeholder="Latitude" 
                                     name="latitude"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -340,7 +363,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Longitude"
                                     placeholder="Longitude" 
                                     name="longitude"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -352,7 +375,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Roteiro de acesso"
                                     placeholder="Roteiro de acesso" 
                                     name="roteiroacesso"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -364,7 +387,7 @@ export const DetalheDeImovel: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="observacao"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>

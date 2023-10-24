@@ -1,4 +1,5 @@
-﻿using Backend.Models;
+﻿using Backend.Data;
+using Backend.Models;
 using DemoToken;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -30,10 +31,19 @@ namespace Backend.Controllers
             _appSettings = appSettings.Value;
         }
 
+        [ClaimsAuthorize("Usuario", "Editar")]
         [HttpPost("usuario")]
         public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
+            var usuarioExistente = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == registerUser.Email);
+
+            if (usuarioExistente != null)
+            {
+                var error = new ApiError(409, "Já existe um usuário com esse Email cadastrado.");
+                return Conflict(error);
+            }
 
             var user = new IdentityUser
             {
@@ -110,9 +120,9 @@ namespace Backend.Controllers
             return tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
         }
 
-        //[ClaimsAuthorize("Usuario","Visualizar")]
+        [ClaimsAuthorize("Usuario","Visualizar")]
         [HttpGet("usuarios")]
-        public async Task<ActionResult<IEnumerable<IdentityUser>>> GetUsers(
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string? userName = null,
@@ -142,26 +152,51 @@ namespace Backend.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
+            // Mapeie os objetos IdentityUser para UserViewModel
+            var userViewModels = users.Select(user => new UserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Password = user.PasswordHash, 
+                ConfirmPassword = user.PasswordHash 
+            }).ToList();
+
             Response.Headers.Add("X-Total-Count", totalCount.ToString());
 
-            return Ok(users);
+            return Ok(userViewModels);
         }
 
 
-        //[ClaimsAuthorize("Usuario", "Visualizar")]
+
+        [ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("usuario/{id}")]
         public async Task<IActionResult> GetUsuarioAsync(string id)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+            }
 
             var usuario = await _userManager.FindByIdAsync(id);
 
-            // Aqui você pode mapear as propriedades que deseja retornar em uma lista de objetos ViewModel
+            if (usuario == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
 
+            // Mapeie as propriedades do IdentityUser para um objeto UserViewModel
+            var userViewModel = new UserViewModel
+            {
+                Id = usuario.Id,
+                Email = usuario.Email,
+                Password = usuario.PasswordHash, 
+                ConfirmPassword = usuario.PasswordHash
+            };
 
-            return Ok(usuario);
+            return Ok(userViewModel);
         }
 
+        [ClaimsAuthorize("Usuario", "Excluir")]
         [HttpDelete("usuario/{id}")]
         public async Task<IActionResult> DeleteUsuario(string id)
         {
@@ -194,7 +229,6 @@ namespace Backend.Controllers
 
             return Ok("Usuário excluído com sucesso.");
         }
-
 
     }
 }

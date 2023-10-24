@@ -6,9 +6,10 @@ import { MuiFileInput } from 'mui-file-input';
 type FileInputProps = {
   name: string;
   extensao: string;
+  disabled: boolean;
 };
 
-export const FileInput: React.FC<FileInputProps> = ({ name, extensao, ...rest }) => {
+export const FileInput: React.FC<FileInputProps> = ({ name, extensao, disabled, ...rest }) => {
   const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
 
   const [value, setValue] = useState(defaultValue || '');
@@ -60,6 +61,8 @@ export const FileInput: React.FC<FileInputProps> = ({ name, extensao, ...rest })
         helperText={error}
         value={value}
         hideSizeText
+        disabled={disabled}
+        
         InputProps={{
             
         }}

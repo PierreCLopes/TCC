@@ -8,6 +8,7 @@ using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
+using Backend.Helpers;
 
 namespace Backend.Controllers
 {
@@ -113,38 +114,22 @@ namespace Backend.Controllers
             return NotFound();
         }
 
-        // Função para validar CPF
-        private bool ValidateCPF(string cpf)
-        {
-            // Lógica de validação do CPF aqui
-            // Retorna true se válido, false se inválido
-            // Exemplo de validação simples:
-            return Regex.IsMatch(cpf, @"^\d{3}\.\d{3}\.\d{3}-\d{2}$");
-        }
-
-        // Função para validar CNPJ
-        private bool ValidateCNPJ(string cnpj)
-        {
-            // Lógica de validação do CNPJ aqui
-            // Retorna true se válido, false se inválido
-            // Exemplo de validação simples:
-            return Regex.IsMatch(cnpj, @"^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$");
-        }
-
         [HttpPost]
         public async Task<ActionResult<Pessoa>> PostPessoa(PessoaCreateDTO pessoaDTO)
         {
             // Verifique se o tipo de pessoa é válido (1 para física, 2 para jurídica)
             if (pessoaDTO.Tipo != 1 && pessoaDTO.Tipo != 2)
             {
-                return BadRequest("Tipo de pessoa inválido. Use 1 para pessoa física ou 2 para pessoa jurídica.");
+                var error = new ApiError(400, "Tipo de pessoa inválido. Use 1 para pessoa física ou 2 para pessoa jurídica.");
+                return BadRequest(error);
             }
 
             // Valide o CNPJ/CPF com base no tipo de pessoa
-            if ((pessoaDTO.Tipo == 1 && !ValidateCPF(pessoaDTO.Cnpjcpf)) ||
-                (pessoaDTO.Tipo == 2 && !ValidateCNPJ(pessoaDTO.Cnpjcpf)))
+            if ((pessoaDTO.Tipo == 1 && !ValidacaoHelper.IsCpf(pessoaDTO.Cnpjcpf)) ||
+                (pessoaDTO.Tipo == 2 && !ValidacaoHelper.IsCnpj(pessoaDTO.Cnpjcpf)))
             {
-                return BadRequest("CNPJ/CPF inválido.");
+                var error = new ApiError(400, "CNPJ/CPF inválido.");
+                return BadRequest(error);
             }
 
             // Verifique se já existe uma pessoa com o mesmo CNPJ/CPF na base
@@ -152,7 +137,8 @@ namespace Backend.Controllers
 
             if (pessoaExistente != null)
             {
-                return Conflict("Já existe uma pessoa com o mesmo CNPJ/CPF na base.");
+                var error = new ApiError(409, "Já existe uma pessoa com o mesmo CNPJ/CPF na base.");
+                return Conflict(error);
             }
 
             var pessoa = new Pessoa
@@ -204,6 +190,30 @@ namespace Backend.Controllers
             if (pessoa == null)
             {
                 return NotFound("Pessoa não encontrada");
+            }
+
+            // Verifique se o tipo de pessoa é válido (1 para física, 2 para jurídica)
+            if (pessoaDTO.Tipo != 1 && pessoaDTO.Tipo != 2)
+            {
+                var error = new ApiError(400, "Tipo de pessoa inválido. Use 1 para pessoa física ou 2 para pessoa jurídica.");
+                return BadRequest(error);
+            }
+
+            // Valide o CNPJ/CPF com base no tipo de pessoa
+            if ((pessoaDTO.Tipo == 1 && !ValidacaoHelper.IsCpf(pessoaDTO.Cnpjcpf)) ||
+                (pessoaDTO.Tipo == 2 && !ValidacaoHelper.IsCnpj(pessoaDTO.Cnpjcpf)))
+            {
+                var error = new ApiError(400, "CNPJ/CPF inválido.");
+                return BadRequest(error);
+            }
+
+            // Verifique se já existe uma pessoa com o mesmo CNPJ/CPF na base
+            var pessoaExistente = await _context.Pessoas.FirstOrDefaultAsync(p => p.Cnpjcpf == pessoaDTO.Cnpjcpf);
+
+            if ((pessoaExistente != null) && (pessoaExistente.Id != id))
+            {
+                var error = new ApiError(409, "Já existe uma pessoa com o mesmo CNPJ/CPF na base.");
+                return Conflict(error);
             }
 
             // Atualize as propriedades da instância existente de Pessoa

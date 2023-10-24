@@ -7,17 +7,18 @@ import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { UsuarioService } from "../../shared/services/api/usuarios/UsuarioService";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
+import useUserPermissions from "../../shared/hooks/UseUserPermissions";
 
 interface IFormData {
     email: string,
     password: string,
-    confirmpassword: string
+    confirmPassword: string
 }
 
 const formValitationSchema: yup.Schema<IFormData> = yup.object({
     email: yup.string().required().email(),
     password: yup.string().required(),
-    confirmpassword: yup.string().required(),
+    confirmPassword: yup.string().required(),
 });
 
 export const DetalheDeUsuario: React.FC = () => {
@@ -31,6 +32,8 @@ export const DetalheDeUsuario: React.FC = () => {
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
+    const permissions = useUserPermissions('Usuario');
 
     useEffect(() => {
         if (id !== 'novo'){    
@@ -135,10 +138,10 @@ export const DetalheDeUsuario: React.FC = () => {
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Novo"
-                    mostrarBotaoSalvarEFechar={id === 'novo'}
-                    mostrarBotaoSalvar={id === 'novo'}
-                    mostrarBotaoNovo={id !== 'novo'}
-                    mostrarBotaoApagar={id !== 'novo'}
+                    mostrarBotaoSalvarEFechar={id === 'novo' && permissions?.Editar}
+                    mostrarBotaoSalvar={id === 'novo' && permissions?.Editar}
+                    mostrarBotaoNovo={id !== 'novo' && permissions?.Editar}
+                    mostrarBotaoApagar={id !== 'novo' && permissions?.Excluir}
      
                     aoClicarEmApagar={() => {handleDelete(id)}}
                     aoClicarEmSalvar={save}
@@ -176,7 +179,7 @@ export const DetalheDeUsuario: React.FC = () => {
                                     label="Email"
                                     placeholder="Email" 
                                     name="email"
-                                    disabled={isLoading || id != 'novo'}
+                                    disabled={isLoading || id != 'novo' || !permissions?.Editar}
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
@@ -187,7 +190,7 @@ export const DetalheDeUsuario: React.FC = () => {
                                     placeholder="Senha" 
                                     name="password"
                                     type="password"
-                                    disabled={isLoading || id != 'novo'}
+                                    disabled={isLoading || id != 'novo' || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={12} md={4}>
@@ -196,8 +199,8 @@ export const DetalheDeUsuario: React.FC = () => {
                                     label="Confirmar senha"
                                     placeholder="Confirmar senha" 
                                     type="password"
-                                    name="confirmpassword"
-                                    disabled={isLoading || id != 'novo'}
+                                    name="confirmPassword"
+                                    disabled={isLoading || id != 'novo' || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -205,6 +208,7 @@ export const DetalheDeUsuario: React.FC = () => {
                             <Button
                                 variant="contained"
                                 color="primary"
+                                disabled={isLoading || id === 'novo' || !permissions?.Visualizar}
                                 onClick={() => {
                                     if (id !== 'novo') {
                                         navigate(`/usuario/${id}/permissoes`);

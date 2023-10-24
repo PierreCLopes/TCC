@@ -13,9 +13,10 @@ interface IAutoCompletePessoaProps {
     isExternalLoading?: boolean;
     nomeField?: string;
     label: string
+    disabled?: boolean;
 }
 
-export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExternalLoading = false, nomeField = 'pessoa', label = 'Pessoa'}) => {
+export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExternalLoading = false, nomeField = 'pessoa', label = 'Pessoa', disabled = false}) => {
     const {fieldName, registerField, defaultValue, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -71,11 +72,11 @@ export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExtern
             loadingText="Carregando..."
 
             disablePortal
-
+            
             value={autoCompleteSelectedOption}
             options={opcoes}
             loading={isLoading}
-            disabled={isExternalLoading}
+            disabled={isExternalLoading || disabled}
             onInputChange={(e, newValue) => { setBusca(newValue) }}
             onChange={(e, newValue) => { setSelectedId(newValue?.id); setBusca(''); clearError(); }}
             popupIcon={(isExternalLoading || isLoading) ? <CircularProgress size={28}/> : undefined}

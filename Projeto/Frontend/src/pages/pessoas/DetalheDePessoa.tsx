@@ -8,6 +8,8 @@ import { AutoCompleteCidade, FerramentasDeDetalhe } from "../../shared/component
 import { PessoaService } from "../../shared/services/api/pessoas/PessoaService";
 import { VTextField, VForm, useVForm, IVFormErrors, VSelectField } from "../../shared/forms";
 import { VCheckBox } from "../../shared/forms/VCheckBox";
+import useUserPermissions from "../../shared/hooks/UseUserPermissions";
+import { useAuthContext } from "../../shared/contexts";
 
 interface IFormData {
     nome: string,
@@ -73,6 +75,8 @@ export const DetalheDePessoa: React.FC = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
+
+    const permissions = useUserPermissions('Pessoa');
 
     useEffect(() => {
         if (id !== 'nova'){    
@@ -204,9 +208,10 @@ export const DetalheDePessoa: React.FC = () => {
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Nova"
-                    mostrarBotaoSalvarEFechar
-                    mostrarBotaoNovo={id !== 'nova'}
-                    mostrarBotaoApagar={id !== 'nova'}
+                    mostrarBotaoSalvar={permissions?.Editar}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar}
+                    mostrarBotaoNovo={id !== 'nova' && permissions?.Editar}
+                    mostrarBotaoApagar={id !== 'nova' && permissions?.Excluir}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
@@ -241,7 +246,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Nome"
                                     placeholder="Nome" 
                                     name="nome"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
@@ -251,7 +256,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Apelido"
                                     placeholder="Apelido" 
                                     name="apelido"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -260,7 +265,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Tipo"
                                     placeholder="Tipo" 
                                     name="tipo"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                     options={[
                                         { value: 1, label: 'Física' },
                                         { value: 2, label: 'Jurídica' }
@@ -273,7 +278,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="CNPJ/CPF"
                                     placeholder="CNPJ/CPF" 
                                     name="cnpjcpf"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -285,7 +290,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="CFTA"
                                     placeholder="CFTA" 
                                     name="cfta"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -294,7 +299,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Telefone"
                                     placeholder="Telefone" 
                                     name="telefone"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -303,7 +308,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="RG"
                                     placeholder="RG" 
                                     name="rg"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -312,7 +317,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Email"
                                     placeholder="Email" 
                                     name="email"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -324,7 +329,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="observacao"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -337,7 +342,7 @@ export const DetalheDePessoa: React.FC = () => {
                                         <VCheckBox 
                                             placeholder="É Técnico" 
                                             name="ehtecnico"
-                                            disabled={isLoading}
+                                            disabled={isLoading || !permissions?.Editar}
                                         />
                                     }
                                 />
@@ -353,6 +358,7 @@ export const DetalheDePessoa: React.FC = () => {
                                 <AutoCompleteCidade 
                                     isExternalLoading={isLoading}
                                     nomeField="endereco.cidade"
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -361,7 +367,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="CEP"
                                     placeholder="CEP" 
                                     name="endereco.cep"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={4}>
@@ -370,7 +376,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Bairro"
                                     placeholder="Bairro" 
                                     name="endereco.bairro"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -379,7 +385,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Número"
                                     placeholder="Número" 
                                     name="endereco.numero"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -391,7 +397,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Complemento"
                                     placeholder="Complemento" 
                                     name="endereco.complemento"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>
@@ -402,7 +408,7 @@ export const DetalheDePessoa: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="endereco.observacao"
-                                    disabled={isLoading}
+                                    disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
                         </Grid>

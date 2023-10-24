@@ -64,6 +64,15 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Cultura>> PostCultura(Cultura cultura)
         {
+            // Verifique se já existe uma pessoa com o mesmo CNPJ/CPF na base
+            var culturaExistente = await _context.Culturas.FirstOrDefaultAsync(p => p.Nome == cultura.Nome);
+
+            if (culturaExistente != null)
+            {
+                var error = new ApiError(409, "Já existe uma cultura com o mesmo nome cadastrada.");
+                return Conflict(error);
+            }
+
             _context.Culturas.Add(cultura);
             await _context.SaveChangesAsync();
 

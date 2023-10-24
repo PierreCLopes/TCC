@@ -12,9 +12,10 @@ type TAutoCompleteOption = {
 interface IAutoCompleteCidadeProps {
     isExternalLoading?: boolean;
     nomeField?: string
+    disabled?: boolean;
 }
 
-export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExternalLoading = false, nomeField = 'cidade'}) => {
+export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExternalLoading = false, nomeField = 'cidade', disabled = false}) => {
     const {fieldName, registerField, defaultValue, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -74,7 +75,7 @@ export const AutoCompleteCidade: React.FC<IAutoCompleteCidadeProps> = ({isExtern
             value={autoCompleteSelectedOption}
             options={opcoes}
             loading={isLoading}
-            disabled={isExternalLoading}
+            disabled={isExternalLoading || disabled}
             onInputChange={(e, newValue) => { setBusca(newValue) }}
             onChange={(e, newValue) => { setSelectedId(newValue?.id); setBusca(''); clearError(); }}
             popupIcon={(isExternalLoading || isLoading) ? <CircularProgress size={28}/> : undefined}
