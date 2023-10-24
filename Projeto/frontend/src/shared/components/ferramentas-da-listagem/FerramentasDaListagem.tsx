@@ -9,6 +9,7 @@ interface IBarraDeFerramentasProps{
     textoBotaoNovo?: string;
     mostrarBotaoNovo?: boolean;
     aoClicarEmNovo?: () => void;
+    aoClicarEmVoltar?: () => void;
 }
 
 export const FerramentasDaListagem: React.FC<IBarraDeFerramentasProps> = ({textoDaBusca = '', 
@@ -16,7 +17,8 @@ export const FerramentasDaListagem: React.FC<IBarraDeFerramentasProps> = ({texto
                                                                         aoMudarTextoDeBusca,
                                                                         textoBotaoNovo = 'Novo',
                                                                         mostrarBotaoNovo = true,
-                                                                        aoClicarEmNovo}) => {
+                                                                        aoClicarEmNovo,
+                                                                        aoClicarEmVoltar}) => {
     const theme = useTheme();
 
     return(
@@ -46,7 +48,7 @@ export const FerramentasDaListagem: React.FC<IBarraDeFerramentasProps> = ({texto
                         variant={'outlined'}
                         disableElevation
                         endIcon={<Icon>arrow_back</Icon>}
-                        onClick={aoClicarEmNovo}
+                        onClick={aoClicarEmVoltar}
                     >
                         Voltar
                     </Button>

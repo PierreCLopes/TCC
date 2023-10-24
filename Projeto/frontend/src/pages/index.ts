@@ -13,4 +13,13 @@ export * from './usuarios/DetalheDeUsuario';
 export * from './permissoes-usuario/ListagemDePermissaoUsuario';
 export * from './permissoes-usuario/DetalheDePermissaoUsuario';
 
+export * from './filiais/ListagemDeFilial';
+export * from './filiais/DetalheDeFilial';
+
+export * from './documentacoes/ListagemDeTipoDocumentacao';
+export * from './documentacoes/DetalheDeTipoDocumentacao';
+
+export * from './documentacoes/ListagemDeDocumentacao';
+export * from './documentacoes/DetalheDeDocumentacao';
+
 export * from './dashboard/Dashboard';

@@ -306,7 +306,7 @@ namespace Backend.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     COMPLEMENTO = table.Column<string>(type: "varchar(60)", unicode: false, maxLength: 60, nullable: false),
-                    NUMERO = table.Column<int>(type: "int", nullable: false),
+                    NUMERO = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CEP = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
                     BAIRRO = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: false),
                     CIDADE = table.Column<int>(type: "int", nullable: false),
@@ -404,7 +404,8 @@ namespace Backend.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ARQUIVO = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    ARQUIVO = table.Column<byte[]>(type: "VARBINARY(MAX)", nullable: false),
+                    NOME = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     TIPO = table.Column<int>(type: "int", nullable: false),
                     PROPOSTA = table.Column<int>(type: "int", nullable: true),
                     IMOVEL = table.Column<int>(type: "int", nullable: true),

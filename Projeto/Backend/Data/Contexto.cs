@@ -134,8 +134,12 @@ namespace Backend.Data
                     .UseIdentityColumn()
                     .HasColumnName("ID");
                 entity.Property(e => e.Arquivo)
+                      .HasColumnType("VARBINARY(MAX)")
+                      .HasColumnName("ARQUIVO");
+                entity.Property(e => e.Nome)
+                    .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("ARQUIVO");
+                    .HasColumnName("NOME");
                 entity.Property(e => e.Imovel).HasColumnName("IMOVEL");
                 entity.Property(e => e.Pessoa).HasColumnName("PESSOA");
                 entity.Property(e => e.Proposta).HasColumnName("PROPOSTA");

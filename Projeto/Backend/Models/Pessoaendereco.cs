@@ -17,14 +17,19 @@ public partial class Pessoaendereco
 
     public string Complemento { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Numero { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Cep { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Bairro { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int Cidade { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int Pessoa { get; set; }
 
     public virtual Cidade CidadeNavigation { get; set; } = null!;

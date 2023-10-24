@@ -2,15 +2,21 @@
 
 namespace Backend.Models.CreateModels
 {
-    public class ClaimDTO
+    public class DocumentacaoDTO
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public string Tipo { get; set; }
+        public byte[]? Arquivo { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public string UserId { get; set; }
+        public int Tipo { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public string Valor { get; set; } 
+        public string Nome { get; set; } = null!;
+
+        public int? Proposta { get; set; }
+
+        public int? Imovel { get; set; }
+
+        public int? Pessoa { get; set; }
     }
 }

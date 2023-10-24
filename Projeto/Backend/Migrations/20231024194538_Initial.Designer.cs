@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backend.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20231021230101_Teste")]
-    partial class Teste
+    [Migration("20231024194538_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,15 +94,21 @@ namespace Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Arquivo")
+                    b.Property<byte[]>("Arquivo")
                         .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("VARBINARY(MAX)")
                         .HasColumnName("ARQUIVO");
 
                     b.Property<int?>("Imovel")
                         .HasColumnType("int")
                         .HasColumnName("IMOVEL");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NOME");
 
                     b.Property<int?>("Pessoa")
                         .HasColumnType("int")

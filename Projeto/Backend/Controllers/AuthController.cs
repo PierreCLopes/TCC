@@ -61,7 +61,10 @@ namespace Backend.Controllers
             {
                 new System.Security.Claims.Claim("Pessoa", ""),
                 new System.Security.Claims.Claim("Cultura", ""),
-                new System.Security.Claims.Claim("Usuario", "")
+                new System.Security.Claims.Claim("Usuario", ""),
+                new System.Security.Claims.Claim("Imovel", ""),
+                new System.Security.Claims.Claim("Filial", ""),
+                new System.Security.Claims.Claim("Documentacao", "")
             };
 
             result = await _userManager.AddClaimsAsync(user, defaultClaims);
@@ -71,9 +74,7 @@ namespace Backend.Controllers
                 return BadRequest(result.Errors);
             }
 
-            await _signInManager.SignInAsync(user, isPersistent: false);
-
-            return Ok(await GerarJWT(registerUser.Email));
+            return Ok(user);
         }
 
 

@@ -164,7 +164,18 @@ namespace Backend.Controllers
         {
             if (arquivokml == null || arquivokml.Length == 0)
             {
-                return BadRequest("Nenhum arquivo enviado.");
+                var error = new ApiError(400, "Nenhum arquivo enviado.");
+                return BadRequest(error);
+            }
+
+            // Verifique a extensão do arquivo
+            var allowedExtensions = new List<string> { ".png", ".jpg", ".mp4", ".pdf", ".ico", ".rar", ".rtf", ".txt", ".srt", ".kml" };
+            var fileExtension = Path.GetExtension(arquivokml.FileName).ToLower();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                var error = new ApiError(400, "A extensão do arquivo não é permitida.");
+                return BadRequest(error);
             }
 
             // Converta o arquivo em um array de bytes
@@ -175,7 +186,6 @@ namespace Backend.Controllers
 
                 // Salve o array de bytes na coluna BLOB do banco de dados
                 // Certifique-se de associá-lo ao imóvel com o ID especificado
-                // Exemplo de uso do Entity Framework Core:
                 var imovel = await _context.Imoveis.FindAsync(imovelId);
                 if (imovel != null)
                 {

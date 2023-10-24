@@ -1,28 +1,27 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor } from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor, Box } from '@mui/material';
 
-import { FerramentasDaListagem } from "../../shared/components";
+import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
+import { TipoDocumentacaoService, IListagemTipoDocumentacao } from '../../shared/services/api/tipo-documentacoes/TipoDocumentacaoService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
-import { PessoaService, IListagemPessoa } from '../../shared/services/api/pessoas/PessoaService';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
-
-export const ListagemDePessoa: React.FC = () => {
+export const ListagemDeTipoDocumentacao: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemPessoa[]>([]);
+    const [rows, setRows] = useState<IListagemTipoDocumentacao[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Pessoa');
+    const permissions = useUserPermissions('Documentacao');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -36,16 +35,14 @@ export const ListagemDePessoa: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            PessoaService.getAll(pagina, busca)
+            TipoDocumentacaoService.getAll(pagina, busca)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
-                } else {
-                    console.log(result);
-                    console.log(result.totalCount);
 
+                } else {
                     setRows(result.data);
                     setTotalCount(result.totalCount);
                 }
@@ -55,15 +52,15 @@ export const ListagemDePessoa: React.FC = () => {
     }, [busca, pagina]);
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir a pessoa?')){
-            PessoaService.deleteById(id)
+        if(confirm('Deseja realmente excluir o Tipo de documentação?')){
+            TipoDocumentacaoService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
                 } else {
-                    setRows(oldRows =>{
-                        return[
+                    setRows(oldRows => {
+                        return [
                             ...oldRows.filter(oldRow => oldRow.id !== id),
                         ]
                     });
@@ -74,22 +71,22 @@ export const ListagemDePessoa: React.FC = () => {
         }
     }
 
-    return(
+    return (
         <LayoutBaseDePagina 
-            titulo="Listagem de pessoas"
-            alertMessage={alertMessage}
-            alertSeverity={alertSeverity}
-            onCloseAlert={() => setAlertMessage('')}
+            titulo="Listagem de tipos de documentação"
             barraDeFerramentas={
                 <FerramentasDaListagem 
                     textoBotaoNovo="Nova"
-                    mostrarBotaoNovo={permissions?.Editar}
                     mostrarInputBusca
+                    mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigate(`/pessoa/nova`)}
-                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1'}, {replace: true})}
+                    aoClicarEmNovo={() => navigate(`/tipodocumentacao/novo`)}
+                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
         >
             <TableContainer component={Paper} variant='outlined' sx={{ m: 1, width: 'auto' }}>
                 <Table>
@@ -97,8 +94,7 @@ export const ListagemDePessoa: React.FC = () => {
                         <TableRow>
                             <TableCell>Código</TableCell>
                             <TableCell>Nome</TableCell>
-                            <TableCell>CNPJ/CPF</TableCell>
-                            <TableCell>Telefone</TableCell>
+                            <TableCell>Sigla</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -108,19 +104,24 @@ export const ListagemDePessoa: React.FC = () => {
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
                                 <TableCell>{row.nome}</TableCell>
-                                <TableCell>{row.cnpjcpf}</TableCell>
-                                <TableCell>{row.telefone}</TableCell>
+                                <TableCell>{row.sigla}</TableCell>
                                 <TableCell>
 
-                                    <IconButton size='small' onClick={() => navigate(`/pessoa/${row.id}`)}>
+                                    <IconButton 
+                                        size='small' 
+                                        onClick={() => navigate(`/tipodocumentacao/${row.id}`)} 
+                                        disabled={!permissions?.Visualizar}
+                                    >
                                         <Icon>edit</Icon>
                                     </IconButton>
 
-                                    {permissions?.Excluir &&(
-                                        <IconButton size='small' onClick={() => handleDelete(row.id)}>
-                                            <Icon>delete</Icon>
-                                        </IconButton>
-                                    )}
+                                    <IconButton 
+                                        size='small' 
+                                        onClick={() => handleDelete(row.id)} 
+                                        disabled = {!permissions?.Excluir}
+                                    >
+                                        <Icon>delete</Icon>
+                                    </IconButton>
 
                                 </TableCell>
                             </TableRow> 
@@ -146,7 +147,7 @@ export const ListagemDePessoa: React.FC = () => {
                                     <Pagination 
                                         page={pagina}
                                         count={Math.ceil(totalCount / Environment.LIMITE_DE_LINHAS)}
-                                        onChange={(e, newPage) => setSearchParams({ busca, pagina: newPage.toString()}, {replace: true})}
+                                        onChange={(e, newPage) => setSearchParams({ busca, pagina: newPage.toString() }, {replace: true})}
                                     />
                                 </TableCell>
                             </TableRow>

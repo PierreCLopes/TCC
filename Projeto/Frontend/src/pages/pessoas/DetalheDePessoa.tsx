@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel, AlertColor, Button } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -76,6 +76,9 @@ export const DetalheDePessoa: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
 
+    const [alertMessage, setAlertMessage] = useState(''); 
+    const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
+
     const permissions = useUserPermissions('Pessoa');
 
     useEffect(() => {
@@ -136,7 +139,8 @@ export const DetalheDePessoa: React.FC = () => {
                         setIsLoading(false);
         
                         if (result instanceof Error){
-                            alert(result.message);
+                            setAlertMessage(result.message);
+                            setAlertSeverity("error");
         
                         } else {
         
@@ -144,7 +148,8 @@ export const DetalheDePessoa: React.FC = () => {
                                 navigate('/pessoas');
         
                             } else {
-                                alert('Registro criado com sucesso!');
+                                setAlertMessage('Registro criado com sucesso!');
+                                setAlertSeverity("success");
                                 navigate(`/pessoa/${result.id}`);
                             }
                         }  
@@ -157,14 +162,16 @@ export const DetalheDePessoa: React.FC = () => {
                         setIsLoading(false);
         
                         if (result instanceof Error){
-                            alert(result.message);
+                            setAlertMessage(result.message);
+                            setAlertSeverity("error");
         
                         } else {
                             if(isSaveAndClose()){
                                 navigate('/pessoas');
         
                             } else {
-                                alert('Registro alterado com sucesso!');
+                                setAlertMessage('Registro alterado com sucesso!');
+                                setAlertSeverity("success");
                             }
                         }  
                     })
@@ -193,7 +200,8 @@ export const DetalheDePessoa: React.FC = () => {
             PessoaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
-                    alert(result.message);
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
                 } else {
                     alert('Registro apagado com sucesso!');
                     navigate('/pessoas');
@@ -205,6 +213,9 @@ export const DetalheDePessoa: React.FC = () => {
     return(
         <LayoutBaseDePagina 
             titulo={id === 'nova' ? 'Nova pessoa' : nome}
+            alertMessage={alertMessage}
+            alertSeverity={alertSeverity}
+            onCloseAlert={() => setAlertMessage('')}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Nova"
@@ -411,6 +422,20 @@ export const DetalheDePessoa: React.FC = () => {
                                     disabled={isLoading || !permissions?.Editar}
                                 />
                             </Grid>
+                        </Grid>
+                        <Grid item xs={2} >
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isLoading || id === 'nova' || !permissions?.Visualizar}
+                                onClick={() => {
+                                    if (id !== 'nova') {
+                                        navigate(`/pessoa/${id}/documentacoes`);
+                                    }
+                                }}
+                            >
+                                Documentações
+                            </Button>
                         </Grid>
                     </Grid> 
                 </Box>

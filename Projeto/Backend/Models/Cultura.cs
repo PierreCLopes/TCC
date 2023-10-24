@@ -14,10 +14,12 @@ public partial class Cultura
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public decimal Precokg { get; set; }
 
     public string? Observacao { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Nome { get; set; } = null!;
 
     [JsonIgnore]

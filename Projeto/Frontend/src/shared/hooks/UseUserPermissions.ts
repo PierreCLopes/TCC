@@ -9,7 +9,7 @@ type ClassPermissions = {
   Processar: boolean;
 };
 
-type ClassType = 'Pessoa' | 'Cultura' | 'Usuario' | 'Imovel';
+type ClassType = 'Pessoa' | 'Cultura' | 'Usuario' | 'Imovel' | 'Filial' | 'Documentacao';
 
 const useUserPermissions = (classe: ClassType) => {
   const [permissions, setPermissions] = useState<ClassPermissions | null>(null);
@@ -68,6 +68,24 @@ const useUserPermissions = (classe: ClassType) => {
               Visualizar: decodedToken.Imovel && decodedToken.Imovel.includes('Visualizar'),
               Excluir: decodedToken.Imovel && decodedToken.Imovel.includes('Excluir'),
               Processar: decodedToken.Imovel && decodedToken.Imovel.includes('Processar'),
+            };
+            break;
+          
+          case 'Filial':
+            classPermissions = {
+              Editar: decodedToken.Filial && decodedToken.Filial.includes('Editar'),
+              Visualizar: decodedToken.Filial && decodedToken.Filial.includes('Visualizar'),
+              Excluir: decodedToken.Filial && decodedToken.Filial.includes('Excluir'),
+              Processar: decodedToken.Filial && decodedToken.Filial.includes('Processar'),
+            };
+            break;
+          
+          case 'Documentacao':
+            classPermissions = {
+              Editar: decodedToken.Documentacao && decodedToken.Documentacao.includes('Editar'),
+              Visualizar: decodedToken.Documentacao && decodedToken.Documentacao.includes('Visualizar'),
+              Excluir: decodedToken.Documentacao && decodedToken.Documentacao.includes('Excluir'),
+              Processar: decodedToken.Documentacao && decodedToken.Documentacao.includes('Processar'),
             };
             break;
           // Adicione outros casos para outras classes

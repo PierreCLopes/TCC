@@ -13,8 +13,13 @@ public partial class Documentacao
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public string Arquivo { get; set; } = null!;
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
+    public byte[]? Arquivo { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
+    public string Nome { get; set; } = null!;
+
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int Tipo { get; set; }
 
     public int? Proposta { get; set; }

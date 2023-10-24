@@ -62,9 +62,8 @@ export const FileInput: React.FC<FileInputProps> = ({ name, extensao, disabled, 
         value={value}
         hideSizeText
         disabled={disabled}
-        
+        fullWidth
         InputProps={{
-            
         }}
         onChange={(file) => {
           setValue(file);

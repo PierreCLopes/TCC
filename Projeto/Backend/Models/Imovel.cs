@@ -16,12 +16,16 @@ public partial class Imovel
 
     public string Observacao { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Nome { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int Proprietario { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Matricula { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public decimal Areatotal { get; set; }
 
     public string Latitude { get; set; } = null!;
@@ -32,8 +36,10 @@ public partial class Imovel
 
     public decimal Areapastagem { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public int Cidade { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Roteiroacesso { get; set; } = null!;
 
     public byte[]? Arquivokml { get; set; }

@@ -91,15 +91,21 @@ namespace Backend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Arquivo")
+                    b.Property<byte[]>("Arquivo")
                         .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("VARBINARY(MAX)")
                         .HasColumnName("ARQUIVO");
 
                     b.Property<int?>("Imovel")
                         .HasColumnType("int")
                         .HasColumnName("IMOVEL");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("NOME");
 
                     b.Property<int?>("Pessoa")
                         .HasColumnType("int")
