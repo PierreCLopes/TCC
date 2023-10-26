@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel, AlertColor, Button } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, Typography, FormControlLabel, AlertColor, Button, Icon } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -9,7 +9,6 @@ import { PessoaService } from "../../shared/services/api/pessoas/PessoaService";
 import { VTextField, VForm, useVForm, IVFormErrors, VSelectField } from "../../shared/forms";
 import { VCheckBox } from "../../shared/forms/VCheckBox";
 import useUserPermissions from "../../shared/hooks/UseUserPermissions";
-import { useAuthContext } from "../../shared/contexts";
 
 interface IFormData {
     nome: string,
@@ -428,6 +427,7 @@ export const DetalheDePessoa: React.FC = () => {
                                 variant="contained"
                                 color="primary"
                                 disabled={isLoading || id === 'nova' || !permissions?.Visualizar}
+                                endIcon={<Icon>file_present</Icon>}
                                 onClick={() => {
                                     if (id !== 'nova') {
                                         navigate(`/pessoa/${id}/documentacoes`);

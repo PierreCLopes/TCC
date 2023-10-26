@@ -47,7 +47,6 @@ export const VSelectField: React.FC<SelectFieldProps> = ({ name, label, options,
         inputRef={selectRef}
         onChange={e => {error && clearError()}}
       >
-        <option value="" />
         {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}

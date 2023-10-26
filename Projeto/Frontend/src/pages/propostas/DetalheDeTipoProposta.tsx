@@ -7,22 +7,25 @@ import { LayoutBaseDePagina } from "../../shared/layouts";
 import { FerramentasDeDetalhe } from "../../shared/components";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 import useUserPermissions from "../../shared/hooks/UseUserPermissions";
+import { TipoPropostaService } from "../../shared/services/api/propostas/TipoPropostaService";
+import { MultiSelectChip, MultiSelectChipOptions } from "../../shared/components/multi-select/MultiSelectChip";
 import { TipoDocumentacaoService } from "../../shared/services/api/documentacoes/TipoDocumentacaoService";
-import { MultiSelectChip } from "../../shared/components/multi-select/MultiSelectChip";
 
 interface IFormData {
     nome: string;
-    sigla: string;
     observacao: string;
+    tipoDocumentacaoObrigatoria: number[];
 }
 
-const formValitationSchema: yup.Schema<IFormData> = yup.object({
+const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
     nome: yup.string().required(),
-    sigla: yup.string().required(),
     observacao: yup.string().default(''),
+    tipoDocumentacaoObrigatoria: yup.array().of(
+        yup.number().required("Cada elemento em 'tipoDocumentacaoObrigatoria' deve ser um número.")
+    ).default([]),
 });
 
-export const DetalheDeTipoDocumentacao: React.FC = () => {
+export const DetalheDeTipoProposta: React.FC = () => {
     const navigate = useNavigate();
     const {id = 'novo'} = useParams<'id'>();
 
@@ -34,14 +37,29 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Documentacao');
+    const permissions = useUserPermissions('Proposta');
+
+    const [opcoesTipoDocumentacao, setOpcoesTipoDocumentacao] = useState<MultiSelectChipOptions[]>([]);
 
     useEffect(() => {
+        TipoDocumentacaoService.getAllAll()
+            .then((result) => {
+                setIsLoading(false);
+
+                if (result instanceof Error){
+                    //alert(result.message);
+                } else {
+                    console.log(result);
+
+                    setOpcoesTipoDocumentacao(result.map(tipo => ({value: tipo.id, label: tipo.nome})));
+                }
+            });
+
         if (id !== 'novo'){    
 
             setIsLoading(true);
 
-            TipoDocumentacaoService.getById(Number(id))
+            TipoPropostaService.getById(Number(id))
             .then((result)=> {
                 
                 setIsLoading(false);
@@ -50,7 +68,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
 
-                    navigate('/tipodocumentacoes');
+                    navigate('/tiposproposta');
 
                 } else {
                     console.log(result);
@@ -62,19 +80,19 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
         } else {
             formRef.current?.setData({
                 nome: '',
-                sigla: '',
-                observacao: ''
+                observacao: '',
+                tipoDocumentacaoObrigatoria: undefined
             });
         }
     }, [id])
 
     const handleSave = (dados: IFormData) => {
-        console.log(dados);
-        formValitationSchema
+
+        formValidationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
                 if(id === 'novo'){
-                    TipoDocumentacaoService.create(dadosValidados)
+                    TipoPropostaService.create(dadosValidados)
                     .then((result) => {
         
                         setIsLoading(false);
@@ -86,17 +104,17 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigate('/tipodocumentacoes');
+                                navigate('/tiposproposta');
         
                             } else {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
-                                navigate(`/tipodocumentacao/${result.id}`);
+                                navigate(`/tipoproposta/${result.id}`);
                             }
                         }  
                     })
                 } else {
-                    TipoDocumentacaoService.updateById(Number(id), {id: Number(id), ...dadosValidados})
+                    TipoPropostaService.updateById(Number(id), {id: Number(id), ...dadosValidados})
                     .then((result) => {
         
                         setIsLoading(false);
@@ -108,7 +126,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigate('/tipodocumentacoes');
+                                navigate('/tiposproposta');
         
                             } else {
                                 setAlertMessage('Registro alterado com sucesso!');
@@ -138,8 +156,8 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir o tipo de documentação?')){
-            TipoDocumentacaoService.deleteById(id)
+        if(confirm('Deseja realmente excluir o tipo de proposta?')){
+            TipoPropostaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -148,7 +166,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                 } else {
                     alert('Registro apagado com sucesso!');
 
-                    navigate('/tipodocumentacoes');
+                    navigate('/tiposproposta');
                 }
             })
         }
@@ -156,7 +174,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
 
     return(
         <LayoutBaseDePagina 
-            titulo={id === 'novo' ? 'Novo tipo de documentação' : nome}
+            titulo={id === 'novo' ? 'Novo tipo de proposta' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Novo"
@@ -168,8 +186,8 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
-                    aoClicarEmNovo={() => {navigate('/tipodocumentacao/novo')}}
-                    aoClicarEmVoltar={() => {navigate('/tipodocumentacoes')}}
+                    aoClicarEmNovo={() => {navigate('/tipoproposta/novo')}}
+                    aoClicarEmVoltar={() => {navigate('/tiposproposta')}}
 
                     mostrarBotaoSalvarCarregando={isLoading}
                     mostrarBotaoApagarCarregando={isLoading}
@@ -195,7 +213,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                             <Typography variant="h6">Geral</Typography>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={10}>
+                            <Grid item xs={12} md={6}>
                                 <VTextField 
                                     fullWidth 
                                     label="Nome"
@@ -205,17 +223,15 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                                     onChange={e => setNome(e.target.value)}
                                 />
                             </Grid>
-                            <Grid item xs={2}>
-                            <VTextField 
-                                    fullWidth 
-                                    label="Sigla"
-                                    placeholder="Sigla" 
-                                    name="sigla"
+                            <Grid item xs={12} md={6}>
+                                <MultiSelectChip 
+                                    label="Tipos de documentação obrigatórias"
+                                    name="tipoDocumentacaoObrigatoria"
                                     disabled={isLoading || !permissions?.Editar}
-                                /> 
+                                    options={opcoesTipoDocumentacao}
+                                />
                             </Grid>
                         </Grid>
-
                         <Grid container item direction="row">
                             <Grid item xs={12}>
                                 <VTextField 
@@ -227,6 +243,7 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+
                     </Grid> 
                 </Box>
             </VForm>

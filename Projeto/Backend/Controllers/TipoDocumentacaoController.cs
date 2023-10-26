@@ -91,6 +91,14 @@ namespace Backend.Controllers
             return TipodocumentacaoDTO;
         }
 
+        [HttpGet("todos")]
+        public async Task<ActionResult<List<Tipodocumentacao>>> GetTodosTipodocumentacao()
+        {
+            var tipoDocumentacoes = await _context.Tipodocumentacoes.ToListAsync();
+
+            return tipoDocumentacoes;
+        }
+
         [HttpPost]
         public async Task<ActionResult<Tipodocumentacao>> PostTipodocumentacao(TipoDocumentacaoDTO TipodocumentacaoDTO)
         {
@@ -158,7 +166,26 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTipodocumentacao(int id)
         {
-            var Tipodocumentacao = await _context.Tipodocumentacoes.FindAsync(id);
+            // Verifique se existe alguma Documentacao vinculada a este tipo
+            var temDocumentacao = await _context.Documentacoes.AnyAsync(d => d.Tipo == id);
+
+            if (temDocumentacao)
+            {
+                var error = new ApiError(400, "Não é possível excluir o Tipo de documentação, pois há Documentações com este tipo.");
+                return BadRequest(error);
+
+            }
+
+            // Verifique se existe alguma Documentacao vinculada a este tipo
+            var temTipoProposta = await _context.Tipopropostadocumentacoes.AnyAsync(t => t.Tipodocumentacao == id);
+
+            if (temTipoProposta)
+            {
+                var error = new ApiError(400, "Não é possível excluir o Tipo de documentação, pois ela está vinculada como obrigatória a um Tipo de proposta.");
+                return BadRequest(error);
+            }
+
+                var Tipodocumentacao = await _context.Tipodocumentacoes.FindAsync(id);
             if (Tipodocumentacao == null)
             {
                 return NotFound();

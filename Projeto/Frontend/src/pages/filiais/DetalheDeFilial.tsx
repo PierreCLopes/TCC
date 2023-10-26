@@ -36,7 +36,7 @@ export const DetalheDeFilial: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Cultura');
+    const permissions = useUserPermissions('Filial');
 
     useEffect(() => {
         if (id !== 'nova'){    
@@ -89,12 +89,12 @@ export const DetalheDeFilial: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigate('/culturas');
+                                navigate('/filiais');
         
                             } else {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
-                                navigate(`/cultura/${result.id}`);
+                                navigate(`/filial/${result.id}`);
                             }
                         }  
                     })

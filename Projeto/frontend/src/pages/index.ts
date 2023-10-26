@@ -22,4 +22,10 @@ export * from './documentacoes/DetalheDeTipoDocumentacao';
 export * from './documentacoes/ListagemDeDocumentacao';
 export * from './documentacoes/DetalheDeDocumentacao';
 
+export * from './propostas/DetalheDeTipoProposta';
+export * from './propostas/ListagemDeTipoProposta';
+
+export * from './propostas/DetalheDeProposta';
+export * from './propostas/ListagemDeProposta';
+
 export * from './dashboard/Dashboard';

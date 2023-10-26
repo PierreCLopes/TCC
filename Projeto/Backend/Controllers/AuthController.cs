@@ -64,7 +64,8 @@ namespace Backend.Controllers
                 new System.Security.Claims.Claim("Usuario", ""),
                 new System.Security.Claims.Claim("Imovel", ""),
                 new System.Security.Claims.Claim("Filial", ""),
-                new System.Security.Claims.Claim("Documentacao", "")
+                new System.Security.Claims.Claim("Documentacao", ""),
+                new System.Security.Claims.Claim("Proposta", "")
             };
 
             result = await _userManager.AddClaimsAsync(user, defaultClaims);

@@ -1,7 +1,7 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useDebounce } from "../../hooks";
-import { TipoDocumentacaoService } from "../../services/api/documentacoes/TipoDocumentacaoService";
+import { FilialService } from "../../services/api/filiais/FilialService";
 import { useField } from "@unform/core";
 
 type TAutoCompleteOption = {
@@ -9,13 +9,13 @@ type TAutoCompleteOption = {
     label: string
 }
 
-interface IAutoCompleteTipoDocumentacaoProps {
+interface IAutoCompleteFilialProps {
     isExternalLoading?: boolean;
     nomeField?: string
     disabled?: boolean;
 }
 
-export const AutoCompleteTipoDocumentacao: React.FC<IAutoCompleteTipoDocumentacaoProps> = ({isExternalLoading = false, nomeField = 'tipodocumentacao', disabled = false}) => {
+export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExternalLoading = false, nomeField = 'filial', disabled = false}) => {
     const {fieldName, registerField, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -38,7 +38,7 @@ export const AutoCompleteTipoDocumentacao: React.FC<IAutoCompleteTipoDocumentaca
         setIsLoading(true);
 
         debounce(() => {
-            TipoDocumentacaoService.getAll(1, busca, selectedId?.toString())
+            FilialService.getAll(1, busca, selectedId?.toString())
             .then((result) => {
                 setIsLoading(false);
 
@@ -47,7 +47,7 @@ export const AutoCompleteTipoDocumentacao: React.FC<IAutoCompleteTipoDocumentaca
                 } else {
                     console.log(result);
 
-                    setOpcoes(result.data.map(tipo => ({id: tipo.id, label: tipo.nome})));
+                    setOpcoes(result.data.map(filial => ({id: filial.id, label: filial.nome})));
                 }
             });
         })
@@ -82,7 +82,7 @@ export const AutoCompleteTipoDocumentacao: React.FC<IAutoCompleteTipoDocumentaca
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Tipo documentação"
+                    label="Filial"
                     error={!!error}
                     helperText={error}
                 />

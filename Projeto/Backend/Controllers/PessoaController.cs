@@ -257,13 +257,22 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePessoa(int id)
         {
-            var PessoaEndereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == id);
+            // Verifique se existe alguma Documentacao vinculada a esta Pessoa
+            var temDocumentacao = await _context.Documentacoes.AnyAsync(d => d.Pessoa == id);
 
+            if (temDocumentacao)
+            {
+                var error = new ApiError(400, "Não é possível excluir a Pessoa, pois há Documentações vinculadas a ela.");
+                return BadRequest(error);
+            }
+
+            // Verifique e remova PessoaEndereco, se existir
+            var PessoaEndereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == id);
             if (PessoaEndereco != null)
             {
                 _context.Pessoaenderecos.Remove(PessoaEndereco);
             }
-            
+
             var Pessoa = await _context.Pessoas.FindAsync(id);
             if (Pessoa == null)
             {
@@ -275,6 +284,7 @@ namespace Backend.Controllers
 
             return NoContent();
         }
+
 
         private bool PessoaExists(int id)
         {

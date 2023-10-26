@@ -1,27 +1,26 @@
 import { Environment } from "../../../environment";
 import { Api } from "../axios-config";
 
-export interface IDetalheCultura{
+export interface IDetalheTipoProposta{
     id: number,
-    precokg: number,
     nome: string,
-    observacao: string
+    observacao: string,
+    tipoDocumentacaoObrigatoria: number[]
 }
 
-export interface IListagemCultura{
+export interface IListagemTipoProposta{
     id: number,
-    precokg: number,
     nome: string
 }
 
-type TCulturasComTotalCount = {
-    data: IListagemCultura[];
+type TTipoPropostaComTotalCount = {
+    data: IListagemTipoProposta[];
     totalCount: number;
 }
 
-const getAll = async (page = 1, filter = '', id = ''): Promise<TCulturasComTotalCount | Error> => {
+const getAll = async (page = 1, filter = '', id = ''): Promise<TTipoPropostaComTotalCount | Error> => {
     try {
-      const urlRelativa = `/cultura?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}&id=${id}`;
+      const urlRelativa = `/tipoproposta?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}&id=${id}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 
@@ -40,9 +39,9 @@ const getAll = async (page = 1, filter = '', id = ''): Promise<TCulturasComTotal
   };
 
 
-const getById = async (id: number): Promise<IDetalheCultura | Error> => {
+const getById = async (id: number): Promise<IDetalheTipoProposta | Error> => {
     try {
-        const { data } = await Api.get(`/cultura/${id}`);
+        const { data } = await Api.get(`/tipoproposta/${id}`);
 
         if(data){
             return data;
@@ -57,9 +56,9 @@ const getById = async (id: number): Promise<IDetalheCultura | Error> => {
     }
 };
 
-const create = async (dados: Omit<IDetalheCultura, 'id'>): Promise<IDetalheCultura | Error> => { 
+const create = async (dados: Omit<IDetalheTipoProposta, 'id'>): Promise<IDetalheTipoProposta | Error> => { 
     try {
-        const { data } = await Api.post('/cultura', dados);
+        const { data } = await Api.post('/tipoproposta', dados);
 
         if(data){
             return data;
@@ -74,9 +73,9 @@ const create = async (dados: Omit<IDetalheCultura, 'id'>): Promise<IDetalheCultu
     }  
 };
 
-const updateById = async (id: number, dados: IDetalheCultura): Promise<void | Error> => { 
+const updateById = async (id: number, dados: IDetalheTipoProposta): Promise<void | Error> => { 
     try {
-        await Api.put(`/cultura/${id}`, dados);
+        await Api.put(`/tipoproposta/${id}`, dados);
 
     } catch (error) {
         console.error(error);
@@ -87,7 +86,7 @@ const updateById = async (id: number, dados: IDetalheCultura): Promise<void | Er
 
 const deleteById = async (id: number): Promise<void | Error> => { 
     try {
-        await Api.delete(`/cultura/${id}`);
+        await Api.delete(`/tipoproposta/${id}`);
 
     } catch (error) {
         console.error(error);
@@ -97,7 +96,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
 };
 
 
-export const CulturaService = {
+export const TipoPropostaService = {
     getAll,
     getById,
     create,

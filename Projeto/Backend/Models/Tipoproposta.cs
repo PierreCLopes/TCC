@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Models;
@@ -15,9 +16,12 @@ public partial class Tipoproposta
 
     public string Observacao { get; set; } = null!;
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string Nome { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Proposta> Proposta { get; set; } = new List<Proposta>();
 
+    [JsonIgnore]
     public virtual ICollection<Tipopropostadocumentacao> Tipopropostadocumentacoes { get; set; } = new List<Tipopropostadocumentacao>();
 }

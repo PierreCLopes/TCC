@@ -96,24 +96,9 @@ const updateById = async (id: number, file: File, dados: Omit<IDetalheDocumentac
         formData.append('arquivo', file);
         formData.append('nome', dados.nome);
         formData.append('tipo', String(dados.tipo));
-
-        if(dados.proposta == 0){
-            formData.append('proposta', '');
-        } else {
-            formData.append('proposta', String(dados.proposta));
-        }
-
-        if(dados.imovel == 0){
-            formData.append('imovel', '');
-        } else {
-            formData.append('imovel', String(dados.imovel));
-        }
-
-        if(dados.pessoa == 0){
-            formData.append('pessoa', '');
-        } else {
-            formData.append('pessoa', String(dados.pessoa));
-        }
+        formData.append('proposta', String(dados.proposta));
+        formData.append('imovel', String(dados.imovel));
+        formData.append('pessoa', String(dados.pessoa));
     
         await Api.put(`/documentacao/${id}`, formData, {
           headers: {

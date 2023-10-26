@@ -9,7 +9,7 @@ type ClassPermissions = {
   Processar: boolean;
 };
 
-type ClassType = 'Pessoa' | 'Cultura' | 'Usuario' | 'Imovel' | 'Filial' | 'Documentacao';
+type ClassType = 'Pessoa' | 'Cultura' | 'Usuario' | 'Imovel' | 'Filial' | 'Documentacao' | 'Proposta';
 
 const useUserPermissions = (classe: ClassType) => {
   const [permissions, setPermissions] = useState<ClassPermissions | null>(null);
@@ -86,6 +86,15 @@ const useUserPermissions = (classe: ClassType) => {
               Visualizar: decodedToken.Documentacao && decodedToken.Documentacao.includes('Visualizar'),
               Excluir: decodedToken.Documentacao && decodedToken.Documentacao.includes('Excluir'),
               Processar: decodedToken.Documentacao && decodedToken.Documentacao.includes('Processar'),
+            };
+            break;
+
+          case 'Proposta':
+            classPermissions = {
+              Editar: decodedToken.Proposta && decodedToken.Proposta.includes('Editar'),
+              Visualizar: decodedToken.Proposta && decodedToken.Proposta.includes('Visualizar'),
+              Excluir: decodedToken.Proposta && decodedToken.Proposta.includes('Excluir'),
+              Processar: decodedToken.Proposta && decodedToken.Proposta.includes('Processar'),
             };
             break;
           // Adicione outros casos para outras classes

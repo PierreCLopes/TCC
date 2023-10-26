@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Models;
@@ -17,7 +18,9 @@ public partial class Tipopropostadocumentacao
 
     public int Tipodocumentacao { get; set; }
 
+    [JsonIgnore]
     public virtual Tipodocumentacao TipodocumentacaoNavigation { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual Tipoproposta TipopropostaNavigation { get; set; } = null!;
 }

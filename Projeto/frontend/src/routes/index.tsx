@@ -18,7 +18,11 @@ import { Dashboard,
          ListagemDeUsuario,
          DetalheDeCultura,
          ListagemDeDocumentacao,
-         DetalheDeDocumentacao} from '../pages';
+         DetalheDeDocumentacao,
+         DetalheDeTipoProposta,
+         ListagemDeProposta,
+         ListagemDeTipoProposta,
+         DetalheDeProposta} from '../pages';
 import useUserPermissions from '../shared/hooks/UseUserPermissions';
 
 export const AppRoutes = () => {
@@ -31,6 +35,7 @@ export const AppRoutes = () => {
     const usuariosPermissions = useUserPermissions('Usuario');
     const filiaisPermissions = useUserPermissions('Filial');
     const documentacoesPermissions = useUserPermissions('Documentacao');
+    const propostasPermissions = useUserPermissions('Proposta');
 
     useEffect(() => {
         // Set drawer options based on permissions
@@ -46,6 +51,12 @@ export const AppRoutes = () => {
                 path: '/pessoas',
                 icon: 'people',
                 disabled: !pessoasPermissions?.Visualizar,
+            },
+            {
+                label: 'Propostas',
+                path: '/propostas',
+                icon: 'people',
+                disabled: !propostasPermissions?.Visualizar,
             },
             {
                 label: 'Culturas',
@@ -72,10 +83,16 @@ export const AppRoutes = () => {
                 disabled: !filiaisPermissions?.Visualizar,
             },
             {
-                label: 'Tipos de documentação',
+                label: 'Tipos de doc.',
                 path: '/tipodocumentacoes',
-                icon: 'folder',
+                icon: 'source',
                 disabled: !documentacoesPermissions?.Visualizar,
+            },
+            {
+                label: 'Tipos de proposta',
+                path: '/tiposproposta',
+                icon: 'sticky_note_2',
+                disabled: !propostasPermissions?.Visualizar,
             },
         ])
     }, [pessoasPermissions, culturasPermissions, imoveisPermissions, usuariosPermissions, filiaisPermissions, documentacoesPermissions]);
@@ -107,6 +124,12 @@ export const AppRoutes = () => {
 
             <Route path="/tipodocumentacoes" element={<ListagemDeTipoDocumentacao/>}/>
             <Route path="/tipodocumentacao/:id" element={<DetalheDeTipoDocumentacao/>}/>
+
+            <Route path="/tiposproposta" element={<ListagemDeTipoProposta/>}/>
+            <Route path="/tipoproposta/:id" element={<DetalheDeTipoProposta/>}/>
+
+            <Route path="/propostas" element={<ListagemDeProposta/>}/>
+            <Route path="/proposta/:id" element={<DetalheDeProposta/>}/>
 
             <Route path="*" element={<Navigate to="/home"/>}/>
         </Routes>

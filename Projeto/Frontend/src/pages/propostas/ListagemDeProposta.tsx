@@ -4,24 +4,24 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper
 
 import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { TipoDocumentacaoService, IListagemTipoDocumentacao } from '../../shared/services/api/documentacoes/TipoDocumentacaoService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
+import { IListagemProposta, PropostaService } from '../../shared/services/api/propostas/PropostaService';
 
-export const ListagemDeTipoDocumentacao: React.FC = () => {
+export const ListagemDeProposta: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemTipoDocumentacao[]>([]);
+    const [rows, setRows] = useState<IListagemProposta[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Documentacao');
+    const permissions = useUserPermissions('Proposta');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -35,7 +35,7 @@ export const ListagemDeTipoDocumentacao: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            TipoDocumentacaoService.getAll(pagina, busca)
+            PropostaService.getAll(pagina, busca)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
@@ -52,8 +52,8 @@ export const ListagemDeTipoDocumentacao: React.FC = () => {
     }, [busca, pagina]);
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir o Tipo de documentação?')){
-            TipoDocumentacaoService.deleteById(id)
+        if(confirm('Deseja realmente excluir a Proposta?')){
+            PropostaService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -73,14 +73,14 @@ export const ListagemDeTipoDocumentacao: React.FC = () => {
 
     return (
         <LayoutBaseDePagina 
-            titulo="Listagem de tipos de documentação"
+            titulo="Listagem de Proposta"
             barraDeFerramentas={
                 <FerramentasDaListagem 
-                    textoBotaoNovo="Novo"
+                    textoBotaoNovo="Nova"
                     mostrarInputBusca
                     mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigate(`/tipodocumentacao/novo`)}
+                    aoClicarEmNovo={() => navigate(`/proposta/nova`)}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
@@ -93,8 +93,11 @@ export const ListagemDeTipoDocumentacao: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Código</TableCell>
-                            <TableCell>Nome</TableCell>
-                            <TableCell>Sigla</TableCell>
+                            <TableCell>Filial</TableCell>
+                            <TableCell>Proponente</TableCell>
+                            <TableCell>Tipo</TableCell>
+                            <TableCell>Data</TableCell>
+                            <TableCell>Cultura</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -103,13 +106,16 @@ export const ListagemDeTipoDocumentacao: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.nome}</TableCell>
-                                <TableCell>{row.sigla}</TableCell>
+                                <TableCell>{row.filialsigla}</TableCell>
+                                <TableCell>{row.proponentenome}</TableCell>
+                                <TableCell>{row.tiponome}</TableCell>
+                                <TableCell>{String(new Date(row.data).toLocaleString())}</TableCell>
+                                <TableCell>{row.culturanome}</TableCell>
                                 <TableCell>
 
                                     <IconButton 
                                         size='small' 
-                                        onClick={() => navigate(`/tipodocumentacao/${row.id}`)} 
+                                        onClick={() => navigate(`/proposta/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
                                         <Icon>edit</Icon>
