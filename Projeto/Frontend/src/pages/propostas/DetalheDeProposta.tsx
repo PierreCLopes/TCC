@@ -254,6 +254,9 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="data"
                                     type="date"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -334,6 +337,9 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="dataplantio"
                                     type="date"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -344,6 +350,9 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="datacolheita"
                                     type="date"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -566,6 +575,9 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="vencimento"
                                     type="date"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
                                 />
                             </Grid>
                         </Grid>

@@ -32,7 +32,7 @@ export const DetalheDePropostaImovel: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Cultura');
+    const permissions = useUserPermissions('Proposta');
 
     useEffect(() => {
         if (id !== 'novo'){    
