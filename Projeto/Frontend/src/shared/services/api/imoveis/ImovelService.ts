@@ -32,9 +32,9 @@ type TImoveisComTotalCount = {
     totalCount: number;
 }
 
-const getAll = async (page = 1, filter = ''): Promise<TImoveisComTotalCount | Error> => {
+const getAll = async (page = 1, filter = '', id = ''): Promise<TImoveisComTotalCount | Error> => {
     try {
-      const urlRelativa = `/imovel?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/imovel?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}&id=${id}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 

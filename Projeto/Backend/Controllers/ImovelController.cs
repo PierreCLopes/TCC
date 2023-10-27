@@ -28,7 +28,8 @@ namespace Backend.Controllers
         public async Task<ActionResult<IEnumerable<Imovel>>> GetImoveis(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
-            [FromQuery] string? nome = null)
+            [FromQuery] string? nome = null,
+            [FromQuery] int? id = null)
         {
             IQueryable<Imovel> query = _context.Imoveis;
 
@@ -39,6 +40,27 @@ namespace Backend.Controllers
 
             //-- Pega o total de registros da base com o filtro de nome
             var totalCount = await query.CountAsync();
+
+            if (id.HasValue)
+            {
+                var ImovelById = await query.FirstOrDefaultAsync(i => i.Id == id);
+                if (ImovelById != null)
+                {
+                    // Obtenha os registros da paginação, excluindo o registro do ID
+                    var imoveis = await query
+                        .Where(p => p.Id != id)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+
+                    // Inclua o registro do ID na lista
+                    imoveis.Add(ImovelById);
+
+                    Response.Headers.Add("X-Total-Count", (totalCount - 1).ToString());
+
+                    return Ok(imoveis);
+                }
+            }
 
             //-- Pega os registros filtrando pelos query paramns
             var Imoveis = await query

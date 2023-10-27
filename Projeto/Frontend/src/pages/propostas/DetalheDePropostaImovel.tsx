@@ -4,32 +4,25 @@ import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColo
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { FerramentasDeDetalhe, FileInput } from "../../shared/components";
-import { DocumentacaoService } from "../../shared/services/api/documentacoes/DocumentacaoService";
+import { AutoCompleteImovel, FerramentasDeDetalhe } from "../../shared/components";
+import { PropostaImovelService } from "../../shared/services/api/propostas/PropostaImovelService";
 import { VTextField, VForm, useVForm, IVFormErrors } from "../../shared/forms";
 import useUserPermissions from "../../shared/hooks/UseUserPermissions";
-import { AutoCompleteTipoDocumentacao } from "../../shared/components/auto-complete/AutoCompleteTipoDocumentacao";
-import { detectFileTypeFromBase64 } from "../../shared/helpers/FileTypeFromBase64";
 
 interface IFormData {
-    nome: string;
-    tipo: number;
-    arquivo: File;
+    area: number;
+    imovel: number;
 }
 
-const formValitationSchema: yup.Schema<Omit<IFormData, 'arquivo'>> = yup.object({
-    nome: yup.string().required(),
-    tipo: yup.number().required(),
+const formValitationSchema: yup.Schema<IFormData> = yup.object({
+    area: yup.number().required().min(0.01),
+    imovel: yup.number().required()
 });
 
-export const DetalheDeDocumentacao: React.FC = () => {
+export const DetalheDePropostaImovel: React.FC = () => {
     const navigate = useNavigate();
-
-    const {id = 'nova'} = useParams<'id'>();
-    
-    const {pessoaid = ''} = useParams<'pessoaid'>();
-    const {propostaid = ''} = useParams<'propostaid'>();
-    const {imovelid = ''} = useParams<'imovelid'>();
+    const {id = 'novo'} = useParams<'id'>();
+    const {propostaid} = useParams<'propostaid'>();
 
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
@@ -41,14 +34,12 @@ export const DetalheDeDocumentacao: React.FC = () => {
 
     const permissions = useUserPermissions('Cultura');
 
-    const [extensao, setExtensao] = useState('');
-
     useEffect(() => {
-        if (id !== 'nova'){    
+        if (id !== 'novo'){    
 
             setIsLoading(true);
 
-            DocumentacaoService.getById(Number(id))
+            PropostaImovelService.getById(Number(id))
             .then((result)=> {
                 
                 setIsLoading(false);
@@ -57,37 +48,18 @@ export const DetalheDeDocumentacao: React.FC = () => {
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
 
-                    navigateBack();
+                    navigate(`/proposta/${propostaid}/propostaimoveis`);
 
                 } else {
-                    setNome(result.nome);
-
-                    // Não sei pq esse diabo não funciona com a extensao do state, então tive que criar uma constante separada
-                    const ext = detectFileTypeFromBase64(String(result.arquivo), ''); 
-                    setExtensao(detectFileTypeFromBase64(String(result.arquivo), ''));
-
-                    // Decodifique a representação Base64
-                    const decodedData = atob(String(result.arquivo));
-
-                    // Converta a representação decodificada em um ArrayBuffer
-                    const arrayBuffer = new ArrayBuffer(decodedData.length);
-                    const uint8Array = new Uint8Array(arrayBuffer);
-                    for (let i = 0; i < decodedData.length; i++) {
-                        uint8Array[i] = decodedData.charCodeAt(i);
-                    }
-
-                    // Crie um Blob a partir do ArrayBuffer
-                    const blob = new Blob([arrayBuffer]);
-
-                    result.arquivo = new File([blob], `${result.nome}.${ext}`, { lastModified: Date.now() });
+                    setNome('Imóvel da proposta Nr.' + id);
 
                     formRef.current?.setData(result);
                 }
             })
         } else {
             formRef.current?.setData({
-                nome: '',
-                tipo: undefined,
+                area: undefined,
+                imovel: undefined
             });
         }
     }, [id])
@@ -97,9 +69,8 @@ export const DetalheDeDocumentacao: React.FC = () => {
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
-                if(id === 'nova'){
-                    console.log(dadosValidados.tipo);
-                    DocumentacaoService.create(dados.arquivo, { proposta: Number(propostaid), imovel: Number(imovelid), pessoa: Number(pessoaid), ...dadosValidados})
+                if(id === 'novo'){
+                    PropostaImovelService.create({proposta: Number(propostaid), ...dadosValidados})
                     .then((result) => {
         
                         setIsLoading(false);
@@ -111,17 +82,17 @@ export const DetalheDeDocumentacao: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigateBack()
+                                navigate(`/proposta/${propostaid}/propostaimoveis`);
         
                             } else {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
-                                navigateBack(String(result.id));
+                                navigate(`/proposta/${propostaid}/propostaimovel/${result.id}`);
                             }
                         }  
                     })
                 } else {
-                    DocumentacaoService.updateById(Number(id), dados.arquivo, { proposta: Number(propostaid), imovel: Number(imovelid), pessoa: Number(pessoaid), ...dadosValidados})
+                    PropostaImovelService.updateById(Number(id), {id: Number(id), proposta: Number(propostaid), ...dadosValidados})
                     .then((result) => {
         
                         setIsLoading(false);
@@ -133,7 +104,7 @@ export const DetalheDeDocumentacao: React.FC = () => {
                         } else {
         
                             if(isSaveAndClose()){
-                                navigateBack()
+                                navigate(`/proposta/${propostaid}/propostaimoveis`);
         
                             } else {
                                 setAlertMessage('Registro alterado com sucesso!');
@@ -164,7 +135,7 @@ export const DetalheDeDocumentacao: React.FC = () => {
 
     const handleDelete = (id: number) => {
         if(confirm('Deseja realmente excluir a cultura?')){
-            DocumentacaoService.deleteById(id)
+            PropostaImovelService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -173,46 +144,28 @@ export const DetalheDeDocumentacao: React.FC = () => {
                 } else {
                     alert('Registro apagado com sucesso!');
 
-                    navigateBack();
+                    navigate(`/proposta/${propostaid}/propostaimoveis`);
                 }
             })
         }
     }
 
-    const navigateBack = (codigo = '') => {
-        let urlFinal = '';
-
-        if (codigo != ''){
-            urlFinal = `documentacao/${codigo}`;
-        } else {
-            urlFinal = `documentacoes`; 
-        }
-
-
-        if(pessoaid != ''){
-            navigate(`/pessoa/${pessoaid}/${urlFinal}`);
-
-        } else if(propostaid != ''){
-            navigate(`/proposta/${propostaid}/${urlFinal}`);
-        }
-    }
-
     return(
         <LayoutBaseDePagina 
-            titulo={id === 'nova' ? 'Nova documentação' : nome}
+            titulo={id === 'novo' ? 'Novo imóvel da proposta' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
-                    textoBotaoNovo="Nova"
+                    textoBotaoNovo="Novo"
                     mostrarBotaoSalvar={permissions?.Editar}
                     mostrarBotaoSalvarEFechar={permissions?.Editar}
-                    mostrarBotaoNovo={id !== 'nova' && permissions?.Editar}
-                    mostrarBotaoApagar={id !== 'nova' && permissions?.Excluir}
+                    mostrarBotaoNovo={id !== 'novo' && permissions?.Editar}
+                    mostrarBotaoApagar={id !== 'novo' && permissions?.Excluir}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
                     aoClicarEmSalvarEFechar={saveAndClose}
-                    aoClicarEmNovo={() => {navigateBack('nova')}}
-                    aoClicarEmVoltar={() => {navigateBack()}}
+                    aoClicarEmNovo={() => {navigate(`/proposta/${propostaid}/propostaimovel/novo`)}}
+                    aoClicarEmVoltar={() => {navigate(`/proposta/${propostaid}/propostaimoveis`)}}
 
                     mostrarBotaoSalvarCarregando={isLoading}
                     mostrarBotaoApagarCarregando={isLoading}
@@ -238,28 +191,25 @@ export const DetalheDeDocumentacao: React.FC = () => {
                             <Typography variant="h6">Geral</Typography>
                         </Grid>
                         <Grid container item direction="row" spacing={2}>
-                            <Grid item xs={12} md={4}>
+                            <Grid item xs={6}>
                                 <VTextField 
                                     fullWidth 
-                                    label="Nome"
-                                    placeholder="Nome" 
-                                    name="nome"
+                                    label="Área"
+                                    placeholder="Área" 
+                                    name="area"
+                                    type="number"
                                     disabled={isLoading || !permissions?.Editar}
-                                    onChange={e => setNome(e.target.value)}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">há</InputAdornment>,
+                                        inputMode: "decimal",
+                                        
+                                    }}
                                 />
                             </Grid>
-                            <Grid item xs={12} md={4}>
-                                <AutoCompleteTipoDocumentacao
-                                    isExternalLoading={isLoading}
+                            <Grid item xs={6}>
+                                <AutoCompleteImovel
                                     disabled={!permissions?.Editar}
-                                    nomeField="tipo"
-                                />
-                            </Grid>
-                            <Grid item xs={12} md={4}>
-                                <FileInput
-                                    name="arquivo"
-                                    extensao={extensao}
-                                    disabled={isLoading || !permissions?.Editar}
+                                    isExternalLoading={isLoading}
                                 />
                             </Grid>
                         </Grid>

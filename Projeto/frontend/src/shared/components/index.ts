@@ -8,6 +8,7 @@ export * from './auto-complete/AutoCompletePessoa';
 export * from './auto-complete/AutoCompleteTipoDocumentacao';
 export * from './auto-complete/AutoCompleteTipoProposta';
 export * from './auto-complete/AutoCompleteUsuario';
+export * from './auto-complete/AutoCompleteImovel';
 export * from './file-input/FileInput';
 export * from './login/Login';
 export * from './alert/VAlert';

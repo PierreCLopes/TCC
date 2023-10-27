@@ -2,30 +2,28 @@ import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor, Box } from '@mui/material';
 
-import { FerramentasDaListagem, VAlert } from "../../shared/components";
+import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { DocumentacaoService, IListagemDocumentacao } from '../../shared/services/api/documentacoes/DocumentacaoService';
+import { PropostaImovelService, IListagemPropostaImovel } from '../../shared/services/api/propostas/PropostaImovelService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
-export const ListagemDeDocumentacao: React.FC = () => {
+export const ListagemDePropostaImovel: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemDocumentacao[]>([]);
+    const [rows, setRows] = useState<IListagemPropostaImovel[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const {pessoaid = ''} = useParams<'pessoaid'>();
-    const {propostaid = ''} = useParams<'propostaid'>();
-    const {imovelid = ''} = useParams<'imovelid'>();
+    const {propostaid} = useParams<'propostaid'>();
 
-    const permissions = useUserPermissions('Documentacao');
+    const permissions = useUserPermissions('Proposta');
 
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
@@ -39,16 +37,13 @@ export const ListagemDeDocumentacao: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            DocumentacaoService.getAll(pagina, busca, propostaid, imovelid, pessoaid)
+            PropostaImovelService.getAll(pagina, busca)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
                 } else {
-                    console.log(result);
-                    console.log(result.totalCount);
-
                     setRows(result.data);
                     setTotalCount(result.totalCount);
                 }
@@ -58,8 +53,8 @@ export const ListagemDeDocumentacao: React.FC = () => {
     }, [busca, pagina]);
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir a documentacao?')){
-            DocumentacaoService.deleteById(id)
+        if(confirm('Deseja realmente excluir o imóvel da proposta?')){
+            PropostaImovelService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -77,37 +72,17 @@ export const ListagemDeDocumentacao: React.FC = () => {
         }
     }
 
-    const navigateTo = (codigo: string) => {
-
-        if(pessoaid != ''){
-            navigate(`/pessoa/${pessoaid}/documentacao/${codigo}`);
-
-        } else if (propostaid != ''){
-            navigate(`/proposta/${propostaid}/documentacao/${codigo}`);
-        }
-    }
-
-    const navigateBack = () => {
-        if(pessoaid != ''){
-            
-            navigate(`/pessoa/${pessoaid}`);
-
-        } else if (propostaid != ''){
-            navigate(`/proposta/${propostaid}`)
-        }
-    }
-
     return (
         <LayoutBaseDePagina 
-            titulo="Listagem de documentações"
+            titulo="Listagem de imóveis da proposta"
             barraDeFerramentas={
                 <FerramentasDaListagem 
-                    textoBotaoNovo="Nova"
+                    textoBotaoNovo="Novo"
                     mostrarInputBusca
                     mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigateTo('nova')}
-                    aoClicarEmVoltar={() => navigateBack()}
+                    aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostaimovel/novo`)}
+                    aoClicarEmVoltar={() => navigate(`/proposta/${propostaid}`)}
                     aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
@@ -120,7 +95,8 @@ export const ListagemDeDocumentacao: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Código</TableCell>
-                            <TableCell>Nome</TableCell>
+                            <TableCell>Imóvel</TableCell>
+                            <TableCell>Área</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -129,12 +105,13 @@ export const ListagemDeDocumentacao: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.nome}</TableCell>
+                                <TableCell>{row.imovelnome}</TableCell>
+                                <TableCell>{row.area}</TableCell>
                                 <TableCell>
 
                                     <IconButton 
                                         size='small' 
-                                        onClick={() => navigateTo(String(row.id))} 
+                                        onClick={() => navigate(`/proposta/${propostaid}/propostaimovel/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
                                         <Icon>edit</Icon>
