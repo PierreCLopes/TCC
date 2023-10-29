@@ -22,8 +22,8 @@ namespace Backend.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Propostaimovel>>> GetPropostaimoveis(
+        [HttpGet("proposta/{PropostaId}")]
+        public async Task<ActionResult<IEnumerable<Propostaimovel>>> GetPropostaimoveis(int PropostaId,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string? nome = null)
@@ -40,11 +40,12 @@ namespace Backend.Controllers
 
             //-- Pega os registros filtrando pelos query paramns
             var Propostaimoveis = await query
+                .Where(p => p.Proposta == PropostaId)
                 .Select(p => new {
                     p.Id,
                     p.Area,
                     imovelnome = p.ImovelNavigation.Nome
-                })
+                })  
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

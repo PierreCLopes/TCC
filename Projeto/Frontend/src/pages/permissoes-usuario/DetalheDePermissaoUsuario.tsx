@@ -105,7 +105,14 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
             valorArray.push(acao);
         }
 
-        const novaAcoes = valorArray.join(",");
+        let novaAcoes = valorArray.join(",");
+
+        //Remover a vírgula do inicio, bem gambiarra mesmo
+        if (novaAcoes.charAt(0) === ',') {
+            // Remove a vírgula do início
+            novaAcoes = novaAcoes.substring(1);
+        }
+
         setValor(novaAcoes);
     };
 

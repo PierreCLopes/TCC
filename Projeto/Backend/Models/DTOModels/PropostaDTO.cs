@@ -66,10 +66,10 @@ namespace Backend.Models.CreateModels
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public int Tipo { get; set; }
 
-        public string Proponentenome { get; set; } = null!;
+        public string? Proponentenome { get; set; } = null!;
 
-        public string Culturanome { get; set; } = null!;
+        public string? Culturanome { get; set; } = null!;
 
-        public string Tiponome { get; set; } = null!;
+        public string? Tiponome { get; set; } = null!;
     }
 }

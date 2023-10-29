@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Models;
@@ -19,7 +20,7 @@ public partial class Propostalaudo
 
     public DateTime Datalaudo { get; set; }
 
-    public string Datavistoria { get; set; } = null!;
+    public DateTime Datavistoria { get; set; }
 
     public int Sequencial { get; set; }
 
@@ -43,9 +44,17 @@ public partial class Propostalaudo
 
     public decimal Produtividadeobtida { get; set; }
 
-    public string Status { get; set; } = null!;
+    public int Status { get; set; }
 
+    [JsonIgnore]
     public virtual Proposta PropostaNavigation { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Propostalaudodiagnostico> Propostalaudodiagnosticos { get; set; } = new List<Propostalaudodiagnostico>();
+}
+
+public static class StatusPropostaLaudo
+{
+    public const int Cadastrado = 1;
+    public const int Encerrado = 2;
 }

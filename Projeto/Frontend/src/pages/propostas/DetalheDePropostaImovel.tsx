@@ -32,7 +32,7 @@ export const DetalheDePropostaImovel: React.FC = () => {
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
-    const permissions = useUserPermissions('Cultura');
+    const permissions = useUserPermissions('Proposta');
 
     useEffect(() => {
         if (id !== 'novo'){    
@@ -134,7 +134,7 @@ export const DetalheDePropostaImovel: React.FC = () => {
     };
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir a cultura?')){
+        if(confirm('Deseja realmente excluir o imóvel da proposta?')){
             PropostaImovelService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){

@@ -4,17 +4,17 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper
 
 import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { PropostaImovelService, IListagemPropostaImovel } from '../../shared/services/api/propostas/PropostaImovelService';
+import { PropostaLaudoService, IListagemPropostaLaudo } from '../../shared/services/api/propostas/PropostaLaudoService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
-export const ListagemDePropostaImovel: React.FC = () => {
+export const ListagemDePropostaLaudo: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemPropostaImovel[]>([]);
+    const [rows, setRows] = useState<IListagemPropostaLaudo[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +37,7 @@ export const ListagemDePropostaImovel: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            PropostaImovelService.getAll(Number(propostaid), pagina, busca)
+            PropostaLaudoService.getAll(Number(propostaid), pagina)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
@@ -54,7 +54,7 @@ export const ListagemDePropostaImovel: React.FC = () => {
 
     const handleDelete = (id: number) => {
         if(confirm('Deseja realmente excluir o imóvel da proposta?')){
-            PropostaImovelService.deleteById(id)
+            PropostaLaudoService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -74,16 +74,15 @@ export const ListagemDePropostaImovel: React.FC = () => {
 
     return (
         <LayoutBaseDePagina 
-            titulo="Listagem de imóveis da proposta"
+            titulo="Listagem de laudos de acompanhamento"
             barraDeFerramentas={
                 <FerramentasDaListagem 
                     textoBotaoNovo="Novo"
-                    mostrarInputBusca
+                    mostrarInputBusca={false}
                     mostrarBotaoNovo={permissions?.Editar}
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostaimovel/novo`)}
+                    aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostalaudo/novo`)}
                     aoClicarEmVoltar={() => navigate(`/proposta/${propostaid}`)}
-                    aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto, pagina: '1' }, {replace: true})}
                 ></FerramentasDaListagem>
             }
             alertMessage={alertMessage}
@@ -95,8 +94,9 @@ export const ListagemDePropostaImovel: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Código</TableCell>
-                            <TableCell>Imóvel</TableCell>
-                            <TableCell>Área</TableCell>
+                            <TableCell>Sequencial</TableCell>
+                            <TableCell>Data da vistoria</TableCell>
+                            <TableCell>Data do laudo</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -105,13 +105,14 @@ export const ListagemDePropostaImovel: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.imovelnome}</TableCell>
-                                <TableCell>{row.area}</TableCell>
+                                <TableCell>{row.sequencial}</TableCell>
+                                <TableCell>{String(new Date(row.datavistoria).toLocaleString())}</TableCell>
+                                <TableCell>{String(new Date(row.datalaudo).toLocaleString())}</TableCell>
                                 <TableCell>
 
                                     <IconButton 
                                         size='small' 
-                                        onClick={() => navigate(`/proposta/${propostaid}/propostaimovel/${row.id}`)} 
+                                        onClick={() => navigate(`/proposta/${propostaid}/propostalaudo/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
                                         <Icon>edit</Icon>

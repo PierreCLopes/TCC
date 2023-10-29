@@ -67,7 +67,7 @@ const formValidationSchema: yup.Schema<IFormData> = yup.object().shape({
     valortotalfinanciado: yup.number().min(0.01),
     valortotalfinanciamento: yup.number().min(0.01),
     valortotalorcamento: yup.number().min(0.01),
-    valortotalrecursoproprio: yup.number().min(0.01),
+    valortotalrecursoproprio: yup.number(),
     valorunitariofinanciamento: yup.number().min(0.01),
     vencimento: yup.date().required(),
     observacao: yup.string().required(),
@@ -95,7 +95,7 @@ export const DetalheDeProposta: React.FC = () => {
 
             PropostaService.getById(Number(id))
             .then((result)=> {
-                
+                console.log(result);
                 setIsLoading(false);
 
                 if (result instanceof Error){ 
@@ -252,8 +252,11 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Data"
                                     placeholder="Data" 
                                     name="data"
-                                    type="date"
+                                    type="datetime-local"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -332,8 +335,11 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Data de plantio"
                                     placeholder="Data de plantio" 
                                     name="dataplantio"
-                                    type="date"
+                                    type="datetime-local"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -342,8 +348,11 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Data de colheita"
                                     placeholder="Data de colheita" 
                                     name="datacolheita"
-                                    type="date"
+                                    type="datetime-local"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -564,8 +573,11 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Vencimento"
                                     placeholder="Vencimento" 
                                     name="vencimento"
-                                    type="date"
+                                    type="datetime-local"
                                     disabled={isLoading || !permissions?.Editar}
+                                    InputLabelProps={{
+                                        shrink: true
+                                    }}
                                 />
                             </Grid>
                         </Grid>
@@ -611,6 +623,21 @@ export const DetalheDeProposta: React.FC = () => {
                                     }}
                                 >
                                     Imóveis da proposta
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'nova' || !permissions?.Visualizar}
+                                    endIcon={<Icon>task</Icon>}
+                                    onClick={() => {
+                                        if (id !== 'nova') {
+                                            navigate(`/proposta/${id}/propostalaudos`);
+                                        }
+                                    }}
+                                >
+                                    Laudos de acompanhamento
                                 </Button>
                             </Grid>
                         </Grid> 

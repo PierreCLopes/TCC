@@ -22,7 +22,11 @@ import { Dashboard,
          DetalheDeTipoProposta,
          ListagemDeProposta,
          ListagemDeTipoProposta,
-         DetalheDeProposta} from '../pages';
+         DetalheDeProposta,
+         ListagemDeCultura,
+         DetalheDeCultura,
+         ListagemDePropostaLaudo,
+         DetalheDePropostaLaudo} from '../pages';
 import useUserPermissions from '../shared/hooks/UseUserPermissions';
 
 export const AppRoutes = () => {
@@ -107,8 +111,8 @@ export const AppRoutes = () => {
             <Route path="/pessoa/:pessoaid/documentacoes" element={<ListagemDeDocumentacao/>}/>
             <Route path="/pessoa/:pessoaid/documentacao/:id" element={<DetalheDeDocumentacao/>}/>
 
-            <Route path="/culturas" element={<ListagemDePropostaImovel/>}/>
-            <Route path="/cultura/:id" element={<DetalheDePropostaImovel/>}/>
+            <Route path="/culturas" element={<ListagemDeCultura/>}/>
+            <Route path="/cultura/:id" element={<DetalheDeCultura/>}/>
 
             <Route path="/imoveis" element={<ListagemDeImovel/>}/>
             <Route path="/imovel/:id" element={<DetalheDeImovel/>}/>
@@ -130,10 +134,15 @@ export const AppRoutes = () => {
 
             <Route path="/propostas" element={<ListagemDeProposta/>}/>
             <Route path="/proposta/:id" element={<DetalheDeProposta/>}/>
+
             <Route path="/proposta/:propostaid/documentacoes" element={<ListagemDeDocumentacao/>}/>
             <Route path="/proposta/:propostaid/documentacao/:id" element={<DetalheDeDocumentacao/>}/>
+
             <Route path="/proposta/:propostaid/propostaimoveis" element={<ListagemDePropostaImovel/>}/>
             <Route path="/proposta/:propostaid/propostaimovel/:id" element={<DetalheDePropostaImovel/>}/>
+
+            <Route path="/proposta/:propostaid/propostalaudos" element={<ListagemDePropostaLaudo/>}/>
+            <Route path="/proposta/:propostaid/propostalaudo/:id" element={<DetalheDePropostaLaudo/>}/>
 
             <Route path="*" element={<Navigate to="/home"/>}/>
         </Routes>

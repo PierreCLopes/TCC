@@ -31,4 +31,7 @@ export * from './propostas/ListagemDeProposta';
 export * from './propostas/DetalheDePropostaImovel';
 export * from './propostas/ListagemDePropostaImovel';
 
+export * from './propostas/DetalheDePropostaLaudo';
+export * from './propostas/ListagemDePropostaLaudo';
+
 export * from './dashboard/Dashboard';

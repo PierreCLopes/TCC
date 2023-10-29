@@ -1,27 +1,40 @@
 import { Environment } from "../../../environment";
 import { Api } from "../axios-config";
 
-export interface IDetalhePropostaImovel{
+export interface IDetalhePropostaLaudo{
     id: number,
-    area: number,
-    imovel: number,
-    proposta: number
+    proposta: number,
+    datalaudo?: Date,
+    datavistoria?: Date,
+    ehareacultivadafinanciada?: boolean,
+    ehcreditoaplicadocorreto?: boolean,
+    ehatendendorecomendacao?: boolean,
+    ehcroquiidentificaarea?: boolean,
+    ehepocaplantiozoneamento?: boolean,
+    ehlavouraplantadafinanciada?: boolean,
+    ehpossuiarearecursoproprio?: boolean,
+    observacao?: string,
+    produtividadeobtida?: number,
+    produtividadeplano?: number,
+    situacaoempreendimento?: string,
+    sequencial: number,
 }
 
-export interface IListagemPropostaImovel{
+export interface IListagemPropostaLaudo{
     id: number,
-    area: number,
-    imovelnome: string
+    sequencial: number
+    datalaudo: Date,
+    datavistoria: Date,
 }
 
-type TPropostaImovelComTotalCount = {
-    data: IListagemPropostaImovel[];
+type TPropostaLaudoComTotalCount = {
+    data: IListagemPropostaLaudo[];
     totalCount: number;
 }
 
-const getAll = async (propostaid: number, page = 1, filter = ''): Promise<TPropostaImovelComTotalCount | Error> => {
+const getAll = async (propostaid: number, page = 1): Promise<TPropostaLaudoComTotalCount | Error> => {
     try {
-      const urlRelativa = `/propostaimovel/proposta/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/propostalaudo/proposta/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 
@@ -40,9 +53,9 @@ const getAll = async (propostaid: number, page = 1, filter = ''): Promise<TPropo
   };
 
 
-const getById = async (id: number): Promise<IDetalhePropostaImovel | Error> => {
+const getById = async (id: number): Promise<IDetalhePropostaLaudo | Error> => {
     try {
-        const { data } = await Api.get(`/propostaimovel/${id}`);
+        const { data } = await Api.get(`/propostalaudo/${id}`);
 
         if(data){
             return data;
@@ -57,9 +70,9 @@ const getById = async (id: number): Promise<IDetalhePropostaImovel | Error> => {
     }
 };
 
-const create = async (dados: Omit<IDetalhePropostaImovel, 'id'>): Promise<IDetalhePropostaImovel | Error> => { 
+const create = async (dados: Omit<IDetalhePropostaLaudo, 'id'>): Promise<IDetalhePropostaLaudo | Error> => { 
     try {
-        const { data } = await Api.post('/propostaimovel', dados);
+        const { data } = await Api.post('/propostalaudo', dados);
 
         if(data){
             return data;
@@ -74,9 +87,9 @@ const create = async (dados: Omit<IDetalhePropostaImovel, 'id'>): Promise<IDetal
     }  
 };
 
-const updateById = async (id: number, dados: IDetalhePropostaImovel): Promise<void | Error> => { 
+const updateById = async (id: number, dados: IDetalhePropostaLaudo): Promise<void | Error> => { 
     try {
-        await Api.put(`/propostaimovel/${id}`, dados);
+        await Api.put(`/propostalaudo/${id}`, dados);
 
     } catch (error) {
         console.error(error);
@@ -87,7 +100,7 @@ const updateById = async (id: number, dados: IDetalhePropostaImovel): Promise<vo
 
 const deleteById = async (id: number): Promise<void | Error> => { 
     try {
-        await Api.delete(`/propostaimovel/${id}`);
+        await Api.delete(`/propostalaudo/${id}`);
 
     } catch (error) {
         console.error(error);
@@ -97,7 +110,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
 };
 
 
-export const PropostaImovelService = {
+export const PropostaLaudoService = {
     getAll,
     getById,
     create,

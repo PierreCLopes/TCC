@@ -1,27 +1,31 @@
 import { Environment } from "../../../environment";
 import { Api } from "../axios-config";
 
-export interface IDetalhePropostaImovel{
+export interface IDetalhePropostaLaudoDiagnostico{
     id: number,
-    area: number,
-    imovel: number,
-    proposta: number
+    propostalaudo: number,
+    areaafetada: number,
+    nivel: string,
+    diagnostico: string,
+    observacao: string,
+    ehalterouprodutividade: boolean,
+    ehfazercontrole: boolean
 }
 
-export interface IListagemPropostaImovel{
+export interface IListagemPropostaLaudoDiagnostico{
     id: number,
-    area: number,
-    imovelnome: string
+    nivel: string,
+    diagnostico: string,
 }
 
 type TPropostaImovelComTotalCount = {
-    data: IListagemPropostaImovel[];
+    data: IListagemPropostaLaudoDiagnostico[];
     totalCount: number;
 }
 
 const getAll = async (propostaid: number, page = 1, filter = ''): Promise<TPropostaImovelComTotalCount | Error> => {
     try {
-      const urlRelativa = `/propostaimovel/proposta/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/propostalaudodiagnostico/propostalaudo/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 
@@ -40,9 +44,9 @@ const getAll = async (propostaid: number, page = 1, filter = ''): Promise<TPropo
   };
 
 
-const getById = async (id: number): Promise<IDetalhePropostaImovel | Error> => {
+const getById = async (id: number): Promise<IDetalhePropostaLaudoDiagnostico | Error> => {
     try {
-        const { data } = await Api.get(`/propostaimovel/${id}`);
+        const { data } = await Api.get(`/propostalaudodiagnostico/${id}`);
 
         if(data){
             return data;
@@ -57,9 +61,9 @@ const getById = async (id: number): Promise<IDetalhePropostaImovel | Error> => {
     }
 };
 
-const create = async (dados: Omit<IDetalhePropostaImovel, 'id'>): Promise<IDetalhePropostaImovel | Error> => { 
+const create = async (dados: Omit<IDetalhePropostaLaudoDiagnostico, 'id'>): Promise<IDetalhePropostaLaudoDiagnostico | Error> => { 
     try {
-        const { data } = await Api.post('/propostaimovel', dados);
+        const { data } = await Api.post('/propostalaudodiagnostico', dados);
 
         if(data){
             return data;
@@ -74,9 +78,9 @@ const create = async (dados: Omit<IDetalhePropostaImovel, 'id'>): Promise<IDetal
     }  
 };
 
-const updateById = async (id: number, dados: IDetalhePropostaImovel): Promise<void | Error> => { 
+const updateById = async (id: number, dados: IDetalhePropostaLaudoDiagnostico): Promise<void | Error> => { 
     try {
-        await Api.put(`/propostaimovel/${id}`, dados);
+        await Api.put(`/propostalaudodiagnostico/${id}`, dados);
 
     } catch (error) {
         console.error(error);
@@ -87,7 +91,7 @@ const updateById = async (id: number, dados: IDetalhePropostaImovel): Promise<vo
 
 const deleteById = async (id: number): Promise<void | Error> => { 
     try {
-        await Api.delete(`/propostaimovel/${id}`);
+        await Api.delete(`/propostalaudodiagnostico/${id}`);
 
     } catch (error) {
         console.error(error);
@@ -97,7 +101,7 @@ const deleteById = async (id: number): Promise<void | Error> => {
 };
 
 
-export const PropostaImovelService = {
+export const PropostaLaudoDiagnosticoService = {
     getAll,
     getById,
     create,
