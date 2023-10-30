@@ -1,20 +1,20 @@
 import { useMemo, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor, Box } from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper, TableFooter, LinearProgress, Pagination, IconButton, Icon, AlertColor } from '@mui/material';
 
 import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
-import { PropostaLaudoService, IListagemPropostaLaudo } from '../../shared/services/api/propostas/PropostaLaudoService';
 import { useDebounce } from '../../shared/hooks';
 import { Environment } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
+import { IListagemPropostaLaudoDiagnostico, PropostaLaudoDiagnosticoService } from '../../shared/services/api/propostas/PropostaLaudoDiagnosticoService';
 
-export const ListagemDePropostaLaudo: React.FC = () => {
+export const ListagemDePropostaLaudoDiagnostico: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
     const navigate = useNavigate();
 
-    const [rows, setRows] = useState<IListagemPropostaLaudo[]>([]);
+    const [rows, setRows] = useState<IListagemPropostaLaudoDiagnostico[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,6 +22,7 @@ export const ListagemDePropostaLaudo: React.FC = () => {
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
     const {propostaid} = useParams<'propostaid'>();
+    const {propostalaudoid} = useParams<'propostalaudoid'>();
 
     const permissions = useUserPermissions('Proposta');
 
@@ -37,7 +38,7 @@ export const ListagemDePropostaLaudo: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            PropostaLaudoService.getAll(Number(propostaid), pagina)
+            PropostaLaudoDiagnosticoService.getAll(Number(propostaid), pagina)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){
@@ -53,8 +54,8 @@ export const ListagemDePropostaLaudo: React.FC = () => {
     }, [busca, pagina]);
 
     const handleDelete = (id: number) => {
-        if(confirm('Deseja realmente excluir o laudo de acompanhamento?')){
-            PropostaLaudoService.deleteById(id)
+        if(confirm('Deseja realmente excluir o diagnóstico do laudo?')){
+            PropostaLaudoDiagnosticoService.deleteById(id)
             .then(result => {
                 if (result instanceof Error){
                     setAlertMessage(result.message);
@@ -74,7 +75,7 @@ export const ListagemDePropostaLaudo: React.FC = () => {
 
     return (
         <LayoutBaseDePagina 
-            titulo="Listagem de laudos de acompanhamento"
+            titulo="Listagem de diagnósticos do laudo"
             barraDeFerramentas={
                 <FerramentasDaListagem 
                     textoBotaoNovo="Novo"
@@ -82,8 +83,8 @@ export const ListagemDePropostaLaudo: React.FC = () => {
                     mostrarBotaoNovo={permissions?.Editar}
                     mostrarBotaoVoltar
                     textoDaBusca={busca}
-                    aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostalaudo/novo`)}
-                    aoClicarEmVoltar={() => navigate(`/proposta/${propostaid}`)}
+                    aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostalaudo/${propostalaudoid}/propostalaudodiagnostico/novo`)}
+                    aoClicarEmVoltar={() => navigate(`/proposta/${propostaid}/propostalaudo/${propostalaudoid}`)}
                 ></FerramentasDaListagem>
             }
             alertMessage={alertMessage}
@@ -95,9 +96,8 @@ export const ListagemDePropostaLaudo: React.FC = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell>Código</TableCell>
-                            <TableCell>Sequencial</TableCell>
-                            <TableCell>Data da vistoria</TableCell>
-                            <TableCell>Data do laudo</TableCell>
+                            <TableCell>Diagnóstico</TableCell>
+                            <TableCell>Nível</TableCell>
                             <TableCell>Ações</TableCell>
                         </TableRow>
                     </TableHead>
@@ -106,14 +106,13 @@ export const ListagemDePropostaLaudo: React.FC = () => {
                         {rows.map(row => (
                             <TableRow key={row.id}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.sequencial}</TableCell>
-                                <TableCell>{String(new Date(row.datavistoria).toLocaleString())}</TableCell>
-                                <TableCell>{String(new Date(row.datalaudo).toLocaleString())}</TableCell>
+                                <TableCell>{row.diagnostico}</TableCell>
+                                <TableCell>{row.nivel}</TableCell>
                                 <TableCell>
 
                                     <IconButton 
                                         size='small' 
-                                        onClick={() => navigate(`/proposta/${propostaid}/propostalaudo/${row.id}`)} 
+                                        onClick={() => navigate(`/proposta/${propostaid}/propostalaudo/${propostalaudoid}/propostalaudodiagnostico/${row.id}`)} 
                                         disabled={!permissions?.Visualizar}
                                     >
                                         <Icon>edit</Icon>

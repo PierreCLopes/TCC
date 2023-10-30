@@ -81,6 +81,21 @@ namespace Backend.Controllers
                 return Conflict(error);
             }
 
+            // Verificar o imóvel e a área informada
+            var Imovel = await _context.Imoveis.FirstOrDefaultAsync(i => (i.Id == Propostaimovel.Imovel));
+
+            if (Imovel == null)
+            {
+                var error = new ApiError(404, "O imóvel informado não foi encontrado.");
+                return NotFound(error);
+            }
+
+            if (Imovel.Areatotal < Propostaimovel.Area)
+            {
+                var error = new ApiError(400, "A área informada é maior que a área total do imóvel.");
+                return BadRequest(error);
+            }
+
             var PropostaImovel = new Propostaimovel
             {
                 Area = Propostaimovel.Area,
@@ -106,6 +121,21 @@ namespace Backend.Controllers
             {
                 var error = new ApiError(409, "Esse imóvel já está cadastrado para essa proposta.");
                 return Conflict(error);
+            }
+
+            // Verificar o imóvel e a área informada
+            var Imovel = await _context.Imoveis.FirstOrDefaultAsync(i => (i.Id == PropostaImovelDTO.Imovel));
+
+            if (Imovel == null)
+            {
+                var error = new ApiError(404, "O imóvel informado não foi encontrado.");
+                return NotFound(error);
+            }
+
+            if (Imovel.Areatotal < PropostaImovelDTO.Area)
+            {
+                var error = new ApiError(400, "A área informada é maior que a área total do imóvel.");
+                return BadRequest(error);
             }
 
             var PropostaImovel = new Propostaimovel

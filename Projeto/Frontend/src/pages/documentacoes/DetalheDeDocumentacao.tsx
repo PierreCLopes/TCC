@@ -194,6 +194,9 @@ export const DetalheDeDocumentacao: React.FC = () => {
 
         } else if(propostaid != ''){
             navigate(`/proposta/${propostaid}/${urlFinal}`);
+
+        } else if(imovelid != ''){
+            navigate(`/imovel/${imovelid}/${urlFinal}`);
         }
     }
 

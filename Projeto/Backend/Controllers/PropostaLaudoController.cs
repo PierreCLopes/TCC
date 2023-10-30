@@ -81,7 +81,7 @@ namespace Backend.Controllers
                 Produtividadeplano = Propostalaudo.Produtividadeplano,
                 Situacaoempreendimento = Propostalaudo.Situacaoempreendimento,
                 Status = StatusPropostaLaudo.Cadastrado,
-                Sequencial = Sequencial,
+                Sequencial = Sequencial + 1,
             };
 
             _context.Propostalaudos.Add(PropostaLaudo);

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColor } from "@mui/material";
+import { LinearProgress, Box, Paper, Grid, InputAdornment, Typography, AlertColor, Button, Icon } from "@mui/material";
 import * as yup from 'yup';
 
 import { LayoutBaseDePagina } from "../../shared/layouts";
@@ -73,25 +73,27 @@ export const DetalheDeImovel: React.FC = () => {
                 } else {
                     setNome(result.nome);
                     
-                    // Não sei pq esse diabo não funciona com a extensao do state, então tive que criar uma constante separada
-                    const ext = detectFileTypeFromBase64(String(result.arquivokml), 'kml'); 
-                    setExtensao(detectFileTypeFromBase64(String(result.arquivokml), 'kml'));
+                    if (result.arquivokml != null){
+                        // Não sei pq esse diabo não funciona com a extensao do state, então tive que criar uma constante separada
+                        const ext = detectFileTypeFromBase64(String(result.arquivokml), 'kml'); 
+                        setExtensao(detectFileTypeFromBase64(String(result.arquivokml), 'kml'));
 
-                    // Decodifique a representação Base64
-                    const decodedData = atob(String(result.arquivokml));
+                        // Decodifique a representação Base64
+                        const decodedData = atob(String(result.arquivokml));
 
-                    // Converta a representação decodificada em um ArrayBuffer
-                    const arrayBuffer = new ArrayBuffer(decodedData.length);
-                    const uint8Array = new Uint8Array(arrayBuffer);
-                    for (let i = 0; i < decodedData.length; i++) {
-                        uint8Array[i] = decodedData.charCodeAt(i);
+                        // Converta a representação decodificada em um ArrayBuffer
+                        const arrayBuffer = new ArrayBuffer(decodedData.length);
+                        const uint8Array = new Uint8Array(arrayBuffer);
+                        for (let i = 0; i < decodedData.length; i++) {
+                            uint8Array[i] = decodedData.charCodeAt(i);
+                        }
+
+                        // Crie um Blob a partir do ArrayBuffer
+                        const blob = new Blob([arrayBuffer]);
+
+                        result.arquivokml = new File([blob], `arquivo.${ext}`, { lastModified: Date.now() });
                     }
-
-                    // Crie um Blob a partir do ArrayBuffer
-                    const blob = new Blob([arrayBuffer]);
-
-                    result.arquivokml = new File([blob], `arquivo.${ext}`, { lastModified: Date.now() });
-
+                    
                     formRef.current?.setData(result);
                 }
             })
@@ -159,14 +161,15 @@ export const DetalheDeImovel: React.FC = () => {
                             setAlertSeverity("error");
         
                         } else {
-                            // Envie o arquivo do imóvel
-                            ImovelService.uploadFile(Number(id), dados.arquivokml)
-                            .then((resultFile) => {
-                                if (resultFile instanceof Error){
-                                    setAlertMessage(resultFile.message);
-                                    setAlertSeverity("error");
-                                }
-                            });
+                            if(dados.arquivokml != null){
+                                ImovelService.uploadFile(Number(id), dados.arquivokml)
+                                .then((resultFile) => {
+                                    if (resultFile instanceof Error){
+                                        setAlertMessage(resultFile.message);
+                                        setAlertSeverity("error");
+                                    }
+                                });
+                            }
 
                             if(isSaveAndClose()){
                                 navigate('/imoveis');
@@ -392,6 +395,22 @@ export const DetalheDeImovel: React.FC = () => {
                                 />
                             </Grid>
                         </Grid>
+                        
+                        <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'novo' || !permissions?.Visualizar}
+                                    endIcon={<Icon>file_present</Icon>}
+                                    onClick={() => {
+                                        if (id !== 'novo') {
+                                            navigate(`/imovel/${id}/documentacoes`);
+                                        }
+                                    }}
+                                >
+                                    Documentações
+                                </Button>
+                            </Grid>
                     </Grid> 
                 </Box>
             </VForm>

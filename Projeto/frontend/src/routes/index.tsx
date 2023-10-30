@@ -28,6 +28,8 @@ import { Dashboard,
          ListagemDePropostaLaudo,
          DetalheDePropostaLaudo} from '../pages';
 import useUserPermissions from '../shared/hooks/UseUserPermissions';
+import { ListagemDePropostaLaudoDiagnostico } from '../pages/propostas/ListagemDePropostaLaudoDiagnostico';
+import { DetalheDePropostaLaudoDiagnostico } from '../pages/propostas/DetalheDePropostaLaudoDiagnostico';
 
 export const AppRoutes = () => {
     const {setDrawerOptions } = useDrawerContext();
@@ -117,6 +119,9 @@ export const AppRoutes = () => {
             <Route path="/imoveis" element={<ListagemDeImovel/>}/>
             <Route path="/imovel/:id" element={<DetalheDeImovel/>}/>
 
+            <Route path="/imovel/:imovelid/documentacoes" element={<ListagemDeDocumentacao/>}/>
+            <Route path="/imovel/:imovelid/documentacao/:id" element={<DetalheDeDocumentacao/>}/>
+
             <Route path="/usuarios" element={<ListagemDeUsuario/>}/>
             <Route path="/usuario/:id" element={<DetalheDeUsuario/>}/>
 
@@ -143,6 +148,9 @@ export const AppRoutes = () => {
 
             <Route path="/proposta/:propostaid/propostalaudos" element={<ListagemDePropostaLaudo/>}/>
             <Route path="/proposta/:propostaid/propostalaudo/:id" element={<DetalheDePropostaLaudo/>}/>
+
+            <Route path="/proposta/:propostaid/propostalaudo/:propostalaudoid/propostalaudodiagnosticos" element={<ListagemDePropostaLaudoDiagnostico/>}/>
+            <Route path="/proposta/:propostaid/propostalaudo/:propostalaudoid/propostalaudodiagnostico/:id" element={<DetalheDePropostaLaudoDiagnostico/>}/>
 
             <Route path="*" element={<Navigate to="/home"/>}/>
         </Routes>

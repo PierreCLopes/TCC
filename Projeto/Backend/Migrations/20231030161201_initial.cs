@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -470,7 +470,7 @@ namespace Backend.Migrations
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: false),
                     PROPOSTA = table.Column<int>(type: "int", nullable: false),
                     DATALAUDO = table.Column<DateTime>(type: "datetime", nullable: false),
-                    DATAVISTORIA = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
+                    DATAVISTORIA = table.Column<DateTime>(type: "datetime", nullable: false),
                     SEQUENCIAL = table.Column<int>(type: "int", nullable: false),
                     EHAREACULTIVADAFINANCIADA = table.Column<bool>(type: "bit", nullable: false),
                     EHLAVOURAPLANTADAFINANCIADA = table.Column<bool>(type: "bit", nullable: false),
@@ -482,7 +482,7 @@ namespace Backend.Migrations
                     SITUACAOEMPREENDIMENTO = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     PRODUTIVIDADEPLANO = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
                     PRODUTIVIDADEOBTIDA = table.Column<decimal>(type: "decimal(15,2)", nullable: false),
-                    STATUS = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false)
+                    STATUS = table.Column<int>(type: "int", unicode: false, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -504,8 +504,6 @@ namespace Backend.Migrations
                     EHALTEROUPRODUTIVIDADE = table.Column<bool>(type: "bit", nullable: false),
                     EHFAZERCONTROLE = table.Column<bool>(type: "bit", nullable: false),
                     PROPOSTALAUDO = table.Column<int>(type: "int", nullable: false),
-                    Logusuariocadastro = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Logusuarioalteracao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DIAGNOSTICO = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     NIVEL = table.Column<string>(type: "varchar(max)", unicode: false, nullable: false),
                     AREAAFETADA = table.Column<decimal>(type: "decimal(15,2)", nullable: false)

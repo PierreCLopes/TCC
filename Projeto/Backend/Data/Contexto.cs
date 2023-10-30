@@ -389,7 +389,7 @@ namespace Backend.Data
                     .HasColumnType("datetime")
                     .HasColumnName("DATALAUDO");
                 entity.Property(e => e.Datavistoria)
-                    .IsUnicode(false)
+                    .HasColumnType("datetime")
                     .HasColumnName("DATAVISTORIA");
                 entity.Property(e => e.Ehareacultivadafinanciada).HasColumnName("EHAREACULTIVADAFINANCIADA");
                 entity.Property(e => e.Ehatendendorecomendacao).HasColumnName("EHATENDENDORECOMENDACAO");

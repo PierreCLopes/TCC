@@ -112,15 +112,15 @@ export const DetalheDeProposta: React.FC = () => {
             })
         } else {
             formRef.current?.setData({
-                nome: '',
-                observacao: '',
-                tipoDocumentacaoObrigatoria: undefined
+                data: Date.now,
+                ehastecfinanciada: false,
+                ehpossuilaudoacompanhamento: false,
             });
         }
     }, [id])
 
     const handleSave = (dados: IFormData) => {
-
+        console.log(dados);
         formValidationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
@@ -487,9 +487,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="valorastec"
                                     disabled={isLoading || !permissions?.Editar}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">R$</InputAdornment>,
-                                        inputMode: "decimal",
-                                        
+                                        startAdornment: <InputAdornment position="start">R$</InputAdornment>
                                     }}
                                 />
                             </Grid>
@@ -500,7 +498,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Valor total financiado"
                                     placeholder="Valor total financiado" 
                                     name="valortotalfinanciado"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={true}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
                                         inputMode: "decimal",
@@ -595,6 +593,21 @@ export const DetalheDeProposta: React.FC = () => {
                         </Grid>
 
                         <Grid container item spacing={2}>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'nova' || !permissions?.Processar}
+                                    endIcon={<Icon>arrow_forward</Icon>}
+                                    onClick={() => {
+                                        if (id !== 'nova') {
+                                           // handleLiberar
+                                        }
+                                    }}
+                                >
+                                    Liberar
+                                </Button>
+                            </Grid>
                             <Grid item>
                                 <Button
                                     variant="contained"

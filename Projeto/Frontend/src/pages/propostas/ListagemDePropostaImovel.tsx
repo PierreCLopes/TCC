@@ -80,6 +80,7 @@ export const ListagemDePropostaImovel: React.FC = () => {
                     textoBotaoNovo="Novo"
                     mostrarInputBusca
                     mostrarBotaoNovo={permissions?.Editar}
+                    mostrarBotaoVoltar
                     textoDaBusca={busca}
                     aoClicarEmNovo={() => navigate(`/proposta/${propostaid}/propostaimovel/novo`)}
                     aoClicarEmVoltar={() => navigate(`/proposta/${propostaid}`)}

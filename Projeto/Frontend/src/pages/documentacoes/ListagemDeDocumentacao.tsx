@@ -84,6 +84,9 @@ export const ListagemDeDocumentacao: React.FC = () => {
 
         } else if (propostaid != ''){
             navigate(`/proposta/${propostaid}/documentacao/${codigo}`);
+
+        } else if (imovelid != ''){
+            navigate(`/imovel/${imovelid}/documentacao/${codigo}`);
         }
     }
 
@@ -94,6 +97,9 @@ export const ListagemDeDocumentacao: React.FC = () => {
 
         } else if (propostaid != ''){
             navigate(`/proposta/${propostaid}`)
+
+        } else if (imovelid != ''){
+            navigate(`/imovel/${imovelid}`)
         }
     }
 

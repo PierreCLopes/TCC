@@ -7,7 +7,7 @@ export interface IDetalhePropostaLaudoDiagnostico{
     areaafetada: number,
     nivel: string,
     diagnostico: string,
-    observacao: string,
+    observacao?: string,
     ehalterouprodutividade: boolean,
     ehfazercontrole: boolean
 }
@@ -23,9 +23,9 @@ type TPropostaImovelComTotalCount = {
     totalCount: number;
 }
 
-const getAll = async (propostaid: number, page = 1, filter = ''): Promise<TPropostaImovelComTotalCount | Error> => {
+const getAll = async (propostaid: number, page = 1): Promise<TPropostaImovelComTotalCount | Error> => {
     try {
-      const urlRelativa = `/propostalaudodiagnostico/propostalaudo/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}&nome=${filter}`;
+      const urlRelativa = `/propostalaudodiagnostico/propostalaudo/${propostaid}?page=${page}&pageSize=${Environment.LIMITE_DE_LINHAS}`;
   
       const { data, headers } = await Api.get(urlRelativa);
 

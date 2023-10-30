@@ -613,10 +613,8 @@ namespace Backend.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("DATALAUDO");
 
-                    b.Property<string>("Datavistoria")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                    b.Property<DateTime>("Datavistoria")
+                        .HasColumnType("datetime")
                         .HasColumnName("DATAVISTORIA");
 
                     b.Property<bool>("Ehareacultivadafinanciada")
@@ -676,10 +674,9 @@ namespace Backend.Migrations
                         .HasColumnType("varchar(max)")
                         .HasColumnName("SITUACAOEMPREENDIMENTO");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
+                    b.Property<int>("Status")
                         .IsUnicode(false)
-                        .HasColumnType("varchar(max)")
+                        .HasColumnType("int")
                         .HasColumnName("STATUS");
 
                     b.HasKey("Id")
@@ -716,12 +713,6 @@ namespace Backend.Migrations
                     b.Property<bool>("Ehfazercontrole")
                         .HasColumnType("bit")
                         .HasColumnName("EHFAZERCONTROLE");
-
-                    b.Property<string>("Logusuarioalteracao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Logusuariocadastro")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nivel")
                         .IsRequired()

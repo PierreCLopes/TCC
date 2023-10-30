@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FilialController : ControllerBase
@@ -24,6 +25,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Filial", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Filial>>> GetFilials(
             [FromQuery] int page = 1,
@@ -71,6 +73,7 @@ namespace Backend.Controllers
             return Ok(filiais);
         }
 
+        [ClaimsAuthorize("Filial", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<FilialDTO>> GetFilial(int id)
         {
@@ -92,6 +95,7 @@ namespace Backend.Controllers
             return FilialDTO;
         }
 
+        [ClaimsAuthorize("Filial", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Filial>> PostFilial(FilialDTO FilialDTO)
         {
@@ -136,6 +140,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetFilial", new { id = Filial.Id }, Filial);
         }
 
+        [ClaimsAuthorize("Filial", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutFilial(int id, FilialDTO FilialDTO)
         {
@@ -182,6 +187,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Filial", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFilial(int id)
         {

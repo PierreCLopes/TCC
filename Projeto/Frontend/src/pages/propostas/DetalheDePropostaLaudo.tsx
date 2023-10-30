@@ -82,6 +82,13 @@ export const DetalheDePropostaLaudo: React.FC = () => {
             })
         } else {
             formRef.current?.setData({
+                ehareacultivadafinanciada: false,
+                ehcreditoaplicadocorreto: false,
+                ehatendendorecomendacao: false,
+                ehcroquiidentificaarea: false,
+                ehepocaplantiozoneamento: false,
+                ehlavouraplantadafinanciada: false,
+                ehpossuiarearecursoproprio: false,
             });
         }
     }, [id])
@@ -393,20 +400,37 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                             </Grid>
                         </Grid>
 
-                        <Grid item xs={2} >
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                disabled={isLoading || id === 'novo' || !permissions?.Visualizar}
-                                endIcon={<Icon>file_present</Icon>}
-                                onClick={() => {
-                                    if (id !== 'nova') {
-                                        navigate(`/proposta/${propostaid}/propostalaudo/${id}/propostalaudodiagnosticos`);
-                                    }
-                                }}
-                            >
-                                Diagnósticos
-                            </Button>
+                        <Grid item container spacing={2}>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'novo' || !permissions?.Processar}
+                                    endIcon={<Icon>arrow_forward</Icon>}
+                                    onClick={() => {
+                                        if (id !== 'novo') {
+                                           // handleLiberar
+                                        }
+                                    }}
+                                >
+                                    Encerrar
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'novo' || !permissions?.Visualizar}
+                                    endIcon={<Icon>file_present</Icon>}
+                                    onClick={() => {
+                                        if (id !== 'nova') {
+                                            navigate(`/proposta/${propostaid}/propostalaudo/${id}/propostalaudodiagnosticos`);
+                                        }
+                                    }}
+                                >
+                                    Diagnósticos
+                                </Button>
+                            </Grid>
                         </Grid>
 
                     </Grid> 
