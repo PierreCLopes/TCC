@@ -13,9 +13,10 @@ interface IAutoCompleteCulturaProps {
     isExternalLoading?: boolean;
     nomeField?: string
     disabled?: boolean;
+    readonly?: boolean;
 }
 
-export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExternalLoading = false, nomeField = 'cultura', disabled = false}) => {
+export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExternalLoading = false, nomeField = 'cultura', disabled = false, readonly = false}) => {
     const {fieldName, registerField, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -85,6 +86,9 @@ export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExte
                     label="Cultura"
                     error={!!error}
                     helperText={error}
+                    InputProps={{
+                        readOnly: readonly
+                    }}
                 />
             )}
         />

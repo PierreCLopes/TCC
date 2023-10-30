@@ -8,3 +8,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+/* Em seu arquivo CSS ou estilo */
+@media print {
+  .menu-lateral {
+    display: none;
+  }
+}

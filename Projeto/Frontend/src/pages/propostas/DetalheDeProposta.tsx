@@ -203,7 +203,11 @@ export const DetalheDeProposta: React.FC = () => {
                 }
             })
         }
-    }
+    };
+
+    const handlePrint = () => {
+        navigate(`/proposta/${id}/imprimir`)
+    }; 
 
     return(
         <LayoutBaseDePagina 
@@ -606,6 +610,17 @@ export const DetalheDeProposta: React.FC = () => {
                                     }}
                                 >
                                     Liberar
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading || id === 'nova' || !permissions?.Visualizar}
+                                    onClick={handlePrint}
+                                    endIcon={<Icon>print</Icon>}
+                                >
+                                    Imprimir
                                 </Button>
                             </Grid>
                             <Grid item>

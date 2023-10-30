@@ -26,7 +26,8 @@ import { Dashboard,
          ListagemDeCultura,
          DetalheDeCultura,
          ListagemDePropostaLaudo,
-         DetalheDePropostaLaudo} from '../pages';
+         DetalheDePropostaLaudo,
+         ImpressaoDeProposta} from '../pages';
 import useUserPermissions from '../shared/hooks/UseUserPermissions';
 import { ListagemDePropostaLaudoDiagnostico } from '../pages/propostas/ListagemDePropostaLaudoDiagnostico';
 import { DetalheDePropostaLaudoDiagnostico } from '../pages/propostas/DetalheDePropostaLaudoDiagnostico';
@@ -139,6 +140,7 @@ export const AppRoutes = () => {
 
             <Route path="/propostas" element={<ListagemDeProposta/>}/>
             <Route path="/proposta/:id" element={<DetalheDeProposta/>}/>
+            <Route path="/proposta/:id/imprimir" element={<ImpressaoDeProposta/>}/>
 
             <Route path="/proposta/:propostaid/documentacoes" element={<ListagemDeDocumentacao/>}/>
             <Route path="/proposta/:propostaid/documentacao/:id" element={<DetalheDeDocumentacao/>}/>

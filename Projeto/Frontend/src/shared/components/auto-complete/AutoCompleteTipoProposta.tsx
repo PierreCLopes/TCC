@@ -13,9 +13,10 @@ interface IAutoCompleteTipoPropostaProps {
     isExternalLoading?: boolean;
     nomeField?: string
     disabled?: boolean;
+    readonly?: boolean;
 }
 
-export const AutoCompleteTipoProposta: React.FC<IAutoCompleteTipoPropostaProps> = ({isExternalLoading = false, nomeField = 'tipo', disabled = false}) => {
+export const AutoCompleteTipoProposta: React.FC<IAutoCompleteTipoPropostaProps> = ({isExternalLoading = false, nomeField = 'tipo', disabled = false, readonly = false}) => {
     const {fieldName, registerField, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -85,6 +86,9 @@ export const AutoCompleteTipoProposta: React.FC<IAutoCompleteTipoPropostaProps> 
                     label="Tipo de proposta"
                     error={!!error}
                     helperText={error}
+                    InputProps={{
+                        readOnly: readonly
+                    }}
                 />
             )}
         />

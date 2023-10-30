@@ -13,9 +13,10 @@ interface IAutoCompleteFilialProps {
     isExternalLoading?: boolean;
     nomeField?: string
     disabled?: boolean;
+    readonly?: boolean;
 }
 
-export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExternalLoading = false, nomeField = 'filial', disabled = false}) => {
+export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExternalLoading = false, nomeField = 'filial', disabled = false, readonly = false}) => {
     const {fieldName, registerField, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -85,6 +86,9 @@ export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExtern
                     label="Filial"
                     error={!!error}
                     helperText={error}
+                    InputProps={{
+                        readOnly: readonly
+                    }}
                 />
             )}
         />

@@ -14,9 +14,10 @@ interface IAutoCompletePessoaProps {
     nomeField?: string;
     label: string
     disabled?: boolean;
+    readonly?: boolean;
 }
 
-export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExternalLoading = false, nomeField = 'pessoa', label = 'Pessoa', disabled = false}) => {
+export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExternalLoading = false, nomeField = 'pessoa', label = 'Pessoa', disabled = false, readonly = false}) => {
     const {fieldName, registerField, defaultValue, error, clearError} = useField(nomeField);
     const {debounce} = useDebounce();
 
@@ -86,6 +87,9 @@ export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExtern
                     label={label}
                     error={!!error}
                     helperText={error}
+                    InputProps={{
+                        readOnly: readonly
+                    }}
                 />
             )}
         />
