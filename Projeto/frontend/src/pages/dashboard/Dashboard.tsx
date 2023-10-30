@@ -2,8 +2,8 @@ import { AlertColor, Box, Card, CardContent, Grid, Typography } from "@mui/mater
 import { FerramentasDaListagem, FerramentasDeDetalhe } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { useEffect, useState } from "react";
-import { ImovelService } from "../../shared/services/api/imoveis/ImovelService";
-import { CulturaService } from "../../shared/services/api/culturas/CulturaService";
+import { PropostaService } from "../../shared/services/api/propostas/PropostaService";
+import { PropostaLaudoService } from "../../shared/services/api/propostas/PropostaLaudoService";
 
 export const Dashboard = () => {
     const [isLoadingImovel, setIsLoadingImovel] = useState(true);
@@ -19,7 +19,7 @@ export const Dashboard = () => {
         setIsLoadingImovel(true);
         setIsLoadingCultura(true);
 
-        ImovelService.getAll(1)
+        PropostaService.getAll(1)
         .then((result) => {
             setIsLoadingImovel(false);
             
@@ -31,7 +31,7 @@ export const Dashboard = () => {
             }
         });
 
-        CulturaService.getAll(1)
+        PropostaLaudoService.getAll(1)
         .then((result) => {
             setIsLoadingCultura(false);
             
@@ -59,8 +59,8 @@ export const Dashboard = () => {
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={2}>
                             <Card>
                                 <CardContent>
-                                    <Typography variant="h5" align="center">
-                                        Total de imóveis
+                                    <Typography variant="h6" align="center">
+                                        Propostas pendentes
                                     </Typography>
 
                                     <Box padding={6} display="flex" justifyContent="center" alignItems="center">
@@ -84,8 +84,8 @@ export const Dashboard = () => {
                         <Grid item xs={12} sm={12} md={6} lg={4} xl={3}>
                             <Card>
                                 <CardContent>
-                                    <Typography variant="h5" align="center">
-                                        Total de culturas
+                                    <Typography variant="h6" align="center">
+                                        Laudos pendentes
                                     </Typography>
 
                                     <Box padding={6} display="flex" justifyContent="center" alignItems="center">

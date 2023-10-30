@@ -257,6 +257,7 @@ export const DetalheDeDocumentacao: React.FC = () => {
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <FileInput
+                                    label={"Arquivo"}
                                     name="arquivo"
                                     extensao={extensao}
                                     disabled={isLoading || !permissions?.Editar}

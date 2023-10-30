@@ -55,6 +55,8 @@ export const ListagemDePermissaoUsuario: React.FC = () => {
                     textoBotaoNovo="Nova"
                     mostrarInputBusca={false}
                     mostrarBotaoNovo={false}
+                    mostrarBotaoVoltar={true}
+                    aoClicarEmVoltar={() => navigate(`/usuario/${userId}`)}
                 ></FerramentasDaListagem>
             }
             alertMessage={alertMessage}

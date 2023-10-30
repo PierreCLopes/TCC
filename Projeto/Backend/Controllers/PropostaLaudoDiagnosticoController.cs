@@ -22,7 +22,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
-        [HttpGet("proposta/{PropostaLaudoId}")]
+        [HttpGet("propostalaudo/{PropostaLaudoId}")]
         public async Task<ActionResult<IEnumerable<Propostalaudodiagnostico>>> GetPropostalaudodiagnosticodiagnosticos(int PropostaLaudoId,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)

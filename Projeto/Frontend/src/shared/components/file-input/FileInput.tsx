@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Icon, IconButton } from '@mui/material';
+import { Icon, IconButton, TextFieldProps } from '@mui/material';
 import { useField } from '@unform/core';
 import { MuiFileInput } from 'mui-file-input';
 
-type FileInputProps = {
+type FileInputProps = TextFieldProps & {
   name: string;
   extensao: string;
   disabled: boolean;

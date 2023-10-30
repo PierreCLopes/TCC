@@ -105,6 +105,7 @@ export const ListagemDeDocumentacao: React.FC = () => {
                     textoBotaoNovo="Nova"
                     mostrarInputBusca
                     mostrarBotaoNovo={permissions?.Editar}
+                    mostrarBotaoVoltar={true}
                     textoDaBusca={busca}
                     aoClicarEmNovo={() => navigateTo('nova')}
                     aoClicarEmVoltar={() => navigateBack()}

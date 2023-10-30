@@ -317,6 +317,7 @@ export const DetalheDeImovel: React.FC = () => {
                             </Grid>
                             <Grid item xs={6} md={2}>
                                 <FileInput
+                                    label={"Arquivo KML"}
                                     name="arquivokml"
                                     extensao={extensao}
                                     disabled={isLoading || !permissions?.Editar}

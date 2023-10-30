@@ -8,7 +8,7 @@
 
         public DateTime Datalaudo { get; set; }
 
-        public DateTime Datavistoria { get; set; } = null!;
+        public DateTime Datavistoria { get; set; }
 
         public int Sequencial { get; set; }
 
