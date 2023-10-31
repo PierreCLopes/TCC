@@ -86,9 +86,6 @@ export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExte
                     label="Cultura"
                     error={!!error}
                     helperText={error}
-                    InputProps={{
-                        readOnly: readonly
-                    }}
                 />
             )}
         />

@@ -312,7 +312,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
 
                             <Grid item xs={12} md={6} lg={4}>
                                 <FormControlLabel
-                                    label="Croqui idenfica a área?"
+                                    label="Croqui identifica a área?"
                                     control={
                                         <VCheckBox 
                                             name="ehcroquiidentificaarea"
@@ -336,7 +336,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
 
                             <Grid item xs={12} md={6} lg={4}>
                                 <FormControlLabel
-                                    label="Época de plantio atendeu ao Zoneamento agrícola?"
+                                    label="Época de plantio atendeu ao zoneamento agrícola?"
                                     control={
                                         <VCheckBox 
                                             name="ehepocaplantiozoneamento"

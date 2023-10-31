@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,10 +78,10 @@ namespace Backend.Migrations
                     NOME = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     APELIDO = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
                     CNPJCPF = table.Column<string>(type: "varchar(18)", unicode: false, maxLength: 18, nullable: false),
-                    TELEFONE = table.Column<string>(type: "varchar(30)", unicode: false, maxLength: 30, nullable: true),
+                    TELEFONE = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     OBSERVACAO = table.Column<string>(type: "varchar(4000)", unicode: false, maxLength: 4000, nullable: true),
                     RG = table.Column<string>(type: "varchar(11)", unicode: false, maxLength: 11, nullable: true),
-                    EMAIL = table.Column<string>(type: "varchar(1)", unicode: false, maxLength: 1, nullable: true),
+                    EMAIL = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
                     EHTECNICO = table.Column<bool>(type: "bit", nullable: false),
                     CFTA = table.Column<string>(type: "varchar(14)", unicode: false, maxLength: 14, nullable: true),
                     TIPO = table.Column<int>(type: "int", nullable: false)

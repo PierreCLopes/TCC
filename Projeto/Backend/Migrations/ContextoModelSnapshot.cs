@@ -317,9 +317,8 @@ namespace Backend.Migrations
                         .HasColumnName("EHTECNICO");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(1)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(1)")
+                        .HasColumnType("varchar(max)")
                         .HasColumnName("EMAIL");
 
                     b.Property<string>("Nome")
@@ -342,9 +341,8 @@ namespace Backend.Migrations
                         .HasColumnName("RG");
 
                     b.Property<string>("Telefone")
-                        .HasMaxLength(30)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(30)")
+                        .HasColumnType("varchar(max)")
                         .HasColumnName("TELEFONE");
 
                     b.Property<int>("Tipo")

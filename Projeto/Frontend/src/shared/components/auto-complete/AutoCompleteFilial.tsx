@@ -87,9 +87,6 @@ export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExtern
                     label="Filial"
                     error={!!error}
                     helperText={error}
-                    InputProps={{
-                        readOnly: readonly
-                    }}
                 />
             )}
         />

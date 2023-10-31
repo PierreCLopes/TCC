@@ -288,7 +288,6 @@ namespace Backend.Data
                     .HasColumnName("CNPJCPF");
                 entity.Property(e => e.Ehtecnico).HasColumnName("EHTECNICO");
                 entity.Property(e => e.Email)
-                    .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasColumnName("EMAIL");
                 entity.Property(e => e.Nome)
@@ -304,7 +303,6 @@ namespace Backend.Data
                     .IsUnicode(false)
                     .HasColumnName("RG");
                 entity.Property(e => e.Telefone)
-                    .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("TELEFONE");
                 entity.Property(e => e.Tipo).HasColumnName("TIPO");

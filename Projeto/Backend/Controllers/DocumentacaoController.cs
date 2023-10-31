@@ -196,7 +196,7 @@ namespace Backend.Controllers
             }
 
             // Verifique a extensão do arquivo
-            var allowedExtensions = new List<string> { ".png", ".jpg", ".mp4", ".pdf", ".ico", ".rar", ".rtf", ".txt", ".srt", ".kml" };
+            var allowedExtensions = new List<string> { ".png", ".jpg", ".pdf", ".kml" };
             var fileExtension = Path.GetExtension(arquivo.FileName).ToLower();
 
             if (!allowedExtensions.Contains(fileExtension))

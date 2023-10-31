@@ -87,9 +87,6 @@ export const AutoCompleteTipoProposta: React.FC<IAutoCompleteTipoPropostaProps> 
                     label="Tipo de proposta"
                     error={!!error}
                     helperText={error}
-                    InputProps={{
-                        readOnly: readonly
-                    }}
                 />
             )}
         />

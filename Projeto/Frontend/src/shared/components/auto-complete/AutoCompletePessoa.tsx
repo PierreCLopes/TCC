@@ -88,9 +88,6 @@ export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExtern
                     label={label}
                     error={!!error}
                     helperText={error}
-                    InputProps={{
-                        readOnly: readonly
-                    }}
                 />
             )}
         />
