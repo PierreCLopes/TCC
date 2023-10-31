@@ -77,6 +77,7 @@ export const AutoCompletePessoa: React.FC<IAutoCompletePessoaProps> = ({isExtern
             value={autoCompleteSelectedOption}
             options={opcoes}
             loading={isLoading}
+            readOnly={readonly}
             disabled={isExternalLoading || disabled}
             onInputChange={(e, newValue) => { setBusca(newValue) }}
             onChange={(e, newValue) => { setSelectedId(newValue?.id); setBusca(''); clearError(); }}

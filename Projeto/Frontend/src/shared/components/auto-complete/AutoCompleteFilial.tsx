@@ -72,6 +72,7 @@ export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExtern
             loadingText="Carregando..."
 
             disablePortal
+            readOnly={readonly}
 
             value={autoCompleteSelectedOption}
             options={opcoes}

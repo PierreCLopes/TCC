@@ -72,7 +72,7 @@ export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExte
             loadingText="Carregando..."
 
             disablePortal
-
+            readOnly={readonly}
             value={autoCompleteSelectedOption}
             options={opcoes}
             loading={isLoading}

@@ -75,6 +75,7 @@ export const AutoCompleteTipoProposta: React.FC<IAutoCompleteTipoPropostaProps> 
 
             value={autoCompleteSelectedOption}
             options={opcoes}
+            readOnly={readonly}
             loading={isLoading}
             disabled={isExternalLoading || disabled}
             onInputChange={(e, newValue) => { setBusca(newValue) }}

@@ -123,6 +123,14 @@ export const ListagemDeProposta: React.FC = () => {
 
                                     <IconButton 
                                         size='small' 
+                                        onClick={() => navigate(`/proposta/${row.id}/imprimir`)} 
+                                        disabled={!permissions?.Visualizar}
+                                    >
+                                        <Icon>print</Icon>
+                                    </IconButton>
+                            
+                                    <IconButton 
+                                        size='small' 
                                         onClick={() => handleDelete(row.id)} 
                                         disabled = {!permissions?.Excluir}
                                     >

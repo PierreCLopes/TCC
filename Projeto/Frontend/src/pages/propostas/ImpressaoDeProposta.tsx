@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { Await, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { LinearProgress, Box, Paper, Grid, Typography, AlertColor, InputAdornment, FormControlLabel, Button, Icon } from "@mui/material";
 
-import { LayoutBaseDePagina } from "../../shared/layouts";
 import { AutoCompleteFilial, AutoCompleteCultura, AutoCompletePessoa, AutoCompleteTipoProposta } from "../../shared/components";
 import { VTextField, VForm, useVForm, VCheckBox } from "../../shared/forms";
 import { PropostaService } from "../../shared/services/api/propostas/PropostaService";
-import { useDebounce } from "../../shared/hooks";
 
 export const ImpressaoDeProposta: React.FC = () => {
     const navigate = useNavigate();
@@ -409,11 +407,13 @@ export const ImpressaoDeProposta: React.FC = () => {
                         </Grid>
                     </Grid>
 
-                    <Grid item>
-                        <Typography variant="h6">Assinatura proponente: </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant="h6">Assinatura responsável técnico: </Typography>
+                    <Grid container item>
+                        <Grid item xs={6}>
+                            <Typography variant="h6">Assinatura proponente: </Typography>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="h6">Assinatura responsável técnico: </Typography>
+                        </Grid>
                     </Grid>
                 </Grid> 
             </Box>
