@@ -161,7 +161,7 @@ export const DetalheDePropostaLaudoDiagnostico: React.FC = () => {
 
     return(
         <LayoutBaseDePagina 
-            titulo={id === 'novo' ? 'Novo laudo de acompanhamento' : nome}
+            titulo={id === 'novo' ? 'Novo diagnóstico do laudo' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Novo"
@@ -209,7 +209,7 @@ export const DetalheDePropostaLaudoDiagnostico: React.FC = () => {
                                     type="number"
                                     disabled={isLoading || !permissions?.Editar}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
                                         inputMode: "decimal",
                                     }}
                                 />

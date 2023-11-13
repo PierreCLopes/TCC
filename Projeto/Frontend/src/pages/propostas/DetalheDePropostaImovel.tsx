@@ -200,7 +200,7 @@ export const DetalheDePropostaImovel: React.FC = () => {
                                     type="number"
                                     disabled={isLoading || !permissions?.Editar}
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
                                         inputMode: "decimal",
                                         
                                     }}

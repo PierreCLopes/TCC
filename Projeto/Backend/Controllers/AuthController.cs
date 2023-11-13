@@ -31,7 +31,7 @@ namespace Backend.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [ClaimsAuthorize("Usuario", "Editar")]
+        //[ClaimsAuthorize("Usuario", "Editar")]
         [HttpPost("usuario")]
         public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
         {

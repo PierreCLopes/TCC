@@ -264,7 +264,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     type="number"
                                     disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">kg/há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
                                     }}
                                 />
@@ -278,7 +278,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     type="number"
                                     disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">kg/há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
                                     }}
                                 />

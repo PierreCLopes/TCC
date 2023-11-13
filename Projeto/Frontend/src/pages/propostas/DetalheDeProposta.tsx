@@ -367,7 +367,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="produtividademedia" 
                                     type="number"
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">kg/há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
                                         
                                     }}
@@ -382,7 +382,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="produtividadeesperada" 
                                     type="number"
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">kg/há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
                                         
                                     }}
@@ -404,7 +404,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     name="areafinanciada" 
                                     type="number"
                                     InputProps={{
-                                        startAdornment: <InputAdornment position="start">há</InputAdornment>,
+                                        startAdornment: <InputAdornment position="start">ha</InputAdornment>,
                                         inputMode: "decimal",
                                         
                                     }}
