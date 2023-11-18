@@ -4,9 +4,10 @@ import { useField } from '@unform/core';
 
 type TVCheckBoxProps = CheckboxProps & {
   name: string;
+  onChangeInterno?: () => void;
 };
 
-export const VCheckBox: React.FC<TVCheckBoxProps> = ({ name, ...rest }) => {
+export const VCheckBox: React.FC<TVCheckBoxProps> = ({ name, onChangeInterno, ...rest }) => {
   const { fieldName, registerField, defaultValue } = useField(name);
 
   const [value, setValue] = useState(defaultValue || false);
@@ -23,7 +24,10 @@ export const VCheckBox: React.FC<TVCheckBoxProps> = ({ name, ...rest }) => {
     <Checkbox
       {...rest}
       checked={value} 
-      onChange={() => setValue(!value)} 
+      onChange={() => {
+        setValue(!value); 
+        onChangeInterno && onChangeInterno(); // Verifica se onChangeInterno é uma função antes de chamá-la
+      }} 
     />
   );
 };

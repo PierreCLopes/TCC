@@ -12,3 +12,11 @@ export const Environment = {
 
     LOCAL_STORAGE_KEY__ACCESS_TOKEN: 'APP_ACCESS_TOKEN',
 };
+
+export const StatusProposta = {
+    Cadastrada: 1,
+
+    AguardandoLaudosDeAcompanhamento: 2,
+
+    Encerrada: 3,
+}

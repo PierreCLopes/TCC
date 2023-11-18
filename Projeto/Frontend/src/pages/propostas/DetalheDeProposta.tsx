@@ -8,6 +8,7 @@ import { AutoCompleteFilial, FerramentasDeDetalhe, AutoCompleteTipoProposta, Aut
 import { VTextField, VForm, useVForm, IVFormErrors, VCheckBox } from "../../shared/forms";
 import useUserPermissions from "../../shared/hooks/UseUserPermissions";
 import { PropostaService } from "../../shared/services/api/propostas/PropostaService";
+import { StatusProposta } from "../../shared/environment";
 
 interface IFormData {
     areafinanciada?: number,
@@ -80,12 +81,15 @@ export const DetalheDeProposta: React.FC = () => {
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isChanging, setIsChanging] = useState(false);
     const [nome, setNome] = useState('');
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
 
     const permissions = useUserPermissions('Proposta');
+
+    const [status, setStatus] = useState(0);
 
     useEffect(() => {
 
@@ -106,7 +110,7 @@ export const DetalheDeProposta: React.FC = () => {
 
                 } else {
                     setNome('Proposta Nr.' + id);
-
+                    setStatus(Number(result.status));
                     formRef.current?.setData(result);
                 }
             })
@@ -116,6 +120,7 @@ export const DetalheDeProposta: React.FC = () => {
                 ehastecfinanciada: false,
                 ehpossuilaudoacompanhamento: false,
             });
+            setStatus(StatusProposta.Cadastrada);
         }
     }, [id])
 
@@ -164,6 +169,7 @@ export const DetalheDeProposta: React.FC = () => {
                             } else {
                                 setAlertMessage('Registro alterado com sucesso!');
                                 setAlertSeverity("success");
+                                setIsChanging(false);
                             }
                         }  
                     })
@@ -209,16 +215,93 @@ export const DetalheDeProposta: React.FC = () => {
         navigate(`/proposta/${id}/imprimir`)
     }; 
 
+    const handleLiberar = (id: number) => {
+        if(confirm('Deseja realmente liberar a proposta?')){
+            PropostaService.liberarById(id)
+            .then(result => {
+                if (result instanceof Error){
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
+
+                } else {
+                    setAlertMessage('Registro liberado com sucesso!');
+                    setAlertSeverity("success");
+
+                    setStatus(Number(result.status));
+                }
+            })
+        } 
+    }
+
+    const handleVoltar = (id: number) => {
+        if(confirm('Deseja realmente liberar a proposta?')){
+            PropostaService.voltarById(id)
+            .then(result => {
+                if (result instanceof Error){
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
+
+                } else {
+                    setAlertMessage('Registro voltado com sucesso!');
+                    setAlertSeverity("success");
+
+                    setStatus(Number(result.status));
+                }
+            })
+        } 
+    };
+
+    const handleFormOnChange = () => {
+        setIsChanging(true);
+    };
+
+    const recalcularValores = (valor: any, origem: string) => {
+        console.log("exec");
+        let dados = formRef.current?.getData();
+
+        if (dados) {
+
+            if (origem == "areafinanciada"){
+                dados.areafinanciada = valor; 
+
+            } else if (origem == "valorunitariofinanciamento"){
+                dados.valorunitariofinanciamento = valor;
+
+            }else if (origem == "valortotalrecursoproprio"){
+                dados.valortotalrecursoproprio = valor;
+
+            } else if (origem == "valorastec"){
+                dados.valorastec = valor;
+
+            } else if (origem == "ehastecfinanciada"){
+                dados.ehastecfinanciada = !dados.ehastecfinanciada;
+            }
+
+            dados.valortotalorcamento = Number(dados.areafinanciada) * Number(dados.valorunitariofinanciamento);
+            dados.totalfinanciamento = Number(dados.valortotalorcamento) - Number(dados.valortotalrecursoproprio);
+
+            if (dados.ehastecfinanciada){
+                dados.valortotalfinanciado = Number(dados.valorastec) + Number(dados.totalfinanciamento);
+
+            } else {
+                dados.valortotalfinanciado = Number(dados.totalfinanciamento);
+            }
+
+            formRef.current?.setData(dados);
+        }
+    };
+    
+
     return(
         <LayoutBaseDePagina 
             titulo={id === 'nova' ? 'Nova proposta' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Nova"
-                    mostrarBotaoSalvar={permissions?.Editar}
-                    mostrarBotaoSalvarEFechar={permissions?.Editar}
+                    mostrarBotaoSalvar={permissions?.Editar && status == StatusProposta.Cadastrada}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar && status == StatusProposta.Cadastrada}
                     mostrarBotaoNovo={id !== 'nova' && permissions?.Editar}
-                    mostrarBotaoApagar={id !== 'nova' && permissions?.Excluir}
+                    mostrarBotaoApagar={id !== 'nova' && permissions?.Excluir && status == StatusProposta.Cadastrada}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
@@ -236,7 +319,7 @@ export const DetalheDeProposta: React.FC = () => {
             alertSeverity={alertSeverity}
             onCloseAlert={() => setAlertMessage('')}
         >
-            <VForm ref={formRef} onSubmit={handleSave}>
+            <VForm ref={formRef} onSubmit={handleSave} onChange={handleFormOnChange}>
                 <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
                     <Grid container direction="column" padding={2} spacing={2}>
 
@@ -245,6 +328,9 @@ export const DetalheDeProposta: React.FC = () => {
                             <LinearProgress variant="indeterminate"/>
                             </Grid>
                         )}
+                        <Grid item>
+                            <Typography variant="h6">Status: {status}</Typography>
+                        </Grid>
 
                         <Grid item>
                             <Typography variant="h6">Geral</Typography>
@@ -257,7 +343,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Data" 
                                     name="data"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -265,19 +351,19 @@ export const DetalheDeProposta: React.FC = () => {
                             </Grid>
                             <Grid item xs={6} md={3}>
                                 <AutoCompleteFilial  
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                 />
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <AutoCompleteTipoProposta  
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
                                 <AutoCompleteCultura  
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                 />
                             </Grid>
@@ -287,12 +373,12 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Linha de crédito"
                                     placeholder="Linha de crédito" 
                                     name="linhacredito"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={12} md={4}>
                                 <AutoCompletePessoa 
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                     nomeField="proponente"
                                     label="Proponente"
@@ -300,7 +386,7 @@ export const DetalheDeProposta: React.FC = () => {
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <AutoCompletePessoa 
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                     nomeField="avalista"
                                     label="Avalista"
@@ -308,7 +394,7 @@ export const DetalheDeProposta: React.FC = () => {
                             </Grid>
                             <Grid item xs={12} md={3}>
                                 <AutoCompletePessoa 
-                                    disabled={!permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     isExternalLoading={isLoading}
                                     nomeField="responsaveltecnico"
                                     label="Responsável técnico"
@@ -321,7 +407,7 @@ export const DetalheDeProposta: React.FC = () => {
                                         <VCheckBox 
                                             placeholder="Possui laudo de acompanhamento" 
                                             name="ehpossuilaudoacompanhamento"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar  || status != StatusProposta.Cadastrada}
                                         />
                                     }
                                 />
@@ -340,7 +426,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Data de plantio" 
                                     name="dataplantio"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -353,7 +439,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Data de colheita" 
                                     name="datacolheita"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -371,7 +457,7 @@ export const DetalheDeProposta: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={6} md={3}>
@@ -386,7 +472,7 @@ export const DetalheDeProposta: React.FC = () => {
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                         </Grid>
@@ -403,12 +489,13 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Área financiada" 
                                     name="areafinanciada" 
                                     type="number"
+                                    onChange={e => recalcularValores(e.target.value, "areafinanciada")}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">ha</InputAdornment>,
                                         inputMode: "decimal",
                                         
                                     }}
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={4} md={3}>
@@ -417,8 +504,9 @@ export const DetalheDeProposta: React.FC = () => {
                                     type="number"
                                     label="Valor unitário"
                                     placeholder="Valor unitário" 
+                                    onChange={e => recalcularValores(e.target.value, "valorunitariofinanciamento")}
                                     name="valorunitariofinanciamento"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
                                         inputMode: "decimal",
@@ -434,7 +522,6 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Valor total do orçamento" 
                                     name="valortotalorcamento"
                                     disabled={true} //Pois deve calcular o valor unitario vs area ha
-                                    //disabled={isLoading || !permissions?.Editar}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
                                         inputMode: "decimal",
@@ -449,7 +536,8 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Valor do recurso próprio"
                                     placeholder="Valor dos recursos próprios" 
                                     name="valortotalrecursoproprio"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    onChange={e => recalcularValores(e.target.value, "valortotalrecursoproprio")}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
                                         inputMode: "decimal",
@@ -463,7 +551,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Origem do recurso próprio"
                                     placeholder="Origem do recurso próprio" 
                                     name="origemrecursoproprio"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={4} md={3}>
@@ -474,7 +562,6 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Valor total do financiamento" 
                                     name="valortotalfinanciamento"
                                     disabled={true} //Valor orçamento menos recursos proprios
-                                    //disabled={isLoading || !permissions?.Editar}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>,
                                         inputMode: "decimal",
@@ -489,7 +576,8 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Valor de ASTEC"
                                     placeholder="Valor de ASTEC" 
                                     name="valorastec"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    onChange={e => recalcularValores(e.target.value, "valorastec")}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">R$</InputAdornment>
                                     }}
@@ -517,7 +605,8 @@ export const DetalheDeProposta: React.FC = () => {
                                         <VCheckBox 
                                             placeholder="ASTEC Financiada" 
                                             name="ehastecfinanciada"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            onChangeInterno={() => recalcularValores(null, "ehastecfinanciada")}
+                                            disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                         />
                                     }
                                 />
@@ -536,7 +625,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Prazo (meses)" 
                                     name="prazomeses"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={4} md={3}>
@@ -546,7 +635,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Número de parcelas" 
                                     name="numeroparcela"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={4} md={2}>
@@ -556,7 +645,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Carência (meses)" 
                                     name="carenciameses"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -566,7 +655,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Taxa de juros" 
                                     name="taxajuros"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                             <Grid item xs={6} md={2}>
@@ -576,7 +665,7 @@ export const DetalheDeProposta: React.FC = () => {
                                     placeholder="Vencimento" 
                                     name="vencimento"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -591,26 +680,44 @@ export const DetalheDeProposta: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="observacao"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status != StatusProposta.Cadastrada}
                                 />
                             </Grid>
                         </Grid>
 
                         <Grid container item spacing={2}>
                             <Grid item>
+                                {(status == StatusProposta.Cadastrada) && (
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    disabled={isLoading || id === 'nova' || !permissions?.Processar}
+                                    disabled={isLoading || id === 'nova' || !permissions?.Processar || isChanging}
                                     endIcon={<Icon>arrow_forward</Icon>}
                                     onClick={() => {
                                         if (id !== 'nova') {
-                                           // handleLiberar
+                                            handleLiberar(Number(id))
                                         }
                                     }}
                                 >
                                     Liberar
                                 </Button>
+                                )}
+
+                                {(status != StatusProposta.Cadastrada) && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={isLoading || id === 'nova' || !permissions?.Processar || isChanging}
+                                        endIcon={<Icon>arrow_back</Icon>}
+                                        onClick={() => {
+                                            if (id !== 'nova') {
+                                                handleVoltar(Number(id))
+                                            }
+                                        }}
+                                    >
+                                        Voltar
+                                    </Button>
+                                )}
                             </Grid>
                             <Grid item>
                                 <Button

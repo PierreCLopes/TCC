@@ -6,8 +6,9 @@ import { formatCNPJCPF, formatCPF, formatRG } from './FormatInput';
 
 type TVTextFieldProps = TextFieldProps & {
   name: string;
+  onChangeInterno?: () => void;
 }
-export const VTextField: React.FC<TVTextFieldProps> = ({ name, ...rest }) => {
+export const VTextField: React.FC<TVTextFieldProps> = ({ name, onChangeInterno, ...rest }) => {
   const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
 
   const [value, setValue] = useState(defaultValue || '');
@@ -18,6 +19,8 @@ export const VTextField: React.FC<TVTextFieldProps> = ({ name, ...rest }) => {
       getValue: () => value,
       setValue: (_, newValue) => setValue(newValue),
     });
+
+    onChangeInterno;
   }, [registerField, fieldName, value]);
 
   return (
@@ -41,7 +44,7 @@ export const VTextField: React.FC<TVTextFieldProps> = ({ name, ...rest }) => {
                       } else {
                         setValue(e.target.value);
 
-                      }; rest.onChange?.(e); }}
+                      }; rest.onChange?.(e);}}
 
       onKeyDown={e => {error && clearError(); rest.onKeyDown?.(e)}}
       />

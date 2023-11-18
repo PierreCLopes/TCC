@@ -5,7 +5,7 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper
 import { FerramentasDaListagem, VAlert } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { useDebounce } from '../../shared/hooks';
-import { Environment } from '../../shared/environment';
+import { Environment, StatusProposta } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 import { IListagemProposta, PropostaService } from '../../shared/services/api/propostas/PropostaService';
 
@@ -128,11 +128,11 @@ export const ListagemDeProposta: React.FC = () => {
                                     >
                                         <Icon>print</Icon>
                                     </IconButton>
-                            
+
                                     <IconButton 
                                         size='small' 
                                         onClick={() => handleDelete(row.id)} 
-                                        disabled = {!permissions?.Excluir}
+                                        disabled = {!permissions?.Excluir || row.status != StatusProposta.Cadastrada}
                                     >
                                         <Icon>delete</Icon>
                                     </IconButton>

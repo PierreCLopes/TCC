@@ -41,6 +41,7 @@ export interface IListagemProposta{
     data: Date,
     culturanome: string,
     filialsigla: string,
+    status: number,
 }
 
 type TPropostaComTotalCount = {
@@ -64,6 +65,7 @@ const getAll = async (page = 1, filter = '', id = ''): Promise<TPropostaComTotal
       return new Error('Erro ao listar os registros.');
     } catch (error) {
       console.error(error);
+
       return new Error((error as { message: string }).message || 'Erro ao listar os registros.');
     }
   };
@@ -125,11 +127,44 @@ const deleteById = async (id: number): Promise<void | Error> => {
     }  
 };
 
+const liberarById = async (id: number): Promise<IDetalheProposta | Error> => { 
+    try {
+        const { data } = await Api.post(`/proposta/liberar/${id}`);
+
+        if(data){
+            return data;
+        }
+
+        return new Error('Erro ao liberar o registro.');
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao liberar o registro.');
+    }  
+};
+
+const voltarById = async (id: number): Promise<IDetalheProposta | Error> => { 
+    try {
+        const { data } = await Api.post(`/proposta/voltar/${id}`);
+
+        if(data){
+            return data;
+        }
+
+        return new Error('Erro ao voltar o registro.');
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao voltar o registro.');
+    }  
+};
 
 export const PropostaService = {
     getAll,
     getById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    liberarById,
+    voltarById,
 };

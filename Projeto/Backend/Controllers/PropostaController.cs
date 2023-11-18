@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using System.Security.Claims;
 
 namespace Backend.Controllers
 {
@@ -44,6 +45,7 @@ namespace Backend.Controllers
                 .Take(pageSize)
                 .Select(p => new { p.Id,
                                    p.Data,
+                                   p.Status,
                                    proponentenome = p.ProponenteNavigation.Nome, 
                                    filialsigla = p.FilialNavigation.Sigla,
                                    culturanome = p.CulturaNavigation.Nome,
@@ -156,6 +158,12 @@ namespace Backend.Controllers
                 return NotFound("Proposta não encontrada");
             }
 
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para ser alterada.");
+                return BadRequest(error);
+            }
+
             // Atualize as propriedades da instância existente de Proposta
             Proposta.Areafinanciada = PropostaDTO.Areafinanciada;
             Proposta.Avalista = PropostaDTO.Avalista;
@@ -207,10 +215,111 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para ser excluída.");
+                return BadRequest(error);
+            }
+
             _context.Proposta.Remove(Proposta);
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpPost("liberar/{id}")]
+        public async Task<IActionResult> LiberarProposta(int id)
+        {
+            var Proposta = await _context.Proposta.FindAsync(id);
+            if (Proposta == null)
+            {
+                return NotFound();
+            }
+
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para ser encerrada.");
+                return BadRequest(error);
+            }
+
+            // Valida se foi informado os laudos de acompanhamento
+            if (Proposta.Ehpossuilaudoacompanhamento)
+            {
+                var Acompanhamento = _context.Propostalaudos.FirstOrDefault(laudo => laudo.Proposta == Proposta.Id);
+
+                if (Acompanhamento == null)
+                {
+                    var error = new ApiError(400, "Laudo de acompanhamento inválido. " +
+                                                  "A proposta está marcada para possuir laudo de acompanhamento, mas não existe nenhum laudo previamente cadastrado para essa proposta.");
+                    return BadRequest(error);
+                }
+            }
+
+            // Obter o tipo de proposta com suas documentações obrigatórias
+            var TipoDocumentacaoObrigatoria = await _context.Tipopropostadocumentacoes.Where(tp => tp.Tipoproposta == Proposta.Tipo).ToListAsync();
+
+            // Verificar se todas as documentações obrigatórias estão presentes na proposta
+            foreach (var tipoPropostaDocumentacao in TipoDocumentacaoObrigatoria)
+            {
+                var documentacaoExistente = _context.Documentacoes
+                    .Any(d => d.Proposta == Proposta.Id && d.Tipo == tipoPropostaDocumentacao.Tipodocumentacao);
+
+                if (!documentacaoExistente)
+                {
+                    var error = new ApiError(400, "Documentação inválida. " +
+                                                  "Existem tipos de documentações obrigatórias que não possuem documentação cadastrada para essa proposta.");
+                    return BadRequest(error);
+                }
+            }
+
+            var Status = StatusProposta.Cadastrada;
+
+            if (Proposta.Ehpossuilaudoacompanhamento)
+            {
+                var Acompanhamento = await _context.Propostalaudos.FirstOrDefaultAsync(laudo =>
+                    (laudo.Proposta == Proposta.Id) && (laudo.Status == StatusPropostaLaudo.Cadastrado));
+
+                if (Acompanhamento == null)
+                {
+                    Status = StatusProposta.AguardandoLaudosDeAcompanhamento;
+                }
+                else
+                {
+                    Status = StatusProposta.Encerrada;
+                }
+            }
+            else
+            {
+                Status = StatusProposta.Encerrada;
+            }
+
+            Proposta.Status = Status;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(Proposta);
+        }
+
+        [HttpPost("voltar/{id}")]
+        public async Task<IActionResult> VoltarProposta(int id)
+        {
+            var Proposta = await _context.Proposta.FindAsync(id);
+            if (Proposta == null)
+            {
+                return NotFound();
+            }
+
+            if (Proposta.Status == StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(400, "Status inválido. A proposta não pode estar cadastrada para voltar o status.");
+                return BadRequest(error);
+            }
+
+            Proposta.Status = StatusProposta.Cadastrada; 
+
+            await _context.SaveChangesAsync();
+
+            return Ok(Proposta);
         }
     }
 }
