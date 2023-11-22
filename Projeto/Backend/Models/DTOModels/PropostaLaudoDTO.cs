@@ -2,7 +2,7 @@
 {
     public class PropostaLaudoDTO
     {
-        public string Observacao { get; set; } = null!;
+        public string? Observacao { get; set; }
 
         public int Proposta { get; set; }
 
@@ -26,7 +26,7 @@
 
         public bool Ehatendendorecomendacao { get; set; }
 
-        public string Situacaoempreendimento { get; set; } = null!;
+        public string? Situacaoempreendimento { get; set; } 
 
         public decimal Produtividadeplano { get; set; }
 

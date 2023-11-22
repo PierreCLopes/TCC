@@ -38,7 +38,7 @@ export const ListagemDePropostaLaudoDiagnostico: React.FC = () => {
         setIsLoading(true);
 
         debounce(() => {
-            PropostaLaudoDiagnosticoService.getAll(Number(propostaid), pagina)
+            PropostaLaudoDiagnosticoService.getAll(Number(propostalaudoid), pagina)
             .then((result) => {
                 setIsLoading(false);
                 if (result instanceof Error){

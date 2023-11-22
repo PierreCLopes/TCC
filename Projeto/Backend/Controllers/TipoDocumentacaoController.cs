@@ -185,7 +185,7 @@ namespace Backend.Controllers
                 return BadRequest(error);
             }
 
-                var Tipodocumentacao = await _context.Tipodocumentacoes.FindAsync(id);
+            var Tipodocumentacao = await _context.Tipodocumentacoes.FindAsync(id);
             if (Tipodocumentacao == null)
             {
                 return NotFound();

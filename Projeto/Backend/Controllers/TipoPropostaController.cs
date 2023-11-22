@@ -209,6 +209,13 @@ namespace Backend.Controllers
                 return NotFound();
             }
 
+            var PropostaVinculada = await _context.Proposta.AnyAsync(p => p.Tipo == id);
+            if (PropostaVinculada)
+            {
+                var error = new ApiError(400, "Não é possível excluir esse tipo de proposta, pois ele está vinculado a uma proposta.");
+                return BadRequest(error);
+            }
+
             // Remova os registros TipoPropostaDocumentacao relacionados a esta TipoProposta
             var existingDocumentacao = _context.Tipopropostadocumentacoes.Where(doc => doc.Tipoproposta == id);
             _context.Tipopropostadocumentacoes.RemoveRange(existingDocumentacao);

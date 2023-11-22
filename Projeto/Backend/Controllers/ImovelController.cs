@@ -168,6 +168,13 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImovel(int id)
         {
+            var ImovelProposta = await _context.Propostaimoveis.AnyAsync(i => i.Imovel == id);
+            if (ImovelProposta)
+            {
+                var error = new ApiError(400, "Não é possível excluir o imóvel, pois ele está vinculado a um imóvel da proposta.");
+                return BadRequest(error);
+            }
+
             var Imovel = await _context.Imoveis.FindAsync(id);
             if (Imovel == null)
             {

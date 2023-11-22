@@ -125,7 +125,6 @@ export const DetalheDeProposta: React.FC = () => {
     }, [id])
 
     const handleSave = (dados: IFormData) => {
-        console.log(dados);
         formValidationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
@@ -148,6 +147,7 @@ export const DetalheDeProposta: React.FC = () => {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
                                 navigate(`/proposta/${result.id}`);
+                                setIsChanging(false);
                             }
                         }  
                     })
@@ -189,9 +189,6 @@ export const DetalheDeProposta: React.FC = () => {
                 
                 formRef.current?.setErrors(validationErrors);
             });
-
-        setIsLoading(true);
-
     };
 
     const handleDelete = (id: number) => {
@@ -217,8 +214,12 @@ export const DetalheDeProposta: React.FC = () => {
 
     const handleLiberar = (id: number) => {
         if(confirm('Deseja realmente liberar a proposta?')){
+            setIsLoading(true);
+
             PropostaService.liberarById(id)
             .then(result => {
+                setIsLoading(false);
+
                 if (result instanceof Error){
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
@@ -235,8 +236,12 @@ export const DetalheDeProposta: React.FC = () => {
 
     const handleVoltar = (id: number) => {
         if(confirm('Deseja realmente liberar a proposta?')){
+            setIsLoading(true);
+
             PropostaService.voltarById(id)
             .then(result => {
+                setIsLoading(false);
+
                 if (result instanceof Error){
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
@@ -278,13 +283,13 @@ export const DetalheDeProposta: React.FC = () => {
             }
 
             dados.valortotalorcamento = Number(dados.areafinanciada) * Number(dados.valorunitariofinanciamento);
-            dados.totalfinanciamento = Number(dados.valortotalorcamento) - Number(dados.valortotalrecursoproprio);
+            dados.valortotalfinanciamento = Number(dados.valortotalorcamento) - Number(dados.valortotalrecursoproprio);
 
             if (dados.ehastecfinanciada){
-                dados.valortotalfinanciado = Number(dados.valorastec) + Number(dados.totalfinanciamento);
+                dados.valortotalfinanciado = Number(dados.valorastec) + Number(dados.valortotalfinanciamento);
 
             } else {
-                dados.valortotalfinanciado = Number(dados.totalfinanciamento);
+                dados.valortotalfinanciado = Number(dados.valortotalfinanciamento);
             }
 
             formRef.current?.setData(dados);
@@ -329,7 +334,7 @@ export const DetalheDeProposta: React.FC = () => {
                             </Grid>
                         )}
                         <Grid item>
-                            <Typography variant="h6">Status: {status}</Typography>
+                            <Typography variant="h6">Status: {status == StatusProposta.Cadastrada ? "Cadastrada" : status == StatusProposta.Encerrada ? "Encerrado" : "Aguardando laudo de acompanhamento"}</Typography>
                         </Grid>
 
                         <Grid item>

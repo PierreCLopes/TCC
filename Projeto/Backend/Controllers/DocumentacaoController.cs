@@ -97,14 +97,37 @@ namespace Backend.Controllers
                                                                        [FromForm] int? imovel = null,
                                                                        [FromForm] int? proposta = null)
         {
-            // Verifique se já existe um tipo de documentacao com o mesmo nome na base
-            /*var DocumentacaoExistente = await _context.Documentacoes.FirstOrDefaultAsync(t => t.Nome == DocumentacaoDTO.Nome);
 
-            if (DocumentacaoExistente != null)
+            if (proposta != 0)
             {
-                var error = new ApiError(409, "Já existe um Tipo de documentação com o mesmo Nome cadastrado.");
-                return Conflict(error);
-            }*/
+                var Proposta = await _context.Proposta.FindAsync(proposta);
+                if (Proposta == null)
+                {
+                    var error = new ApiError(404, "Proposta não encontrada.");
+                    return NotFound(error);
+                }
+
+                if (Proposta.Status != StatusProposta.Cadastrada)
+                {
+                    var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para a documentação ser cadastrada.");
+                    return BadRequest(error);
+                }
+            }
+
+            if (pessoa == 0)
+            {
+                pessoa = null;
+            }
+
+            if (imovel == 0)
+            {
+                imovel = null;
+            }
+
+            if (proposta == 0)
+            {
+                proposta = null;
+            }
 
             if (arquivo == null || arquivo.Length == 0)
             {
@@ -113,7 +136,7 @@ namespace Backend.Controllers
             }
 
             // Verifique a extensão do arquivo
-            var allowedExtensions = new List<string> { ".png", ".jpg", ".mp4", ".pdf", ".ico", ".rar", ".rtf", ".txt", ".srt", ".kml" };
+            var allowedExtensions = new List<string> { ".png", ".jpg", ".pdf",".kml" };
             var fileExtension = Path.GetExtension(arquivo.FileName).ToLower();
 
             if (!allowedExtensions.Contains(fileExtension))
@@ -127,21 +150,6 @@ namespace Backend.Controllers
             {
                 await arquivo.CopyToAsync(memoryStream);
                 var fileBytes = memoryStream.ToArray();
-
-                if(pessoa == 0)
-                {
-                    pessoa = null;
-                }
-
-                if (imovel == 0)
-                {
-                    imovel = null;
-                }
-
-                if (proposta == 0)
-                {
-                    proposta = null;
-                }
 
                 var Documentacao = new Documentacao
                 {
@@ -180,15 +188,6 @@ namespace Backend.Controllers
                 return NotFound("Documentação não encontrada");
             }
 
-            // Verifique se já existe uma Documentacao com o mesmo nome na base
-            /*var DocumentacaoExistente = await _context.Documentacoes.FirstOrDefaultAsync(f => f.Nome == DocumentacaoDTO.Nome);
-
-            if ((DocumentacaoExistente != null) && (DocumentacaoExistente.Id != Documentacao.Id))
-            {
-                var error = new ApiError(409, "Já existe um Tipo de documentação com o mesmo Nome cadastrado.");
-                return Conflict(error);
-            }*/
-
             if (arquivo == null || arquivo.Length == 0)
             {
                 var error = new ApiError(400, "Nenhum arquivo enviado.");
@@ -205,26 +204,42 @@ namespace Backend.Controllers
                 return BadRequest(error);
             }
 
+            if (proposta != 0)
+            {
+                var Proposta = await _context.Proposta.FindAsync(proposta);
+                if (Proposta == null)
+                {
+                    var error = new ApiError(404, "Proposta não encontrada.");
+                    return NotFound(error);
+                }
+
+                if (Proposta.Status != StatusProposta.Cadastrada)
+                {
+                    var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para a documentação ser cadastrada.");
+                    return BadRequest(error);
+                }
+            }
+
+            if (pessoa == 0)
+            {
+                pessoa = null;
+            }
+
+            if (imovel == 0)
+            {
+                imovel = null;
+            }
+
+            if (proposta == 0)
+            {
+                proposta = null;
+            }
+
             // Converta o arquivo em um array de bytes
             using (var memoryStream = new MemoryStream())
             {
                 await arquivo.CopyToAsync(memoryStream);
                 var fileBytes = memoryStream.ToArray();
-
-                if (pessoa == 0)
-                {
-                    pessoa = null;
-                }
-
-                if (imovel == 0)
-                {
-                    imovel = null;
-                }
-
-                if (proposta == 0)
-                {
-                    proposta = null;
-                }
 
                 // Atualize as propriedades da instância existente de Documentacao
                 Documentacao.Nome = nome;
@@ -254,6 +269,22 @@ namespace Backend.Controllers
             if (Documentacao == null)
             {
                 return NotFound();
+            }
+
+            if (Documentacao.Proposta != null)
+            {
+                var Proposta = await _context.Proposta.FindAsync(Documentacao.Proposta);
+                if (Proposta == null)
+                {
+                    var error = new ApiError(404, "Proposta não encontrada.");
+                    return NotFound(error);
+                }
+
+                if (Proposta.Status != StatusProposta.Cadastrada)
+                {
+                    var error = new ApiError(400, "Status inválido. A proposta precisa estar no status Cadastrada para a documentação ser cadastrada.");
+                    return BadRequest(error);
+                }
             }
 
             _context.Documentacoes.Remove(Documentacao);

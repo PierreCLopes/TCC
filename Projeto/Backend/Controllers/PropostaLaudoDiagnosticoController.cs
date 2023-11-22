@@ -60,6 +60,19 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Propostalaudodiagnostico>> PostPropostalaudodiagnostico(PropostaLaudoDiagnosticoDTO Propostalaudodiagnostico)
         {
+            var PropostaLaudo = await _context.Propostalaudos.FindAsync(Propostalaudodiagnostico.Propostalaudo);
+            if (PropostaLaudo == null)
+            {
+                var error = new ApiError(400, "Laudo não encontrado.");
+                return BadRequest(error);
+            }
+
+            if (PropostaLaudo.Status != StatusPropostaLaudo.Cadastrado)
+            {
+                var error = new ApiError(400, "Status inválido. O laudo precisa estar no status Cadastrado para cadastrar um diagnóstico.");
+                return BadRequest(error);
+            }
+
             IQueryable<Propostalaudodiagnostico> query = _context.Propostalaudodiagnosticos;
 
             var PropostaLaudoDiagnostico = new Propostalaudodiagnostico
@@ -82,6 +95,19 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPropostalaudodiagnostico(int id, PropostaLaudoDiagnosticoDTO Propostalaudodiagnostico)
         {
+            var PropostaLaudo = await _context.Propostalaudos.FindAsync(Propostalaudodiagnostico.Propostalaudo);
+            if (PropostaLaudo == null)
+            {
+                var error = new ApiError(400, "Laudo não encontrado.");
+                return BadRequest(error);
+            }
+
+            if (PropostaLaudo.Status != StatusPropostaLaudo.Cadastrado)
+            {
+                var error = new ApiError(400, "Status inválido. O laudo precisa estar no status Cadastrado para alterar um diagnóstico.");
+                return BadRequest(error);
+            }
+
             var PropostaLaudoDiagnostico = new Propostalaudodiagnostico
             {
                 Id = id,
@@ -122,6 +148,19 @@ namespace Backend.Controllers
             if (Propostalaudodiagnostico == null)
             {
                 return NotFound();
+            }
+
+            var PropostaLaudo = await _context.Propostalaudos.FindAsync(Propostalaudodiagnostico.Propostalaudo);
+            if (PropostaLaudo == null)
+            {
+                var error = new ApiError(400, "Laudo não encontrado.");
+                return BadRequest(error);
+            }
+
+            if (PropostaLaudo.Status != StatusPropostaLaudo.Cadastrado)
+            {
+                var error = new ApiError(400, "Status inválido. O laudo precisa estar no status Cadastrado para excluir um diagnóstico.");
+                return BadRequest(error);
             }
 
             _context.Propostalaudodiagnosticos.Remove(Propostalaudodiagnostico);

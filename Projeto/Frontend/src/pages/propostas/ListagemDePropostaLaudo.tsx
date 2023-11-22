@@ -6,7 +6,7 @@ import { FerramentasDaListagem } from "../../shared/components";
 import { LayoutBaseDePagina } from "../../shared/layouts";
 import { PropostaLaudoService, IListagemPropostaLaudo } from '../../shared/services/api/propostas/PropostaLaudoService';
 import { useDebounce } from '../../shared/hooks';
-import { Environment } from '../../shared/environment';
+import { Environment, StatusPropostaLaudo } from '../../shared/environment';
 import useUserPermissions from '../../shared/hooks/UseUserPermissions';
 
 export const ListagemDePropostaLaudo: React.FC = () => {
@@ -122,7 +122,7 @@ export const ListagemDePropostaLaudo: React.FC = () => {
                                     <IconButton 
                                         size='small' 
                                         onClick={() => handleDelete(row.id)} 
-                                        disabled = {!permissions?.Excluir}
+                                        disabled = {!permissions?.Excluir || row.status == StatusPropostaLaudo.Encerrado}
                                     >
                                         <Icon>delete</Icon>
                                     </IconButton>

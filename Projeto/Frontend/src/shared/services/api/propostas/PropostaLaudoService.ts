@@ -18,6 +18,7 @@ export interface IDetalhePropostaLaudo{
     produtividadeplano?: number,
     situacaoempreendimento?: string,
     sequencial: number,
+    status?: number
 }
 
 export interface IListagemPropostaLaudo{
@@ -25,6 +26,7 @@ export interface IListagemPropostaLaudo{
     sequencial: number
     datalaudo: Date,
     datavistoria: Date,
+    status: number
 }
 
 type TPropostaLaudoComTotalCount = {
@@ -109,11 +111,44 @@ const deleteById = async (id: number): Promise<void | Error> => {
     }  
 };
 
+const liberarById = async (id: number): Promise<IDetalhePropostaLaudo | Error> => { 
+    try {
+        const { data } = await Api.post(`/propostalaudo/liberar/${id}`);
+
+        if(data){
+            return data;
+        }
+
+        return new Error('Erro ao liberar o registro.');
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao liberar o registro.');
+    }  
+};
+
+const voltarById = async (id: number): Promise<IDetalhePropostaLaudo | Error> => { 
+    try {
+        const { data } = await Api.post(`/propostalaudo/voltar/${id}`);
+
+        if(data){
+            return data;
+        }
+
+        return new Error('Erro ao voltar o registro.');
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao voltar o registro.');
+    }  
+};
 
 export const PropostaLaudoService = {
     getAll,
     getById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    liberarById,
+    voltarById
 };

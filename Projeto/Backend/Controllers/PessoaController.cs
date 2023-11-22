@@ -266,6 +266,30 @@ namespace Backend.Controllers
                 return BadRequest(error);
             }
 
+            var PropostaVinculada = await _context.Proposta.AnyAsync(p => (p.Avalista == id) ||
+                                                                          (p.Proponente == id) ||
+                                                                          (p.Responsaveltecnico == id) ||
+                                                                          (p.Avalista == id));
+            if (PropostaVinculada)
+            {
+                var error = new ApiError(400, "Não é possível excluir a Pessoa, pois ela está vinculada a uma proposta.");
+                return BadRequest(error);
+            }
+
+            var FilialVinculada = await _context.Filiais.AnyAsync(f => f.Pessoa == id);
+            if (FilialVinculada)
+            {
+                var error = new ApiError(400, "Não é possível excluir a Pessoa, pois ela está vinculada a uma filial.");
+                return BadRequest(error);
+            }
+
+            var ImovelVinculado = await _context.Imoveis.AnyAsync(f => f.Proprietario == id);
+            if (ImovelVinculado)
+            {
+                var error = new ApiError(400, "Não é possível excluir a Pessoa, pois ela está vinculada a um imóvel.");
+                return BadRequest(error);
+            }
+
             // Verifique e remova PessoaEndereco, se existir
             var PessoaEndereco = await _context.Pessoaenderecos.FirstOrDefaultAsync(e => e.Pessoa == id);
             if (PessoaEndereco != null)
@@ -280,8 +304,16 @@ namespace Backend.Controllers
             }
 
             _context.Pessoas.Remove(Pessoa);
-            await _context.SaveChangesAsync();
 
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                return BadRequest(e.Message);
+            }
+            
             return NoContent();
         }
 

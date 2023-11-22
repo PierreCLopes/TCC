@@ -133,6 +133,14 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCultura(int id)
         {
+            var Proposta = await _context.Proposta.AnyAsync(p => p.Cultura == id);
+            if (Proposta)
+            {
+                var error = new ApiError(400, "Não é possível excluir a cultura, pois ela está vinculada a uma proposta.");
+                return BadRequest(error);
+            }
+
+
             var cultura = await _context.Culturas.FindAsync(id);
             if (cultura == null)
             {

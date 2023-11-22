@@ -272,14 +272,23 @@ namespace Backend.Controllers
                 }
             }
 
+            var AreaImovelProposta = await _context.Propostaimoveis.Where(i => i.Proposta == Proposta.Id).SumAsync(p => p.Area);
+
+            if (AreaImovelProposta != Proposta.Areafinanciada)
+            {
+                var error = new ApiError(400, "Imóveis inválidos. " +
+                                              "A área financiada não corresponde a área dos imóveis dessa proposta.");
+                return BadRequest(error);
+            }
+
             var Status = StatusProposta.Cadastrada;
 
             if (Proposta.Ehpossuilaudoacompanhamento)
             {
-                var Acompanhamento = await _context.Propostalaudos.FirstOrDefaultAsync(laudo =>
+                var Acompanhamento = await _context.Propostalaudos.AnyAsync(laudo =>
                     (laudo.Proposta == Proposta.Id) && (laudo.Status == StatusPropostaLaudo.Cadastrado));
 
-                if (Acompanhamento == null)
+                if (Acompanhamento)
                 {
                     Status = StatusProposta.AguardandoLaudosDeAcompanhamento;
                 }

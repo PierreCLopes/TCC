@@ -20,3 +20,9 @@ export const StatusProposta = {
 
     Encerrada: 3,
 }
+
+export const StatusPropostaLaudo = {
+    Cadastrado: 1,
+
+    Encerrado: 2,
+}

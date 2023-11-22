@@ -8,6 +8,7 @@ import { FerramentasDeDetalhe } from "../../shared/components";
 import { PropostaLaudoService } from "../../shared/services/api/propostas/PropostaLaudoService";
 import { VTextField, VForm, useVForm, IVFormErrors, VCheckBox } from "../../shared/forms";
 import useUserPermissions from "../../shared/hooks/UseUserPermissions";
+import { StatusPropostaLaudo } from "../../shared/environment";
 
 interface IFormData {
     datalaudo?: Date,
@@ -27,8 +28,8 @@ interface IFormData {
 }
 
 const formValitationSchema: yup.Schema<IFormData> = yup.object({
-    datalaudo: yup.date(),
-    datavistoria: yup.date(),
+    datalaudo: yup.date().required(),
+    datavistoria: yup.date().required(),
     ehareacultivadafinanciada: yup.boolean(),
     ehcreditoaplicadocorreto: yup.boolean(),
     ehatendendorecomendacao: yup.boolean(),
@@ -43,6 +44,23 @@ const formValitationSchema: yup.Schema<IFormData> = yup.object({
     sequencial: yup.number().default(0),
 });
 
+const formValitationSchemaLiberar: yup.Schema<IFormData> = yup.object({
+    datalaudo: yup.date().required(),
+    datavistoria: yup.date().required(),
+    ehareacultivadafinanciada: yup.boolean(),
+    ehcreditoaplicadocorreto: yup.boolean(),
+    ehatendendorecomendacao: yup.boolean(),
+    ehcroquiidentificaarea: yup.boolean(),
+    ehepocaplantiozoneamento: yup.boolean(),
+    ehlavouraplantadafinanciada: yup.boolean(),
+    ehpossuiarearecursoproprio: yup.boolean(),
+    observacao: yup.string(),
+    produtividadeobtida: yup.number().moreThan(0),
+    produtividadeplano: yup.number().moreThan(0),
+    situacaoempreendimento: yup.string().required(),
+    sequencial: yup.number().default(0),
+});
+
 export const DetalheDePropostaLaudo: React.FC = () => {
     const navigate = useNavigate();
     const {id = 'novo'} = useParams<'id'>();
@@ -51,7 +69,9 @@ export const DetalheDePropostaLaudo: React.FC = () => {
     const { formRef, save, saveAndClose, isSaveAndClose } = useVForm();
 
     const [isLoading, setIsLoading] = useState(false);
+    const [isChanging, setIsChanging] = useState(false);
     const [nome, setNome] = useState('');
+    const [status, setStatus] = useState(0);
 
     const [alertMessage, setAlertMessage] = useState(''); 
     const [alertSeverity, setAlertSeverity] = useState<AlertColor>("info"); 
@@ -78,6 +98,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                     setNome('Laudo de acompanhamento Seq.' + result.sequencial);
 
                     formRef.current?.setData(result);
+                    setStatus(Number(result.status));
                 }
             })
         } else {
@@ -89,7 +110,10 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                 ehepocaplantiozoneamento: false,
                 ehlavouraplantadafinanciada: false,
                 ehpossuiarearecursoproprio: false,
+                observacao: "",
+                situacaoempreendimento: "",
             });
+            setStatus(StatusPropostaLaudo.Cadastrado);
         }
     }, [id])
 
@@ -117,6 +141,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                 setAlertMessage('Registro criado com sucesso!');
                                 setAlertSeverity("success");
                                 navigate(`/proposta/${propostaid}/propostalaudo/${result.id}`);
+                                setIsChanging(false);
                             }
                         }  
                     })
@@ -138,6 +163,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                             } else {
                                 setAlertMessage('Registro alterado com sucesso!');
                                 setAlertSeverity("success");
+                                setIsChanging(false);
                             }
                         }  
                     })
@@ -157,9 +183,6 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                 
                 formRef.current?.setErrors(validationErrors);
             });
-
-        setIsLoading(true);
-
     };
 
     const handleDelete = (id: number) => {
@@ -179,16 +202,82 @@ export const DetalheDePropostaLaudo: React.FC = () => {
         }
     }
 
+    const handleLiberar = (id: number) => {
+        if(confirm('Deseja realmente liberar o laudo?')){
+            setIsLoading(true);
+
+            formValitationSchemaLiberar
+            .validate(formRef.current?.getData(), { abortEarly: false })
+            .then((dadosValidados) => {
+                PropostaLaudoService.liberarById(id)
+                .then(result => {
+                    setIsLoading(false);
+
+                    if (result instanceof Error){
+                        setAlertMessage(result.message);
+                        setAlertSeverity("error");
+
+                    } else {
+                        setAlertMessage('Registro liberado com sucesso!');
+                        setAlertSeverity("success");
+
+                        setStatus(Number(result.status));
+                    }
+                })
+            })
+            .catch((errors: yup.ValidationError) => {
+                
+                setIsLoading(false);
+
+                const validationErrors: IVFormErrors = {};
+
+                errors.inner.forEach(error => {
+                    if (!error.path) return;
+
+                    validationErrors[error.path] = error.message;
+                })
+                
+                formRef.current?.setErrors(validationErrors);
+            });
+        } 
+    }
+
+    const handleVoltar = (id: number) => {
+        if(confirm('Deseja realmente voltar o laudo?')){
+            setIsLoading(true);
+
+            PropostaLaudoService.voltarById(id)
+            .then(result => {
+                setIsLoading(false);
+                
+                if (result instanceof Error){
+                    setAlertMessage(result.message);
+                    setAlertSeverity("error");
+
+                } else {
+                    setAlertMessage('Registro voltado com sucesso!');
+                    setAlertSeverity("success");
+
+                    setStatus(Number(result.status));
+                }
+            })
+        } 
+    };
+
+    const handleFormOnChange = () => {
+        setIsChanging(true);
+    };
+
     return(
         <LayoutBaseDePagina 
             titulo={id === 'novo' ? 'Novo laudo de acompanhamento' : nome}
             barraDeFerramentas={
                 <FerramentasDeDetalhe
                     textoBotaoNovo="Novo"
-                    mostrarBotaoSalvar={permissions?.Editar}
-                    mostrarBotaoSalvarEFechar={permissions?.Editar}
+                    mostrarBotaoSalvar={permissions?.Editar  && status == StatusPropostaLaudo.Cadastrado}
+                    mostrarBotaoSalvarEFechar={permissions?.Editar  && status == StatusPropostaLaudo.Cadastrado}
                     mostrarBotaoNovo={id !== 'novo' && permissions?.Editar}
-                    mostrarBotaoApagar={id !== 'novo' && permissions?.Excluir}
+                    mostrarBotaoApagar={id !== 'novo' && permissions?.Excluir && status == StatusPropostaLaudo.Cadastrado}
      
                     aoClicarEmApagar={() => {handleDelete(Number(id))}}
                     aoClicarEmSalvar={save}
@@ -206,7 +295,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
             alertSeverity={alertSeverity}
             onCloseAlert={() => setAlertMessage('')}
         >
-            <VForm ref={formRef} onSubmit={handleSave}>
+            <VForm ref={formRef} onSubmit={handleSave} onChange={handleFormOnChange}>
                 <Box margin={1} display="flex" flexDirection="column" component={Paper} variant="outlined">
                     <Grid container direction="column" padding={2} spacing={2}>
 
@@ -215,6 +304,10 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                             <LinearProgress variant="indeterminate"/>
                             </Grid>
                         )}
+
+                        <Grid item>
+                            <Typography variant="h6">Status: {status == StatusPropostaLaudo.Cadastrado ? "Cadastrado" : "Encerrado"}</Typography>
+                        </Grid>
 
                         <Grid item>
                             <Typography variant="h6">Geral</Typography>
@@ -236,7 +329,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     placeholder="Data da vistoria" 
                                     name="datavistoria"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
+                                    disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado} //Proprio backend gera o sequencial
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -249,7 +342,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     placeholder="Data do laudo" 
                                     name="datalaudo"
                                     type="datetime-local"
-                                    disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
+                                    disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado} //Proprio backend gera o sequencial
                                     InputLabelProps={{
                                         shrink: true
                                     }}
@@ -262,7 +355,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     placeholder="Produtividade do plano" 
                                     name="produtividadeplano"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
+                                    disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado} //Proprio backend gera o sequencial
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
@@ -276,7 +369,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     placeholder="Produtividade obtida" 
                                     name="produtividadeobtida"
                                     type="number"
-                                    disabled={isLoading || !permissions?.Editar} //Proprio backend gera o sequencial
+                                    disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado} //Proprio backend gera o sequencial
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">kg/ha</InputAdornment>,
                                         inputMode: "decimal",
@@ -292,7 +385,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehareacultivadafinanciada"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -304,7 +397,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehlavouraplantadafinanciada"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -316,7 +409,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehcroquiidentificaarea"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -328,7 +421,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehpossuiarearecursoproprio"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -340,7 +433,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehepocaplantiozoneamento"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -358,7 +451,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehcreditoaplicadocorreto"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -369,7 +462,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     control={
                                         <VCheckBox 
                                             name="ehatendendorecomendacao"
-                                            disabled={isLoading || !permissions?.Editar}
+                                            disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                         />
                                     }
                                 />
@@ -383,7 +476,7 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     label="Situação do empreendimento"
                                     placeholder="Situação do empreendimento" 
                                     name="situacaoempreendimento"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar  || status == StatusPropostaLaudo.Encerrado}
                                 />
                             </Grid>
                         </Grid>
@@ -395,26 +488,44 @@ export const DetalheDePropostaLaudo: React.FC = () => {
                                     label="Observação"
                                     placeholder="Observação" 
                                     name="observacao"
-                                    disabled={isLoading || !permissions?.Editar}
+                                    disabled={isLoading || !permissions?.Editar || status == StatusPropostaLaudo.Encerrado}
                                 />
                             </Grid>
                         </Grid>
 
                         <Grid item container spacing={2}>
                             <Grid item>
+                            {(status == StatusPropostaLaudo.Cadastrado) && (
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    disabled={isLoading || id === 'novo' || !permissions?.Processar}
+                                    disabled={isLoading || id === 'novo' || !permissions?.Processar || isChanging}
                                     endIcon={<Icon>arrow_forward</Icon>}
                                     onClick={() => {
                                         if (id !== 'novo') {
-                                           // handleLiberar
+                                            handleLiberar(Number(id))
                                         }
                                     }}
                                 >
-                                    Encerrar
+                                    Liberar
                                 </Button>
+                                )}
+
+                                {(status != StatusPropostaLaudo.Cadastrado) && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={isLoading || id === 'novo' || !permissions?.Processar || isChanging}
+                                        endIcon={<Icon>arrow_back</Icon>}
+                                        onClick={() => {
+                                            if (id !== 'novo') {
+                                                handleVoltar(Number(id))
+                                            }
+                                        }}
+                                    >
+                                        Voltar
+                                    </Button>
+                                )}
                             </Grid>
                             <Grid item>
                                 <Button

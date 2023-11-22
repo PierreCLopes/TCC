@@ -71,6 +71,19 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Propostaimovel>> PostPropostaimovel(PropostaImovelDTO Propostaimovel)
         {
+            var Proposta = await _context.Proposta.FindAsync(Propostaimovel.Proposta);
+            if (Proposta == null)
+            {
+                var error = new ApiError(404, "Proposta não encontrada.");
+                return NotFound(error);
+            }
+
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(404, "Status inválido. A proposta precisa estar com status Cadastrada para alterar o imóvel da proposta.");
+                return BadRequest(error);
+            }
+
             // Verifique se já existe um imovel da proposta com o mesmo imovel
             var PropostaimovelExistente = await _context.Propostaimoveis.FirstOrDefaultAsync(p => (p.Imovel == Propostaimovel.Imovel) && 
                                                                                                   (p.Proposta == Propostaimovel.Proposta));
@@ -112,6 +125,19 @@ namespace Backend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPropostaimovel(int id, PropostaImovelDTO PropostaImovelDTO)
         {
+            var Proposta = await _context.Proposta.FindAsync(PropostaImovelDTO.Proposta);
+            if (Proposta == null)
+            {
+                var error = new ApiError(404, "Proposta não encontrada.");
+                return NotFound(error);
+            }
+
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(404, "Status inválido. A proposta precisa estar com status Cadastrada para alterar o imóvel da proposta.");
+                return BadRequest(error);
+            }
+
             // Verifique se já existe um imovel da proposta com o mesmo imovel
             var PropostaimovelExistente = await _context.Propostaimoveis.FirstOrDefaultAsync(p => (p.Imovel == PropostaImovelDTO.Imovel) &&
                                                                                                   (p.Proposta == PropostaImovelDTO.Proposta) &&
@@ -174,6 +200,19 @@ namespace Backend.Controllers
             if (Propostaimovel == null)
             {
                 return NotFound();
+            }
+
+            var Proposta = await _context.Proposta.FindAsync(Propostaimovel.Proposta);
+            if (Proposta == null)
+            {
+                var error = new ApiError(404, "Proposta não encontrada.");
+                return NotFound(error);
+            }
+
+            if (Proposta.Status != StatusProposta.Cadastrada)
+            {
+                var error = new ApiError(404, "Status inválido. A proposta precisa estar com status Cadastrada para alterar o imóvel da proposta.");
+                return BadRequest(error);
             }
 
             _context.Propostaimoveis.Remove(Propostaimovel);

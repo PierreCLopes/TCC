@@ -101,7 +101,7 @@ export const DetalheDePropostaLaudoDiagnostico: React.FC = () => {
                         }  
                     })
                 } else {
-                    PropostaLaudoDiagnosticoService.updateById(Number(id), {id: Number(id), propostalaudo: Number(propostaid), ...dadosValidados})
+                    PropostaLaudoDiagnosticoService.updateById(Number(id), {id: Number(id), propostalaudo: Number(propostalaudoid), ...dadosValidados})
                     .then((result) => {
         
                         setIsLoading(false);
