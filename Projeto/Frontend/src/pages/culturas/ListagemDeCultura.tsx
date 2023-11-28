@@ -42,9 +42,6 @@ export const ListagemDeCultura: React.FC = () => {
                     setAlertMessage(result.message);
                     setAlertSeverity("error");
                 } else {
-                    console.log(result);
-                    console.log(result.totalCount);
-
                     setRows(result.data);
                     setTotalCount(result.totalCount);
                 }

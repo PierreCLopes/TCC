@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TipopropostaController : ControllerBase
@@ -24,6 +25,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tipoproposta>>> GetTiposproposta(
             [FromQuery] int page = 1,
@@ -71,6 +73,7 @@ namespace Backend.Controllers
             return Ok(Tiposproposta);
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<TipoPropostaDTO>> GetTipoProposta(int id)
         {
@@ -97,7 +100,7 @@ namespace Backend.Controllers
             return tipoPropostaDTO;
         }
 
-
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Tipoproposta>> PostTipoProposta(TipoPropostaDTO tipoPropostaDTO)
         {
@@ -143,7 +146,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetTipoProposta", new { id = tipoProposta.Id }, tipoProposta);
         }
 
-
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTipoProposta(int id, TipoPropostaDTO tipoPropostaDTO)
         {
@@ -199,7 +202,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
-
+        [ClaimsAuthorize("Proposta", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTipoProposta(int id)
         {

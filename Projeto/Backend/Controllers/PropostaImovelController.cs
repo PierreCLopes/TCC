@@ -7,6 +7,7 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.DTOModels;
+using DemoToken;
 
 namespace Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("proposta/{PropostaId}")]
         public async Task<ActionResult<IEnumerable<Propostaimovel>>> GetPropostaimoveis(int PropostaId,
             [FromQuery] int page = 1,
@@ -55,6 +57,7 @@ namespace Backend.Controllers
             return Ok(Propostaimoveis);
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Propostaimovel>> GetPropostaimovel(int id)
         {
@@ -68,6 +71,7 @@ namespace Backend.Controllers
             return Propostaimovel;
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Propostaimovel>> PostPropostaimovel(PropostaImovelDTO Propostaimovel)
         {
@@ -122,6 +126,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetPropostaimovel", new { id = PropostaImovel.Id }, PropostaImovel);
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPropostaimovel(int id, PropostaImovelDTO PropostaImovelDTO)
         {
@@ -193,6 +198,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePropostaimovel(int id)
         {

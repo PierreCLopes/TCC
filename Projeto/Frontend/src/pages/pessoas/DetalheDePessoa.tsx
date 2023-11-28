@@ -37,8 +37,6 @@ const formValitationSchema: yup.Schema<IFormData> = yup.object({
     cnpjcpf: yup.string().test('valid-cnpj-cpf', 'CNPJ ou CPF inválido', function (value) {
         const { tipo } = this.parent; // Obtém o valor de 'tipo' do objeto
     
-        console.log(tipo);
-        
         if (typeof value === 'string') { // Verifica se 'cnpjcpf' é uma string válida
             if (tipo === 1) { // Se o tipo for 1 (Física), valida como CPF (deve ter 14 caracteres)
                 return value.length === 14;
@@ -95,8 +93,6 @@ export const DetalheDePessoa: React.FC = () => {
                     navigate('/pessoas');
 
                 } else {
-                    console.log(result);
-
                     setNome(result.nome);
 
                     formRef.current?.setData(result);
@@ -127,7 +123,6 @@ export const DetalheDePessoa: React.FC = () => {
     }, [id])
 
     const handleSave = (dados: IFormData) => {
-        console.log(dados);
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
@@ -154,7 +149,6 @@ export const DetalheDePessoa: React.FC = () => {
                         }  
                     })
                 } else {
-                    console.log(dadosValidados);
                     PessoaService.updateById(Number(id), dadosValidados)
                     .then((result) => {
                         

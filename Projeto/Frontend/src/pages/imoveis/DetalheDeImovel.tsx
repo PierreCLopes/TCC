@@ -150,7 +150,6 @@ export const DetalheDeImovel: React.FC = () => {
                         }  
                     })
                 } else {
-                    console.log(dadosValidados);
                     ImovelService.updateById(Number(id), dadosValidados)
                     .then((result) => {
                         

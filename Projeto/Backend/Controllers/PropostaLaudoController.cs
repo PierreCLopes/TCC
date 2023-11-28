@@ -7,6 +7,7 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.DTOModels;
+using DemoToken;
 
 namespace Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("proposta/{PropostaId}")]
         public async Task<ActionResult<IEnumerable<Propostalaudo>>> GetPropostalaudos(int PropostaId,
             [FromQuery] int page = 1,
@@ -44,6 +46,7 @@ namespace Backend.Controllers
             return Ok(Propostalaudos);
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Propostalaudo>> GetPropostalaudo(int id)
         {
@@ -57,6 +60,15 @@ namespace Backend.Controllers
             return Propostalaudo;
         }
 
+        [HttpGet("pendente")]
+        public async Task<IActionResult> GetPropostaLaudosPendentes()
+        {
+            var QuantidadePendente = await _context.Propostalaudos.Where(p => p.Status != StatusPropostaLaudo.Encerrado).CountAsync();
+
+            return Ok(QuantidadePendente);
+        }
+
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Propostalaudo>> PostPropostalaudo(PropostaLaudoDTO Propostalaudo)
         {
@@ -110,6 +122,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetPropostalaudo", new { id = PropostaLaudo.Id }, PropostaLaudo);
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPropostalaudo(int id, PropostaLaudoDTO Propostalaudo)
         {
@@ -161,6 +174,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePropostalaudo(int id)
         {          
@@ -190,6 +204,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Processar")]
         [HttpPost("liberar/{id}")]
         public async Task<IActionResult> LiberarPropostaLaudo(int id)
         {
@@ -247,6 +262,7 @@ namespace Backend.Controllers
             return Ok(PropostaLaudo);
         }
 
+        [ClaimsAuthorize("Proposta", "Processar")]
         [HttpPost("voltar/{id}")]
         public async Task<IActionResult> VoltarPropostaLaudo(int id)
         {

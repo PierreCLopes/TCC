@@ -52,7 +52,6 @@ export const DetalheDeCultura: React.FC = () => {
                     navigate('/culturas');
 
                 } else {
-                    console.log(result);
                     setNome(result.nome);
 
                     formRef.current?.setData(result);

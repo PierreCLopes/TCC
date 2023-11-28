@@ -46,7 +46,6 @@ export const AutoCompleteCultura: React.FC<IAutoCompleteCulturaProps> = ({isExte
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
 
                     setOpcoes(result.data.map(cultura => ({id: cultura.id, label: cultura.nome})));
                 }

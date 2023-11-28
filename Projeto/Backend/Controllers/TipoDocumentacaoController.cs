@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TipodocumentacaoController : ControllerBase
@@ -24,6 +25,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Documentacao", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tipodocumentacao>>> GetTipodocumentacaos(
             [FromQuery] int page = 1,
@@ -71,6 +73,7 @@ namespace Backend.Controllers
             return Ok(Tipodocumentacoes);
         }
 
+        [ClaimsAuthorize("Documentacao", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<TipoDocumentacaoDTO>> GetTipodocumentacao(int id)
         {
@@ -91,6 +94,7 @@ namespace Backend.Controllers
             return TipodocumentacaoDTO;
         }
 
+        [ClaimsAuthorize("Documentacao", "Visualizar")]
         [HttpGet("todos")]
         public async Task<ActionResult<List<Tipodocumentacao>>> GetTodosTipodocumentacao()
         {
@@ -99,6 +103,7 @@ namespace Backend.Controllers
             return tipoDocumentacoes;
         }
 
+        [ClaimsAuthorize("Documentacao", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Tipodocumentacao>> PostTipodocumentacao(TipoDocumentacaoDTO TipodocumentacaoDTO)
         {
@@ -127,6 +132,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetTipodocumentacao", new { id = Tipodocumentacao.Id }, Tipodocumentacao);
         }
 
+        [ClaimsAuthorize("Documentacao", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTipodocumentacao(int id, TipoDocumentacaoDTO TipodocumentacaoDTO)
         {
@@ -163,6 +169,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Documentacao", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTipodocumentacao(int id)
         {

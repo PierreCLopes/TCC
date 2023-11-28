@@ -52,7 +52,6 @@ export const DetalheDeUsuario: React.FC = () => {
                     navigate('/usuarios');
 
                 } else {
-                    console.log(result);
                     setNome(result.email);
 
                     formRef.current?.setData(result);

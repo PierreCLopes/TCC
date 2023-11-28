@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PessoaController : ControllerBase
@@ -24,6 +25,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Pessoa", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas(
             [FromQuery] int page = 1,
@@ -71,6 +73,7 @@ namespace Backend.Controllers
             return Ok(pessoas);
         }
 
+        [ClaimsAuthorize("Pessoa", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<PessoaCreateDTO>> GetPessoa(int id)
         {
@@ -114,6 +117,7 @@ namespace Backend.Controllers
             return NotFound();
         }
 
+        [ClaimsAuthorize("Pessoa", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Pessoa>> PostPessoa(PessoaCreateDTO pessoaDTO)
         {
@@ -181,7 +185,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetPessoa", new { id = pessoa.Id }, pessoa);
         }
 
-
+        [ClaimsAuthorize("Pessoa", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPessoa(int id, PessoaCreateDTO pessoaDTO)
         {
@@ -253,7 +257,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
-
+        [ClaimsAuthorize("Pessoa", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePessoa(int id)
         {
@@ -315,12 +319,6 @@ namespace Backend.Controllers
             }
             
             return NoContent();
-        }
-
-
-        private bool PessoaExists(int id)
-        {
-            return _context.Pessoas.Any(e => e.Id == id);
         }
     }
 }

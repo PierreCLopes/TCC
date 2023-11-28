@@ -88,6 +88,19 @@ const getById = async (id: number): Promise<IDetalheProposta | Error> => {
     }
 };
 
+const getPendente = async (): Promise<number | Error> => {
+    try {
+        const { data } = await Api.get('/proposta/pendente');
+        
+        return data;
+
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao consultar o registro.');
+    }
+};
+
 const create = async (dados: Omit<IDetalheProposta, 'id'>): Promise<IDetalheProposta | Error> => { 
     try {
         const { data } = await Api.post('/proposta', dados);
@@ -162,6 +175,7 @@ const voltarById = async (id: number): Promise<IDetalheProposta | Error> => {
 export const PropostaService = {
     getAll,
     getById,
+    getPendente,
     create,
     updateById,
     deleteById,

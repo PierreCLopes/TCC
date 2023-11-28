@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Backend.Models; // Importe os modelos relevantes
 using Backend.Models.CreateModels;
+using DemoToken;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClaimsController : ControllerBase
@@ -19,7 +22,7 @@ namespace Backend.Controllers
             _userManager = userManager;
         }
 
-        // Atualizar o valor de uma claim de um usuário
+        [ClaimsAuthorize("Usuario", "Editar")]
         [HttpPut("{userId}/{claimType}")]
         public async Task<IActionResult> UpdateClaimValue(string userId, string claimType, ClaimDTO newClaimValue)
         {
@@ -48,7 +51,7 @@ namespace Backend.Controllers
             return BadRequest(result.Errors);
         }
 
-        // Obter todas as claims de um usuário
+        [ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetClaimsForUser(string userId)
         {
@@ -71,6 +74,7 @@ namespace Backend.Controllers
             return Ok(claimModels);
         }
 
+        [ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("{userId}/{claimType}")]
         public async Task<IActionResult> GetClaimForUser(string userId, string claimType)
         {

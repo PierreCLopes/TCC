@@ -31,7 +31,7 @@ namespace Backend.Controllers
             _appSettings = appSettings.Value;
         }
 
-        //[ClaimsAuthorize("Usuario", "Editar")]
+        [ClaimsAuthorize("Usuario", "Editar")]
         [HttpPost("usuario")]
         public async Task<ActionResult> Registrar(RegisterUserViewModel registerUser)
         {
@@ -77,7 +77,6 @@ namespace Backend.Controllers
 
             return Ok(user);
         }
-
 
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginUserViewModel loginUser)
@@ -167,8 +166,6 @@ namespace Backend.Controllers
 
             return Ok(userViewModels);
         }
-
-
 
         [ClaimsAuthorize("Usuario", "Visualizar")]
         [HttpGet("usuario/{id}")]

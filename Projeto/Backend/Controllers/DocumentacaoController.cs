@@ -9,10 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentacaoController : ControllerBase
@@ -24,6 +25,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Documentacao", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Documentacao>>> GetDocumentacoes(
             [FromQuery] int page = 1,
@@ -65,7 +67,7 @@ namespace Backend.Controllers
             return Ok(Documentacoes);
         }
 
-
+        [ClaimsAuthorize("Documentacao", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<DocumentacaoDTO>> GetDocumentacao(int id)
         {
@@ -89,6 +91,7 @@ namespace Backend.Controllers
             return DocumentacaoDTO;
         }
 
+        [ClaimsAuthorize("Documentacao", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Documentacao>> PostDocumentacao([FromForm] IFormFile arquivo,
                                                                        [FromForm] string nome,
@@ -172,6 +175,7 @@ namespace Backend.Controllers
             
         }
 
+        [ClaimsAuthorize("Documentacao", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocumentacao(int id,
                                                          [FromForm] IFormFile arquivo,
@@ -262,6 +266,7 @@ namespace Backend.Controllers
             }
         }
 
+        [ClaimsAuthorize("Documentacao", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocumentacao(int id)
         {

@@ -19,7 +19,6 @@ export const ImpressaoDeProposta: React.FC = () => {
 
         PropostaService.getById(Number(id))
         .then(async (result)=> {
-            console.log(result);
             setIsLoading(false);
 
             if (result instanceof Error) {

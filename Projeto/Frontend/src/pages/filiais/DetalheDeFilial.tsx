@@ -55,7 +55,6 @@ export const DetalheDeFilial: React.FC = () => {
                     navigate('/filiais');
 
                 } else {
-                    console.log(result);
                     setNome(result.nome);
 
                     formRef.current?.setData(result);

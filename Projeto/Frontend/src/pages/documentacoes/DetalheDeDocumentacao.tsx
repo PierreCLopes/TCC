@@ -98,7 +98,6 @@ export const DetalheDeDocumentacao: React.FC = () => {
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {
                 if(id === 'nova'){
-                    console.log(dadosValidados.tipo);
                     DocumentacaoService.create(dados.arquivo, { proposta: Number(propostaid), imovel: Number(imovelid), pessoa: Number(pessoaid), ...dadosValidados})
                     .then((result) => {
         

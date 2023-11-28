@@ -45,8 +45,6 @@ export const AutoCompleteImovel: React.FC<IAutoCompleteImovelProps> = ({isExtern
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
-
                     setOpcoes(result.data.map(imovel => ({id: imovel.id, label: imovel.nome})));
                 }
             });

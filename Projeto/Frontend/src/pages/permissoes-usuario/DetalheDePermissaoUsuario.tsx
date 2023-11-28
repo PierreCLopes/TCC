@@ -53,8 +53,6 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
                     navigate(`/usuario/${userId}`);
 
                 } else {
-                    console.log(result);
-
                     formRef.current?.setData(result);
                     setValor(result.valor);
                 }
@@ -64,7 +62,6 @@ export const DetalheDePermissaoUsuario: React.FC = () => {
     const handleSave = (dados: IFormData) => {
         dados.valor = valor;
 
-        console.log(dados);
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {

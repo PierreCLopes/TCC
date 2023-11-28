@@ -49,8 +49,6 @@ export const DetalheDeTipoProposta: React.FC = () => {
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
-
                     setOpcoesTipoDocumentacao(result.map(tipo => ({value: tipo.id, label: tipo.nome})));
                 }
             });
@@ -71,7 +69,6 @@ export const DetalheDeTipoProposta: React.FC = () => {
                     navigate('/tiposproposta');
 
                 } else {
-                    console.log(result);
                     setNome(result.nome);
 
                     formRef.current?.setData(result);

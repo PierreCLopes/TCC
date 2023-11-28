@@ -10,10 +10,11 @@ using Backend.Models.CreateModels;
 using System.Text.RegularExpressions;
 using Backend.Helpers;
 using System.Security.Claims;
+using DemoToken;
 
 namespace Backend.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PropostaController : ControllerBase
@@ -25,6 +26,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Proposta>>> GetPropostas(
             [FromQuery] int page = 1,
@@ -57,6 +59,15 @@ namespace Backend.Controllers
             return Ok(Proposta);
         }
 
+        [HttpGet("pendente")]
+        public async Task<IActionResult> GetPropostasPendentes()
+        {
+            var QuantidadePendente = await _context.Proposta.Where(p => p.Status != StatusProposta.Encerrada).CountAsync();
+
+            return Ok(QuantidadePendente);
+        }
+
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<PropostaDTO>> GetProposta(int id)
         {
@@ -103,6 +114,7 @@ namespace Backend.Controllers
             return PropostaDTO;
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Proposta>> PostProposta(PropostaDTO PropostaDTO)
         {
@@ -148,6 +160,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetProposta", new { id = Proposta.Id }, Proposta);
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProposta(int id, PropostaDTO PropostaDTO)
         {
@@ -206,6 +219,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProposta(int id)
         {
@@ -227,6 +241,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Processar")]
         [HttpPost("liberar/{id}")]
         public async Task<IActionResult> LiberarProposta(int id)
         {
@@ -309,6 +324,7 @@ namespace Backend.Controllers
             return Ok(Proposta);
         }
 
+        [ClaimsAuthorize("Proposta", "Processar")]
         [HttpPost("voltar/{id}")]
         public async Task<IActionResult> VoltarProposta(int id)
         {

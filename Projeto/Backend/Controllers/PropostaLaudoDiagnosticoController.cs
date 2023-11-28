@@ -7,6 +7,7 @@ using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Backend.Models.DTOModels;
+using DemoToken;
 
 namespace Backend.Controllers
 {
@@ -22,6 +23,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("propostalaudo/{PropostaLaudoId}")]
         public async Task<ActionResult<IEnumerable<Propostalaudodiagnostico>>> GetPropostalaudodiagnosticodiagnosticos(int PropostaLaudoId,
             [FromQuery] int page = 1,
@@ -44,6 +46,7 @@ namespace Backend.Controllers
             return Ok(Propostalaudodiagnostico);
         }
 
+        [ClaimsAuthorize("Proposta", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Propostalaudodiagnostico>> GetPropostalaudodiagnostico(int id)
         {
@@ -57,6 +60,7 @@ namespace Backend.Controllers
             return Propostalaudodiagnostico;
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Propostalaudodiagnostico>> PostPropostalaudodiagnostico(PropostaLaudoDiagnosticoDTO Propostalaudodiagnostico)
         {
@@ -92,6 +96,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetPropostalaudodiagnostico", new { id = PropostaLaudoDiagnostico.Id }, PropostaLaudoDiagnostico);
         }
 
+        [ClaimsAuthorize("Proposta", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPropostalaudodiagnostico(int id, PropostaLaudoDiagnosticoDTO Propostalaudodiagnostico)
         {
@@ -141,6 +146,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Proposta", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePropostalaudodiagnostico(int id)
         {

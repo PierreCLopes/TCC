@@ -45,8 +45,6 @@ export const AutoCompleteTipoDocumentacao: React.FC<IAutoCompleteTipoDocumentaca
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
-
                     setOpcoes(result.data.map(tipo => ({id: tipo.id, label: tipo.nome})));
                 }
             });

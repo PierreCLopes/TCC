@@ -46,8 +46,6 @@ export const AutoCompleteFilial: React.FC<IAutoCompleteFilialProps> = ({isExtern
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
-
                     setOpcoes(result.data.map(filial => ({id: filial.id, label: filial.nome})));
                 }
             });

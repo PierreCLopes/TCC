@@ -99,7 +99,6 @@ export const DetalheDeProposta: React.FC = () => {
 
             PropostaService.getById(Number(id))
             .then((result)=> {
-                console.log(result);
                 setIsLoading(false);
 
                 if (result instanceof Error){ 
@@ -261,7 +260,6 @@ export const DetalheDeProposta: React.FC = () => {
     };
 
     const recalcularValores = (valor: any, origem: string) => {
-        console.log("exec");
         let dados = formRef.current?.getData();
 
         if (dados) {

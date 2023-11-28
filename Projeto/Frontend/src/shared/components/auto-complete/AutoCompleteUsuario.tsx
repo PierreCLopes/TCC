@@ -46,8 +46,6 @@ export const AutoCompleteUsuario: React.FC<IAutoCompleteUsuarioProps> = ({isExte
                 if (result instanceof Error){
                     //alert(result.message);
                 } else {
-                    console.log(result);
-
                     setOpcoes(result.data.map(usuario => ({id: usuario.id, label: usuario.email})));
                 }
             });

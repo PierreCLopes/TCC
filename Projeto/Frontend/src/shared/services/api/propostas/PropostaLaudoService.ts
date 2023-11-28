@@ -72,6 +72,19 @@ const getById = async (id: number): Promise<IDetalhePropostaLaudo | Error> => {
     }
 };
 
+const getPendente = async (): Promise<number | Error> => {
+    try {
+        const { data } = await Api.get('/propostalaudo/pendente');
+        
+        return data;
+
+    } catch (error) {
+        console.error(error);
+
+        return new Error((error as {message: string}).message || 'Erro ao consultar o registro.');
+    }
+};
+
 const create = async (dados: Omit<IDetalhePropostaLaudo, 'id'>): Promise<IDetalhePropostaLaudo | Error> => { 
     try {
         const { data } = await Api.post('/propostalaudo', dados);
@@ -146,6 +159,7 @@ const voltarById = async (id: number): Promise<IDetalhePropostaLaudo | Error> =>
 export const PropostaLaudoService = {
     getAll,
     getById,
+    getPendente,
     create,
     updateById,
     deleteById,

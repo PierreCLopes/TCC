@@ -19,7 +19,7 @@ export const Dashboard = () => {
         setIsLoadingImovel(true);
         setIsLoadingCultura(true);
 
-        PropostaService.getAll(1)
+        PropostaService.getPendente()
         .then((result) => {
             setIsLoadingImovel(false);
             
@@ -27,11 +27,11 @@ export const Dashboard = () => {
                 setAlertMessage(result.message);
                 setAlertSeverity("error");
             } else {
-                setTotalCountImovel(result.totalCount);
+                setTotalCountImovel(result);
             }
         });
 
-        PropostaLaudoService.getAll(1)
+        PropostaLaudoService.getPendente()
         .then((result) => {
             setIsLoadingCultura(false);
             
@@ -39,7 +39,7 @@ export const Dashboard = () => {
                 setAlertMessage(result.message);
                 setAlertSeverity("error");
             } else {
-                setTotalCountCultura(result.totalCount);
+                setTotalCountCultura(result);
             }
         });
 

@@ -53,7 +53,6 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
                     navigate('/tipodocumentacoes');
 
                 } else {
-                    console.log(result);
                     setNome(result.nome);
 
                     formRef.current?.setData(result);
@@ -69,7 +68,6 @@ export const DetalheDeTipoDocumentacao: React.FC = () => {
     }, [id])
 
     const handleSave = (dados: IFormData) => {
-        console.log(dados);
         formValitationSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValidados) => {

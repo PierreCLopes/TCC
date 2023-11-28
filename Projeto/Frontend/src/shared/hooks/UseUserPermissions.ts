@@ -21,7 +21,6 @@ const useUserPermissions = (classe: ClassType) => {
 
     const jwtToken = getJWTFromStorage();
 
-    console.log(jwtToken);
     if (jwtToken) {
       try {
         const decodedToken: Record<string, any> = jwtDecode(jwtToken);

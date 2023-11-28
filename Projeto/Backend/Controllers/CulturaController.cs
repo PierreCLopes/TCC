@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
+using DemoToken;
 
 namespace Backend.Controllers
 {
@@ -21,6 +22,7 @@ namespace Backend.Controllers
             _context = context;
         }
 
+        [ClaimsAuthorize("Cultura", "Visualizar")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cultura>>> GetCulturas(
             [FromQuery] int page = 1, 
@@ -70,6 +72,7 @@ namespace Backend.Controllers
             return Ok(culturas);
         }
 
+        [ClaimsAuthorize("Cultura", "Visualizar")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Cultura>> GetCultura(int id)
         {
@@ -83,6 +86,7 @@ namespace Backend.Controllers
             return cultura;
         }
 
+        [ClaimsAuthorize("Cultura", "Editar")]
         [HttpPost]
         public async Task<ActionResult<Cultura>> PostCultura(Cultura cultura)
         {
@@ -101,6 +105,7 @@ namespace Backend.Controllers
             return CreatedAtAction("GetCultura", new { id = cultura.Id }, cultura);
         }
 
+        [ClaimsAuthorize("Cultura", "Editar")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCultura(int id, Cultura cultura)
         {
@@ -130,6 +135,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
+        [ClaimsAuthorize("Cultura", "Excluir")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCultura(int id)
         {
