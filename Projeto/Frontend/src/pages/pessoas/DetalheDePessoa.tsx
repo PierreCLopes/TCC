@@ -52,7 +52,7 @@ const formValitationSchema: yup.Schema<IFormData> = yup.object({
     rg: yup.string().default(''),
     email: yup.string().email().default(''),
     ehtecnico: yup.boolean().default(false),
-    cfta: yup.string().required().default(''),
+    cfta: yup.string().default(''),
     tipo: yup.number().required(),
     endereco: yup.object({
         bairro: yup.string().default(''),
